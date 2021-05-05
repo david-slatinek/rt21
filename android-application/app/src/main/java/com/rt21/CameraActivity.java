@@ -1,5 +1,7 @@
 package com.rt21;
 
+// activity to test Camera class
+
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
