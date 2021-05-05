@@ -10,4 +10,6 @@
     <string name="register_button">Register</string>
     <string name="back_login_register_button">Back</string>
     <string name="add_location_button">add location</string>
+    <string name="distance_traveled_format">Distance traveled with us: %s km</string>
+    <string name="road_signs_passed_format">Road signs passed: %s</string>
 </resources>

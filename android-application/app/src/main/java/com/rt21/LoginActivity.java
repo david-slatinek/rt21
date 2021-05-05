@@ -99,6 +99,8 @@ public class LoginActivity extends AppCompatActivity {
                         //} else {
                         //    Toast.makeText(getApplicationContext(), "Registration failed!", Toast.LENGTH_SHORT).show();
                         //}
+                    } else {
+                        Toast.makeText(getApplicationContext(), "No registration data provided!", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
