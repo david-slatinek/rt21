@@ -41,7 +41,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        app = (MyApplication) getApplication();
+        //problems with getApplication();
+        //app = (MyApplication) getApplication();
 
         txtTitle = findViewById(R.id.txtLoginRegisterTitle);
         txtName = findViewById(R.id.txtName);

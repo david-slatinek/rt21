@@ -39,10 +39,9 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(i, LoginActivity.ACTIVITY_ID);
     }
 
-    // needs implementation
     public void onClickOpenInfo(View view) {
-        //Intent i = new Intent(getBaseContext(), InfoActivity.class);
-        //startActivity(i);
+        Intent i = new Intent(getBaseContext(), InfoActivity.class);
+        startActivity(i);
     }
 
     public void onClickOpenCamera(View view) {
@@ -62,9 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     Timber.i("Received: %s which is Login code.", data.getExtras().get(LoginActivity.RESULT_VAL));
                 }
 
-                // needs implementation
-                //Intent i = new Intent(getBaseContext(), ShowLocations.class);
-                //startActivityForResult(i, ShowLocations.ACTIVITY_ID);
+                //TODO - open activity containing user profile, how many km he drove and how many road signs he passed
             }
         }
         // needs implementation

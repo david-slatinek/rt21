@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Author: Marcel Iskrač"
+        android:text="Authors:"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -30,11 +30,11 @@
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Project: UPORA second application in Android and Java"
+        android:layout_marginTop="16dp"
+        android:text="Project: RT21 driving statistics"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <TextView
         android:id="@+id/textView9"
@@ -42,7 +42,7 @@
         android:layout_height="199dp"
         android:layout_marginTop="60dp"
         android:padding="10dp"
-        android:text="Description:\n\nIn this application user can find interesting geological location that other users visited and shared the location with others. The initial user can hit a treasure in that area and give other users a tip how to fined it. Others can post a comment for that location, so others can see if it is worth visiting."
+        android:text="Description:\n\nThis application collects data from sensors on a mobile device such as GPS and camera while user is driving a car. When user finishes with the ride the phone sends collected data to a server where the report about driving is generated.\nUser can check drive statistics on this web page: link"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
@@ -59,4 +59,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9"
         app:layout_constraintVertical_bias="0.29000002" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Marcel Iskrač, Marko Hiršel, David Slatinek"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
 </androidx.constraintlayout.widget.ConstraintLayout>
