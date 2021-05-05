@@ -1,24 +1,29 @@
-from main import app
-from main import UserCollection
-from main import ObjectId
-from main import json
-from main import json_util
-from main import request
+from main import app, json, UserCollection, ObjectId, create_invalid, invalid_id
+from main import json_util, request
 
 
-def create_invalid(filed_name):
-    response = app.response_class(
-        response=json.dumps({"error": filed_name + " not given or invalid"}),
-        status=400,
-        mimetype='application/json'
-    )
-    return response
+def get_user(object_id):
+    if len(object_id) != 24:
+        return invalid_id()
+
+    obj = UserCollection.find_one({"_id": ObjectId(object_id)})
+    if obj:
+        return json.loads(json_util.dumps(obj))
+    else:
+        return app.response_class(
+            response=json.dumps({"error": "user not found"}),
+            status=404,
+            mimetype='application/json'
+        )
 
 
-def create_user():
+def register():
     name = request.form.get('name', 'default_name')
     last_name = request.form.get('last_name', 'default_last_name')
-    age = int(request.form.get('age', -1))
+    try:
+        age = int(request.form.get('age', -1))
+    except ValueError:
+        age = -1
     nickname = request.form.get('nickname', 'default_nickname')
     email = request.form.get('email', 'default_email')
     password = request.form.get('password', 'default_password')
@@ -30,11 +35,11 @@ def create_user():
     if age < 18:
         return create_invalid('age')
     if nickname == 'default_nickname':
-        return create_invalid('default_nickname')
+        return create_invalid('nickname')
     if email == 'default_email':
-        return create_invalid('default_email')
+        return create_invalid('email')
     if password == 'default_password':
-        return create_invalid('default_password')
+        return create_invalid('password')
 
     obj = {
         'name': name,
@@ -49,30 +54,28 @@ def create_user():
     if obj_id is not None:
         return json.loads(json_util.dumps(obj_id)), 201
     else:
-        response = app.response_class(
+        return app.response_class(
             response=json.dumps({"error": "error when creating user"}),
             status=500,
             mimetype='application/json'
         )
-        return response
 
 
-def get_user(object_id):
-    if len(object_id) != 24:
-        response = app.response_class(
-            response=json.dumps({"error": "invalid id length"}),
-            status=400,
-            mimetype='application/json'
-        )
-        return response
+def login():
+    email = request.form.get('email', 'default_email')
+    password = request.form.get('password', 'default_password')
 
-    obj = UserCollection.find_one({"_id": ObjectId(object_id)})
-    if obj:
+    if email == 'default_email':
+        return create_invalid('email')
+    if password == 'default_password':
+        return create_invalid('password')
+
+    obj = UserCollection.find_one({"$and": [{"email": email}, {"password": password}]})
+    if obj is not None:
         return json.loads(json_util.dumps(obj))
     else:
-        response = app.response_class(
-            response=json.dumps({"error": "not found"}),
+        return app.response_class(
+            response=json.dumps({"error": "invalid email/password"}),
             status=404,
             mimetype='application/json'
         )
-        return response

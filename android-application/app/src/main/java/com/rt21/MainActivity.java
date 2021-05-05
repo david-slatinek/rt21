@@ -10,10 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int ACTIVITY_ID = 100;
     private static final  String TAG = MainActivity.class.getSimpleName();
     private MyApplication app;
-
-    public static final int ACTIVITY_ID = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         System.out.print("Hello");
 
-        // leads to error:
-//        Caused by: java.lang.ClassCastException: android.app.Application cannot be cast to com.rt21.MyApplication
-//        at com.rt21.MainActivity.onCreate(MainActivity.java:25)
-        // app = (MyApplication) getApplication();
+        app = (MyApplication) getApplication();
     }
 
     public void onClickOpenLogin(View view) {
@@ -39,14 +35,8 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(i, LoginActivity.ACTIVITY_ID);
     }
 
-    // needs implementation
     public void onClickOpenInfo(View view) {
-        //Intent i = new Intent(getBaseContext(), InfoActivity.class);
-        //startActivity(i);
-    }
-
-    public void onClickOpenCamera(View view) {
-        Intent i = new Intent(getBaseContext(), CameraActivity.class);
+        Intent i = new Intent(getBaseContext(), InfoActivity.class);
         startActivity(i);
     }
 
@@ -62,14 +52,12 @@ public class MainActivity extends AppCompatActivity {
                     Timber.i("Received: %s which is Login code.", data.getExtras().get(LoginActivity.RESULT_VAL));
                 }
 
-                // needs implementation
-                //Intent i = new Intent(getBaseContext(), ShowLocations.class);
-                //startActivityForResult(i, ShowLocations.ACTIVITY_ID);
+                Intent i = new Intent(getBaseContext(), HomeActivity.class);
+                startActivityForResult(i, HomeActivity.ACTIVITY_ID);
             }
         }
-        // needs implementation
-//        if (requestCode == ShowLocations.ACTIVITY_ID) {
-//            this.finishAffinity();
-//        }
+        if (requestCode == HomeActivity.ACTIVITY_ID) {
+            this.finishAffinity();
+        }
     }
 }
