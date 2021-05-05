@@ -5,6 +5,7 @@ import user
 import config
 import drive
 import location
+import sign
 from common import create_invalid, invalid_id
 from bson.objectid import ObjectId
 from bson import json_util
@@ -19,6 +20,7 @@ db = mongo.db
 UserCollection = db.user
 DriveCollection = db.drive
 LocationCollection = db.location
+SignCollection = db.sign
 
 
 @app.errorhandler(404)
@@ -63,6 +65,16 @@ def get_location(location_id):
 @app.route('/api/location/create', methods=['POST'])
 def create_location():
     return location.create_location()
+
+
+@app.route('/api/sign/sign/<sign_id>', methods=['GET'])
+def get_sign(sign_id):
+    return sign.get_sign(sign_id)
+
+
+@app.route('/api/sign/create', methods=['POST'])
+def create_sign():
+    return sign.create_sign()
 
 
 if __name__ == "__main__":
