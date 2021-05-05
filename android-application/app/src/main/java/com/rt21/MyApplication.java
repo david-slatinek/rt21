@@ -2,7 +2,6 @@ package com.rt21;
 
 import android.app.Application;
 
-
 import timber.log.Timber;
 
 public class MyApplication extends Application {
@@ -16,6 +15,5 @@ public class MyApplication extends Application {
         }
         Timber.tag("My application");
         Timber.d("Application created");
-
     }
 }

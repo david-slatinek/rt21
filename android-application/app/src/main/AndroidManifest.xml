@@ -3,13 +3,23 @@
     package="com.rt21">
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RT21">
-        <activity android:name=".CameraActivity"></activity>
+        <activity android:name=".HomeActivity"></activity>
+        <activity
+            android:name=".InfoActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".LoginActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".CameraActivity"
+            android:launchMode="singleInstance" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
