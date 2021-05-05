@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">RT21</string>
+    <string name="login_page_title">Login page</string>
+    <string name="register_page_title">Register page</string>
+    <string name="name_login_register">Name</string>
+    <string name="username_login_register">Username</string>
+    <string name="email_login_register">Email</string>
+    <string name="password_login_register">Password</string>
+    <string name="login_button">Login</string>
+    <string name="register_button">Register</string>
+    <string name="back_login_register_button">Back</string>
+    <string name="add_location_button">add location</string>
 </resources>

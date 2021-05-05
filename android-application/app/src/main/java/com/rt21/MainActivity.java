@@ -1,14 +1,11 @@
-package com.minty.treasurehunt;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+package com.rt21;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
-import java.util.logging.LoggingMXBean;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import timber.log.Timber;
 
@@ -24,7 +21,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         System.out.print("Hello");
 
-        app = (MyApplication) getApplication();
+        // leads to error:
+//        Caused by: java.lang.ClassCastException: android.app.Application cannot be cast to com.rt21.MyApplication
+//        at com.rt21.MainActivity.onCreate(MainActivity.java:25)
+        // app = (MyApplication) getApplication();
     }
 
     public void onClickOpenLogin(View view) {
@@ -39,9 +39,10 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(i, LoginActivity.ACTIVITY_ID);
     }
 
+    // needs implementation
     public void onClickOpenInfo(View view) {
-        Intent i = new Intent(getBaseContext(), InfoActivity.class);
-        startActivity(i);
+        //Intent i = new Intent(getBaseContext(), InfoActivity.class);
+        //startActivity(i);
     }
 
     @Override
@@ -56,12 +57,14 @@ public class MainActivity extends AppCompatActivity {
                     Timber.i("Received: %s which is Login code.", data.getExtras().get(LoginActivity.RESULT_VAL));
                 }
 
-                Intent i = new Intent(getBaseContext(), ShowLocations.class);
-                startActivityForResult(i, ShowLocations.ACTIVITY_ID);
+                // needs implementation
+                //Intent i = new Intent(getBaseContext(), ShowLocations.class);
+                //startActivityForResult(i, ShowLocations.ACTIVITY_ID);
             }
         }
-        if (requestCode == ShowLocations.ACTIVITY_ID) {
-            this.finishAffinity();
-        }
+        // needs implementation
+//        if (requestCode == ShowLocations.ACTIVITY_ID) {
+//            this.finishAffinity();
+//        }
     }
 }

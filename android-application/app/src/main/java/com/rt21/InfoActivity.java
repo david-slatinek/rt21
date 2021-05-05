@@ -1,9 +1,9 @@
-package com.minty.treasurehunt;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.rt21;
 
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class InfoActivity extends AppCompatActivity {
     public static final int ACTIVITY_ID = 103;

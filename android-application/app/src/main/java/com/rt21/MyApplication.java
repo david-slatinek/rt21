@@ -1,16 +1,11 @@
-package com.minty.treasurehunt;
+package com.rt21;
 
 import android.app.Application;
 
-import com.minty.data.MyLocation;
-import com.minty.data.User;
 
 import timber.log.Timber;
 
 public class MyApplication extends Application {
-
-    public MyLocation location;
-    public User testingUser;
 
     @Override
     public void onCreate() {
@@ -22,6 +17,5 @@ public class MyApplication extends Application {
         Timber.tag("My application");
         Timber.d("Application created");
 
-        testingUser = new User("Test", "UsernameTest", "test@mail.com", "testPasswd");
     }
 }
