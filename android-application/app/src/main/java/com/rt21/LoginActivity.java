@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import timber.log.Timber;
 import timber.log.Timber;
@@ -70,8 +71,17 @@ public class LoginActivity extends AppCompatActivity {
             btnLogin_Register.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Timber.i("Login pressed");
-                    returnBack(1);
+                    if (!etUsername.getText().toString().equals("") && !etPassword.getText().toString().equals("")) {
+                        //TODO - check if user exists
+                        //if (login.success) {
+                        Timber.i("Login pressed");
+                        returnBack(1);
+                        //} else {
+                        //    Toast.makeText(getApplicationContext(), "User doesn't exist!", Toast.LENGTH_SHORT).show();
+                        //}
+                    } else {
+                        Toast.makeText(getApplicationContext(), "No login data provided!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         } else if (activityMode == FORM_MODE_REGISTER) {
@@ -80,8 +90,16 @@ public class LoginActivity extends AppCompatActivity {
             btnLogin_Register.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Timber.i("Register pressed");
-                    returnBack(0);
+                    if (!etName.getText().toString().equals("") && !etUsername.getText().toString().equals("") &&
+                            !etEmail.getText().toString().equals("") && !etPassword.getText().toString().equals("")) {
+                        //TODO - check if user exists and if data is compatible for registration
+                        //if (registration.success) {
+                        Timber.i("Register pressed");
+                        returnBack(0);
+                        //} else {
+                        //    Toast.makeText(getApplicationContext(), "Registration failed!", Toast.LENGTH_SHORT).show();
+                        //}
+                    }
                 }
             });
         }

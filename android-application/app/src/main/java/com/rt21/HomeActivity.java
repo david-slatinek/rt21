@@ -9,10 +9,14 @@ import android.view.View;
 public class HomeActivity extends AppCompatActivity {
     public static final int ACTIVITY_ID = 103;
 
+    private MyApplication app;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        app = (MyApplication) getApplication();
     }
 
     public void onClickOpenCamera(View view) {
