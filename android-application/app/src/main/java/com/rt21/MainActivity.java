@@ -45,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
         //startActivity(i);
     }
 
+    public void onClickOpenCamera(View view) {
+        Intent i = new Intent(getBaseContext(), CameraActivity.class);
+        startActivity(i);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
