@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraX;
+import androidx.camera.core.FlashMode;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureConfig;
 import androidx.camera.core.Preview;
@@ -87,9 +88,12 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
 
-        // configuration for parameters
+        // configuration for camera. ImageCapture.CaptureMode.MIN_LATENCY prioritizes speed over quality of photo
+        // rotation of the image is set the same as device's current rotation
+        // flash is turned off and desired resolution is set to 1280x720. cameraX takes the photo of nearest possible resolution
         ImageCaptureConfig imageCaptureConfig = new ImageCaptureConfig.Builder().setCaptureMode(ImageCapture.CaptureMode.MIN_LATENCY)
-                .setTargetRotation(getWindowManager().getDefaultDisplay().getRotation()).build();
+                .setTargetRotation(getWindowManager().getDefaultDisplay().getRotation())
+                .setFlashMode(FlashMode.OFF).setTargetResolution(new Size(1280, 720)).build();
 
         final ImageCapture imageCapture = new ImageCapture(imageCaptureConfig);
 
