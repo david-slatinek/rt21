@@ -77,10 +77,10 @@ public class LoginActivity extends AppCompatActivity {
                         Timber.i("Login pressed");
                         returnBack(1);
                         //} else {
-                        //    Toast.makeText(getApplicationContext(), "User doesn't exist!", Toast.LENGTH_SHORT).show();
+                        //    CommonMethods.displayToastShort(getApplicationContext(), "User doesn't exist!");
                         //}
                     } else {
-                        Toast.makeText(getApplicationContext(), "No login data provided!", Toast.LENGTH_SHORT).show();
+                        CommonMethods.displayToastLong(getApplicationContext(), "No login data provided!");
                     }
                 }
             });
@@ -97,10 +97,10 @@ public class LoginActivity extends AppCompatActivity {
                         Timber.i("Register pressed");
                         returnBack(0);
                         //} else {
-                        //    Toast.makeText(getApplicationContext(), "Registration failed!", Toast.LENGTH_SHORT).show();
+                        //    CommonMethods.displayToastShort(getApplicationContext(), "Registration failed!");
                         //}
                     } else {
-                        Toast.makeText(getApplicationContext(), "No registration data provided!", Toast.LENGTH_SHORT).show();
+                        CommonMethods.displayToastShort(getApplicationContext(), "No registration data provided!");
                     }
                 }
             });

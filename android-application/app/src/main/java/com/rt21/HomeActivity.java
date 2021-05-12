@@ -72,7 +72,7 @@ public class HomeActivity extends AppCompatActivity {
                 if (grantResults.length >= PERMISSIONS.length) {
                     for (int i = 0; i < PERMISSIONS.length; i++) {
                         if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                            Toast.makeText(this, "Please allow access to camera and location!", Toast.LENGTH_SHORT).show();
+                            CommonMethods.displayToastShort(getApplicationContext(), "Please allow access to camera and location!");
                             return;
                         }
                     }

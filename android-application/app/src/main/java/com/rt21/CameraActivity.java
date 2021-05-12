@@ -33,6 +33,7 @@ import java.io.File;
 
 public class CameraActivity extends AppCompatActivity {
 
+
     TextureView textureViewCameraFlowPreview;
     Button buttonTakePicture;
     ImageView imageViewCapturedPhoto;
@@ -111,8 +112,8 @@ public class CameraActivity extends AppCompatActivity {
                     // image was successfully saved to file
                     public void onImageSaved(@NonNull @NotNull File file) {
                         // notify user where image was saved with absolute path
-                        String msg = "Image was captured and saved in: " + file.getAbsolutePath();
-                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+
+                        CommonMethods.displayToastShort(getApplicationContext(), "Image was captured and saved in: " + file.getAbsolutePath());
 
                         // read that file and show it in imageView with Bitmap object
                         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -123,8 +124,7 @@ public class CameraActivity extends AppCompatActivity {
                     // image was NOT successfully saved to file
                     public void onError(@NonNull @NotNull ImageCapture.UseCaseError useCaseError, @NonNull @NotNull String message, @Nullable @org.jetbrains.annotations.Nullable Throwable cause) {
                         // notify user what went wrong
-                        String msg = "Image was NOT captured and saved!";
-                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                        CommonMethods.displayToastShort(getApplicationContext(), "Image was NOT captured and saved!");
 
                     }
                 });
