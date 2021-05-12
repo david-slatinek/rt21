@@ -25,7 +25,6 @@ public class HomeActivity extends AppCompatActivity {
     String[] PERMISSIONS = {
             android.Manifest.permission.ACCESS_FINE_LOCATION,
             android.Manifest.permission.INTERNET,
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             android.Manifest.permission.CAMERA
     };
 
@@ -73,7 +72,7 @@ public class HomeActivity extends AppCompatActivity {
                 if (grantResults.length >= PERMISSIONS.length) {
                     for (int i = 0; i < PERMISSIONS.length; i++) {
                         if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                            Toast.makeText(this, "Please allow access to camera, location and storage!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Please allow access to camera and location!", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
