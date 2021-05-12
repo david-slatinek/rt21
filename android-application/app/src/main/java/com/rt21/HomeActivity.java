@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity {
     public static final int ACTIVITY_ID = 103;
@@ -72,7 +71,7 @@ public class HomeActivity extends AppCompatActivity {
                 if (grantResults.length >= PERMISSIONS.length) {
                     for (int i = 0; i < PERMISSIONS.length; i++) {
                         if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                            CommonMethods.displayToastShort(getApplicationContext(), "Please allow access to camera and location!");
+                            CommonMethods.displayToastShort("Please allow access to camera and location!", getApplicationContext());
                             return;
                         }
                     }
