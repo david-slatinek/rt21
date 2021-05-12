@@ -6,6 +6,7 @@ import config
 import drive
 import location
 import sign
+import os
 from common import create_invalid, invalid_id
 from bson.objectid import ObjectId
 from bson import json_util
@@ -78,4 +79,4 @@ def create_sign():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
