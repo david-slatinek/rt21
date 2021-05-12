@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Rational;
 import android.util.Size;
 import android.view.TextureView;
@@ -13,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,6 +43,13 @@ public class CameraActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int ACTIVITY_ID = 102;
 
+    // handler will be used to trigger code to take a picture every X seconds
+    Handler myHandler = new Handler();
+    // runnable stores the code that will execute every x seconds
+    Runnable myRunnable;
+    // timer is set to 5 seconds
+    int delayMilliSeconds = 5000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +59,7 @@ public class CameraActivity extends AppCompatActivity {
         buttonTakePicture = findViewById(R.id.buttonTakePicture);
         imageViewCapturedPhoto = findViewById(R.id.imageView);
 
+        // when activity starts begin with camera preview
         startCameraFlow();
     }
 
@@ -142,4 +150,18 @@ public class CameraActivity extends AppCompatActivity {
 
     }
 
+
+    // when this method is called every x seconds new image will be taken
+    public void onClickEnableTimerToTakeImage(View view) {
+        // simulate user click on button
+        buttonTakePicture.performClick();
+        // every x seconds execute code in run function
+        myHandler.postDelayed(myRunnable = new Runnable() {
+            public void run() {
+                myHandler.postDelayed(myRunnable, delayMilliSeconds);
+                // simulate user click on button
+                buttonTakePicture.performClick();
+            }
+        }, delayMilliSeconds);
+    }
 }
