@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                         //    CommonMethods.displayToastShort(getApplicationContext(), "User doesn't exist!");
                         //}
                     } else {
-                        CommonMethods.displayToastLong(getApplicationContext(), "No login data provided!");
+                        CommonMethods.displayToastLong("No login data provided!", getApplicationContext());
                     }
                 }
             });
@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                         //    CommonMethods.displayToastShort(getApplicationContext(), "Registration failed!");
                         //}
                     } else {
-                        CommonMethods.displayToastShort(getApplicationContext(), "No registration data provided!");
+                        CommonMethods.displayToastShort("No registration data provided!", getApplicationContext());
                     }
                 }
             });

@@ -113,7 +113,7 @@ public class CameraActivity extends AppCompatActivity {
                     public void onImageSaved(@NonNull @NotNull File file) {
                         // notify user where image was saved with absolute path
 
-                        CommonMethods.displayToastShort(getApplicationContext(), "Image was captured and saved in: " + file.getAbsolutePath());
+                        CommonMethods.displayToastShort("Image was captured and saved in: " + file.getAbsolutePath(), getApplicationContext());
 
                         // read that file and show it in imageView with Bitmap object
                         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -124,7 +124,7 @@ public class CameraActivity extends AppCompatActivity {
                     // image was NOT successfully saved to file
                     public void onError(@NonNull @NotNull ImageCapture.UseCaseError useCaseError, @NonNull @NotNull String message, @Nullable @org.jetbrains.annotations.Nullable Throwable cause) {
                         // notify user what went wrong
-                        CommonMethods.displayToastShort(getApplicationContext(), "Image was NOT captured and saved!");
+                        CommonMethods.displayToastShort("Image was NOT captured and saved!", getApplicationContext());
 
                     }
                 });
