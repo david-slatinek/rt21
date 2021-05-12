@@ -15,15 +15,14 @@
 #ENTRYPOINT ["python3"]
 #CMD ["main.py"]
 
-FROM python:latest
+FROM python:3.9.5
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY requirements.txt ./
+COPY requirements.txt .
+
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-
-EXPOSE 5000
 
 CMD [ "python", "./main.py" ]
