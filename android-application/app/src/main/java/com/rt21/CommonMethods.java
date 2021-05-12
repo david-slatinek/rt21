@@ -8,20 +8,21 @@ public class CommonMethods {
     // this class stores custom made static methods to avoid duplicating their implementation in multiple classes
 
     /**
-     *use it as CommonMethods.displayToastShort(getApplicationContext(), "Message");
-     * @param context getApplicationContext()
+     *use it as CommonMethods.displayToastShort("Message", getApplicationContext());
      * @param text your message text
+     * @param context getApplicationContext()
      */
-    public static void displayToastShort(Context context, String text) {
+    public static void displayToastShort(String text, Context context) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
+
     /**
-     * use it as CommonMethods.displayToastLong(getApplicationContext(), "Message");
-     * @param context getApplicationContext()
+     * CommonMethods.displayToastLong("Message", getApplicationContext());
      * @param text your message text
+     * @param context getApplicationContext()
      */
-    public static void displayToastLong(Context context, String text) {
+    public static void displayToastLong(String text, Context context) {
         Toast.makeText(context, text, Toast.LENGTH_LONG).show();
     }
 }
