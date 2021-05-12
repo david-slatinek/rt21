@@ -1,16 +1,29 @@
-FROM alpine:latest
+#FROM alpine:latest
+#
+#RUN apk add cmd:pip3
+#RUN apk add --no-cache python3-dev \
+#    && pip3 install --upgrade pip
+#
+#WORKDIR /app
+#
+#COPY . /app
+#
+#RUN pip3 --no-cache install -r requirements.txt
+#
+#EXPOSE 5000
+#
+#ENTRYPOINT ["python3"]
+#CMD ["main.py"]
 
-RUN apk add cmd:pip3
-RUN apk add --no-cache python3-dev \
-    && pip3 install --upgrade pip
+FROM python:latest
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
-COPY . /app
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip3 --no-cache install -r requirements.txt
+COPY . .
 
 EXPOSE 5000
 
-ENTRYPOINT ["python3"]
-CMD ["main.py"]
+CMD [ "python", "./main.py" ]
