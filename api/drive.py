@@ -11,9 +11,8 @@ def create_drive():
     if len(user_id) != 24:
         return main.create_response('error', 'invalid id length', 400)
 
-    value = main.get_user(user_id)
-    if not isinstance(value, dict):
-        return value
+    if not main.UserCollection.find_one({"_id": main.ObjectId(user_id)}):
+        return main.create_response('error', 'drive not found', 404)
 
     obj = {
         'user_id': user_id,
@@ -63,10 +62,15 @@ def update_drive(drive_id):
             and key != "mean_speed" and key != "max_speed" and key != "nr_of_stops":
         return main.create_response('error', "key not valid", 400)
 
-    if key == "length" or key == "speed_limit_exceed" or key == "mean_speed" \
-            or key == "max_speed" or key == "nr_of_stops":
+    if key == "speed_limit_exceed" or key == "nr_of_stops":
         try:
             value = int(value)
+        except ValueError:
+            return main.create_response('error', "value not valid", 400)
+
+    if key == "length" or key == "mean_speed" or key == "max_speed":
+        try:
+            value = float(value)
         except ValueError:
             return main.create_response('error', "value not valid", 400)
 

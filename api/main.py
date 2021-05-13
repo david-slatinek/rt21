@@ -116,14 +116,32 @@ def delete_location(location_id):
     return location.delete_location(location_id)
 
 
-# @app.route('/api/sign/sign/<sign_id>', methods=['GET'])
-# def get_sign(sign_id):
-#     return sign.get_sign(sign_id)
-#
-#
-# @app.route('/api/sign/create', methods=['POST'])
-# def create_sign():
-#     return sign.create_sign()
+@app.route('/api/sign/create', methods=['POST'])
+def create_sign():
+    if request.headers.get('X-API-Key') != api_key:
+        return create_response("error", "api key not given or invalid", 401)
+    return sign.create_sign()
+
+
+@app.route('/api/sign/<sign_id>', methods=['GET'])
+def get_sign(sign_id):
+    if request.headers.get('X-API-Key') != api_key:
+        return create_response("error", "api key not given or invalid", 401)
+    return sign.get_sign(sign_id)
+
+
+@app.route('/api/sign/<sign_id>', methods=['PUT'])
+def update_sign(sign_id):
+    if request.headers.get('X-API-Key') != api_key:
+        return create_response("error", "api key not given or invalid", 401)
+    return sign.update_sign(sign_id)
+
+
+@app.route('/api/sign/<sign_id>', methods=['DELETE'])
+def delete_sign(sign_id):
+    if request.headers.get('X-API-Key') != api_key:
+        return create_response("error", "api key not given or invalid", 401)
+    return sign.delete_sign(sign_id)
 
 
 if __name__ == "__main__":

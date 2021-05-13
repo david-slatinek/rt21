@@ -10,8 +10,19 @@ def create_location():
     if len(drive_id) != 24:
         return main.create_response('error', 'invalid id length', 400)
 
-    latitude = main.request.form.get('latitude', None)
-    longitude = main.request.form.get('longitude', None)
+    if not main.DriveCollection.find_one({"_id": main.ObjectId(drive_id)}):
+        return main.create_response('error', 'drive not found', 404)
+
+    try:
+        latitude = float(main.request.form.get('latitude', None))
+    except ValueError:
+        latitude = None
+
+    try:
+        longitude = float(main.request.form.get('longitude', None))
+    except ValueError:
+        longitude = None
+
     try:
         road_quality = float(main.request.form.get('road_quality', -1))
     except ValueError:
@@ -24,10 +35,6 @@ def create_location():
     if 10.0 < road_quality < 1.0:
         return main.create_response('error', 'road_quality not given/valid', 400)
 
-    value = main.get_drive(drive_id)
-    if not isinstance(value, dict):
-        return value
-
     obj = {
         'drive_id': drive_id,
         'latitude': latitude,
@@ -36,7 +43,7 @@ def create_location():
     }
 
     obj_id = main.LocationCollection.insert_one(obj).inserted_id
-    if obj_id is not None:
+    if not obj_id:
         return main.json.loads(main.json_util.dumps(obj_id)), 201
     else:
         return main.create_response('error', 'error when creating location', 500)
@@ -72,7 +79,7 @@ def update_location(location_id):
         return main.create_response('error', "key not valid", 400)
 
     try:
-        value = int(value)
+        value = float(value)
     except ValueError:
         return main.create_response('error', "value not valid", 400)
 
