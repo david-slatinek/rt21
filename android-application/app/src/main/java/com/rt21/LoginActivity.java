@@ -27,13 +27,9 @@ public class LoginActivity extends AppCompatActivity {
     private MyApplication app;
 
     private TextView txtTitle;
-    private TextView txtName;
     private EditText etName;
-    private TextView txtUsername;
     private EditText etUsername;
-    private TextView txtEmail;
     private EditText etEmail;
-    private TextView txtPassword;
     private EditText etPassword;
     private Button btnLogin_Register;
 
@@ -45,13 +41,9 @@ public class LoginActivity extends AppCompatActivity {
         app = (MyApplication) getApplication();
 
         txtTitle = findViewById(R.id.txtLoginRegisterTitle);
-        txtName = findViewById(R.id.txtName);
         etName = findViewById(R.id.etName);
-        txtUsername = findViewById(R.id.txtUsername);
         etUsername = findViewById(R.id.etUsername);
-        txtEmail = findViewById(R.id.txtEmail);
         etEmail = findViewById(R.id.etEmail);
-        txtPassword = findViewById(R.id.txtPassword);
         etPassword = findViewById(R.id.etPassword);
         btnLogin_Register = findViewById(R.id.login_registerBtn);
 
@@ -63,9 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     private void updateGUI() {
         if (activityMode == FORM_MODE_LOGIN) {
             txtTitle.setText(getString(R.string.login_page_title));
-            txtName.setVisibility(View.GONE);
             etName.setVisibility(View.GONE);
-            txtEmail.setVisibility(View.GONE);
             etEmail.setVisibility(View.GONE);
             btnLogin_Register.setText(getString(R.string.login_button));
             btnLogin_Register.setOnClickListener(new View.OnClickListener() {
