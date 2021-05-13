@@ -88,16 +88,34 @@ def delete_drive(drive_id):
     return drive.delete_drive(drive_id)
 
 
-# @app.route('/api/location/location/<location_id>', methods=['GET'])
-# def get_location(location_id):
-#     return location.get_location(location_id)
-#
-#
-# @app.route('/api/location/create', methods=['POST'])
-# def create_location():
-#     return location.create_location()
-#
-#
+@app.route('/api/location/create', methods=['POST'])
+def create_location():
+    if request.headers.get('X-API-Key') != api_key:
+        return create_response("error", "api key not given or invalid", 401)
+    return location.create_location()
+
+
+@app.route('/api/location/<location_id>', methods=['GET'])
+def get_location(location_id):
+    if request.headers.get('X-API-Key') != api_key:
+        return create_response("error", "api key not given or invalid", 401)
+    return location.get_location(location_id)
+
+
+@app.route('/api/location/<location_id>', methods=['PUT'])
+def update_location(location_id):
+    if request.headers.get('X-API-Key') != api_key:
+        return create_response("error", "api key not given or invalid", 401)
+    return location.update_location(location_id)
+
+
+@app.route('/api/location/<location_id>', methods=['DELETE'])
+def delete_location(location_id):
+    if request.headers.get('X-API-Key') != api_key:
+        return create_response("error", "api key not given or invalid", 401)
+    return location.delete_location(location_id)
+
+
 # @app.route('/api/sign/sign/<sign_id>', methods=['GET'])
 # def get_sign(sign_id):
 #     return sign.get_sign(sign_id)

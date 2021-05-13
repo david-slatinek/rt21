@@ -1,4 +1,4 @@
-from main import app, json, UserCollection, ObjectId, create_response, invalid_id
+from main import app, json, UserCollection, ObjectId, create_response
 from main import json_util, request, bcrypt
 
 
@@ -69,7 +69,7 @@ def login():
 
 def get_user(user_id):
     if len(user_id) != 24:
-        return invalid_id()
+        return create_response('error', 'invalid id length', 400)
 
     obj = UserCollection.find_one({"_id": ObjectId(user_id)})
     if obj:
@@ -82,7 +82,7 @@ def get_user(user_id):
 
 def update_user(user_id):
     if len(user_id) != 24:
-        return invalid_id()
+        return create_response('error', 'invalid id length', 400)
 
     if not UserCollection.find_one({"_id": ObjectId(user_id)}):
         return create_response('error', 'user not found', 404)
@@ -91,7 +91,7 @@ def update_user(user_id):
     value = request.form.get('value', None)
 
     if not key or key == "_id":
-        return create_response('error', 'key not given/invalid', 400)
+        return create_response('error', 'key not given/valid', 400)
     if not value:
         return create_response('error', 'value not given', 400)
 

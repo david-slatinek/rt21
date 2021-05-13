@@ -55,9 +55,9 @@ def update_drive(drive_id):
     value = main.request.form.get('value', None)
 
     if not key or key == "_id" or key == "user_id":
-        return main.create_response('error', 'key not given/invalid', 400)
+        return main.create_response('error', 'key not given/valid', 400)
     if not value:
-        return main.create_response('error', 'value not valid', 400)
+        return main.create_response('error', 'value not given', 400)
 
     if key != "start" and key != "end" and key != "length" and key != "speed_limit_exceed" \
             and key != "mean_speed" and key != "max_speed" and key != "nr_of_stops":
