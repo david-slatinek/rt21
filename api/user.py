@@ -1,4 +1,4 @@
-from main import app, json, UserCollection, ObjectId, create_invalid, invalid_id
+from main import app, json, UserCollection, ObjectId, create_response, invalid_id
 from main import json_util, request, bcrypt
 
 
@@ -14,20 +14,20 @@ def register():
     password = request.form.get('password', None)
 
     if not name:
-        return create_invalid('name not given/invalid')
+        return create_response('error', 'name not given', 400)
     if not last_name:
-        return create_invalid('last_name not given/invalid')
+        return create_response('error', 'last_name not given', 400)
     if not age:
-        return create_invalid('age not given/invalid')
+        return create_response('error', 'age not given', 400)
     if not nickname:
-        return create_invalid('nickname not given/invalid')
+        return create_response('error', 'nickname not given', 400)
     if not email:
-        return create_invalid('email not given/invalid')
+        return create_response('error', 'email not given', 400)
     if not password:
-        return create_invalid('password not given/invalid')
+        return create_response('error', 'password not given', 400)
 
     if UserCollection.find_one({"email": email}):
-        create_invalid('email already exists')
+        return create_response('error', 'email already exists', 400)
 
     obj = {
         'name': name,
@@ -42,7 +42,7 @@ def register():
     if obj_id:
         return json.loads(json_util.dumps(obj_id)), 201
     else:
-        return create_invalid('password not given/invalid')
+        return create_response('error', 'error when creating user', 500)
 
 
 def login():
@@ -50,11 +50,10 @@ def login():
     password = request.form.get('password', None)
 
     if not email:
-        return create_invalid('email not given/invalid')
+        return create_response('error', 'email not given', 400)
     if not password:
-        return create_invalid('password not given/invalid')
+        return create_response('error', 'password not given', 400)
 
-    # obj = UserCollection.find_one({"$and": [{"email": email}, {"password": password}]})
     obj = UserCollection.find_one({"email": email})
     if obj:
         user = json.loads(json_util.dumps(obj))
@@ -63,9 +62,9 @@ def login():
             user.pop('password')
             return user
         else:
-            return create_invalid('invalid email/password', 404)
+            return create_response('error', 'invalid email/password', 404)
     else:
-        return create_invalid('invalid email/password', 404)
+        return create_response('error', 'invalid email/password', 404)
 
 
 def get_user(user_id):
@@ -78,34 +77,37 @@ def get_user(user_id):
         user.pop("password")
         return user
     else:
-        return create_invalid('user not found', 404)
+        return create_response('error', 'user not found', 404)
 
 
 def update_user(user_id):
     if len(user_id) != 24:
         return invalid_id()
 
+    if not UserCollection.find_one({"_id": ObjectId(user_id)}):
+        return create_response('error', 'user not found', 404)
+
     key = request.form.get('key', None)
     value = request.form.get('value', None)
 
     if not key or key == "_id":
-        return create_invalid('key')
+        return create_response('error', 'key not given/invalid', 400)
     if not value:
-        return create_invalid('value')
+        return create_response('error', 'value not given', 400)
 
     if key != "name" and key != "last_name" and key != "age" and key != "nickname" \
             and key != "email" and key != "password":
-        return create_invalid("key")
+        return create_response('error', "key not valid", 400)
 
     if key == "age":
         try:
             value = int(value)
         except ValueError:
-            return create_invalid("age")
+            return create_response('age', "age not valid", 400)
 
     if key == "password":
         value = bcrypt.generate_password_hash(value.encode('utf-8')).decode('utf-8')
 
-    UserCollection.update_one({'_id': ObjectId(user_id)}, {'$set': {key: value}}, upsert=False)
+    UserCollection.update_one({'_id': ObjectId(user_id)}, {'$set': {key: value}})
 
     return get_user(user_id)
