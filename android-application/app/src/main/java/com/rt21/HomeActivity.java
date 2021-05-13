@@ -6,8 +6,10 @@ import androidx.core.app.ActivityCompat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
 
@@ -82,5 +84,18 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public void onClickLogOut(View view) {
+        SharedPreferences sprefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sprefs.edit();
+        editor.remove("remember_user");
+        editor.apply();
+
+
+        Intent i = getIntent();
+        i.putExtra("sign_out", true);
+        setResult(RESULT_OK, i);
+        finish();
     }
 }

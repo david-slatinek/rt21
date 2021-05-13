@@ -3,9 +3,12 @@ package com.rt21;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPassword;
     private Button btnLogin_Register;
+    private CheckBox chkStayLoggedIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnLogin_Register = findViewById(R.id.login_registerBtn);
+        chkStayLoggedIn = findViewById(R.id.chk_StayLoggedIn);
 
         activityMode = getIntent().getExtras().getInt(FORM_MODE_ID);
         Timber.i("Opening as: %s", activityMode);
@@ -64,6 +69,12 @@ public class LoginActivity extends AppCompatActivity {
                     if (!etUsername.getText().toString().equals("") && !etPassword.getText().toString().equals("")) {
                         //TODO - check if user exists
                         //if (login.success) {
+                        if (chkStayLoggedIn.isChecked()) {
+                            SharedPreferences sprefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                            SharedPreferences.Editor editor = sprefs.edit();
+                            editor.putBoolean("remember_user", true);
+                            editor.apply();
+                        }
                         Timber.i("Login pressed");
                         returnBack(1);
                         //} else {
@@ -76,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
             });
         } else if (activityMode == FORM_MODE_REGISTER) {
             txtTitle.setText(getString(R.string.register_page_title));
+            chkStayLoggedIn.setChecked(false);
             btnLogin_Register.setText(getString(R.string.register_button));
             btnLogin_Register.setOnClickListener(new View.OnClickListener() {
                 @Override

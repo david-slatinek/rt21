@@ -1,8 +1,11 @@
 package com.rt21;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +24,13 @@ public class MainActivity extends AppCompatActivity {
         System.out.print("Hello");
 
         app = (MyApplication) getApplication();
+
+        SharedPreferences sprefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sprefs.getBoolean("remember_user", false)) {
+            //get user data to save into app class
+            Intent i = new Intent(getBaseContext(), HomeActivity.class);
+            startActivityForResult(i, HomeActivity.ACTIVITY_ID);
+        }
     }
 
     public void onClickOpenLogin(View view) {
@@ -45,19 +55,32 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == LoginActivity.ACTIVITY_ID) {
             if (resultCode == RESULT_OK && data != null) {
+                //Register return
                 if (data.getIntExtra(LoginActivity.RESULT_VAL, -1) == 0) {
                     Timber.i("Received: %s which is Register code.", data.getExtras().get(LoginActivity.RESULT_VAL));
+
+                    Intent i = new Intent(getBaseContext(), LoginActivity.class);
+                    i.putExtra(LoginActivity.FORM_MODE_ID, LoginActivity.FORM_MODE_LOGIN);
+                    startActivityForResult(i, LoginActivity.ACTIVITY_ID);
+
                 }
+                //Login return
                 else if (data.getIntExtra(LoginActivity.RESULT_VAL, -1) == 1) {
                     Timber.i("Received: %s which is Login code.", data.getExtras().get(LoginActivity.RESULT_VAL));
-                }
 
-                Intent i = new Intent(getBaseContext(), HomeActivity.class);
-                startActivityForResult(i, HomeActivity.ACTIVITY_ID);
+                    Intent i = new Intent(getBaseContext(), HomeActivity.class);
+                    startActivityForResult(i, HomeActivity.ACTIVITY_ID);
+                }
             }
         }
         if (requestCode == HomeActivity.ACTIVITY_ID) {
-            this.finishAffinity();
+            if (resultCode == RESULT_OK && data != null) {
+                if (data.getBooleanExtra("sign_out", false)) {
+                    Toast.makeText(getBaseContext(), "Log out", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+               this.finishAffinity();
+            }
         }
     }
 }
