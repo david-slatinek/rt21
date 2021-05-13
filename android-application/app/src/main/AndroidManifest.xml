@@ -18,17 +18,27 @@
         android:theme="@style/Theme.RT21">
         <activity
             android:name=".HomeActivity"
-            android:launchMode="singleInstance"/>
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".InfoActivity"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".LoginActivity"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".CameraActivity"
-            android:launchMode="singleInstance" />
-        <activity android:name=".MainActivity">
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".HomeActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

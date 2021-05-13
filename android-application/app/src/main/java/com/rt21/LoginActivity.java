@@ -116,8 +116,4 @@ public class LoginActivity extends AppCompatActivity {
         }
         finish();
     }
-
-    public void onClickGoBackFromLogin(View view) {
-        returnBack(-1);
-    }
 }
