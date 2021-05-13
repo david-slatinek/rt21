@@ -1,6 +1,7 @@
 #/bin/bash
 
-docker image build -t rt21 .
 heroku container:login
-heroku container:push web --app rt210
-heroku container:release web --app rt210
+#heroku create rt21-api
+docker image build -t rt21 .
+heroku container:push web --app rt21-api
+heroku container:release web --app rt21-api
