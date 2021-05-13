@@ -7,13 +7,16 @@ import drive
 import location
 import sign
 import os
-from common import create_invalid, invalid_id
+from common import create_invalid, invalid_id, invalid_api_key
 from bson.objectid import ObjectId
 from bson import json_util
 from flask import request
+from flask_bcrypt import Bcrypt
 
 key = config.KEY
+api_key = config.API_KEY
 app = flask.Flask(__name__)
+bcrypt = Bcrypt()
 
 app.config["MONGO_URI"] = "mongodb+srv://david:" + key + "@apicluster.knc1y.mongodb.net/rt21Db?retryWrites=true"
 mongo = PyMongo(app)
@@ -33,19 +36,32 @@ def page_not_found(e):
     )
 
 
-@app.route('/api/user/user/<object_id>', methods=['GET'])
-def get_user(object_id):
-    return user.get_user(object_id)
-
-
 @app.route('/api/user/register', methods=['POST'])
 def register():
+    if request.headers.get('X-API-Key') != api_key:
+        return invalid_api_key()
     return user.register()
 
 
 @app.route('/api/user/login', methods=['POST'])
 def login():
+    if request.headers.get('X-API-Key') != api_key:
+        return invalid_api_key()
     return user.login()
+
+
+@app.route('/api/user/<user_id>', methods=['GET'])
+def get_user(user_id):
+    if request.headers.get('X-API-Key') != api_key:
+        return invalid_api_key()
+    return user.get_user(user_id)
+
+
+@app.route('/api/user/<user_id>', methods=['PUT'])
+def update_user(user_id):
+    if request.headers.get('X-API-Key') != api_key:
+        return invalid_api_key()
+    return user.update_user(user_id)
 
 
 @app.route('/api/drive/create', methods=['POST'])

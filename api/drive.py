@@ -3,9 +3,9 @@ import main
 
 
 def create_drive():
-    user_id = main.request.form.get('user_id', 'default_user_id')
+    user_id = main.request.form.get('user_id', None)
 
-    if user_id == "default_user_id":
+    if not user_id:
         return main.create_invalid('user_id')
 
     if len(user_id) != 24:
@@ -30,11 +30,7 @@ def create_drive():
     if obj_id is not None:
         return main.json.loads(main.json_util.dumps(obj_id)), 201
     else:
-        return main.app.response_class(
-            response=main.json.dumps({"error": "error when creating drive"}),
-            status=500,
-            mimetype='application/json'
-        )
+        return main.create_invalid('error when creating drive', 500)
 
 
 def get_drive(drive_id):
@@ -45,8 +41,4 @@ def get_drive(drive_id):
     if obj:
         return main.json.loads(main.json_util.dumps(obj))
     else:
-        return main.app.response_class(
-            response=main.json.dumps({"error": "drive not found"}),
-            status=404,
-            mimetype='application/json'
-        )
+        return main.create_invalid('drive not found', 404)

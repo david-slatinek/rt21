@@ -9,34 +9,31 @@ def get_location(location_id):
     if obj:
         return main.json.loads(main.json_util.dumps(obj))
     else:
-        return main.app.response_class(
-            response=main.json.dumps({"error": "location not found"}),
-            status=404,
-            mimetype='application/json'
-        )
+        return main.create_invalid('location not found', 404)
 
 
 def create_location():
-    drive_id = main.request.form.get('drive_id', 'default_drive_id')
+    drive_id = main.request.form.get('drive_id', None)
+
+    if not drive_id:
+        return main.create_invalid('drive_id not given')
 
     if len(drive_id) != 24:
         return main.invalid_id()
 
-    latitude = main.request.form.get('latitude', 'default_latitude')
-    longitude = main.request.form.get('longitude', 'default_longitude')
+    latitude = main.request.form.get('latitude', None)
+    longitude = main.request.form.get('longitude', None)
     try:
         road_quality = float(main.request.form.get('road_quality', -1))
     except ValueError:
         road_quality = -1
 
-    if drive_id == "default_drive_id":
-        return main.create_invalid('drive_id')
-    if latitude == "default_latitude":
-        return main.create_invalid('latitude')
-    if longitude == "default_longitude":
-        return main.create_invalid('longitude')
+    if not latitude:
+        return main.create_invalid('latitude not given')
+    if not longitude:
+        return main.create_invalid('longitude not given')
     if 10.0 < road_quality < 1.0:
-        return main.create_invalid('road_quality')
+        return main.create_invalid('road_quality not given/invalid')
 
     value = main.get_drive(drive_id)
     if not isinstance(value, dict):
@@ -53,8 +50,4 @@ def create_location():
     if obj_id is not None:
         return main.json.loads(main.json_util.dumps(obj_id)), 201
     else:
-        return main.app.response_class(
-            response=main.json.dumps({"error": "error when creating location"}),
-            status=500,
-            mimetype='application/json'
-        )
+        return main.create_invalid('error when creating location', 500)
