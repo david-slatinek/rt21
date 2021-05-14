@@ -10,6 +10,8 @@ import java.util.Random;
 import timber.log.Timber;
 
 public class MyApplication extends Application {
+    private final String keyName = "X-API-Key";
+    private final String apiKey = "04fca805-c486-4519-9bdb-7dd80733dfd1";
 
     public User testUser;
     public int distance;
@@ -30,5 +32,13 @@ public class MyApplication extends Application {
         testUser = new User("Test Subject", "Test Username", "test.subject@mail.com", "testPswd");
         distance = rand.nextInt(1000);
         signs = rand.nextInt(1000);
+    }
+
+    public String getKeyName() {
+        return keyName;
+    }
+
+    public String getApiKey() {
+        return apiKey;
     }
 }
