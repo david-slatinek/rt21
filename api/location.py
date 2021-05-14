@@ -17,15 +17,21 @@ def create_location():
         latitude = float(main.request.form.get('latitude', None))
     except ValueError:
         latitude = None
+    except TypeError:
+        latitude = None
 
     try:
         longitude = float(main.request.form.get('longitude', None))
     except ValueError:
         longitude = None
+    except TypeError:
+        longitude = None
 
     try:
         road_quality = float(main.request.form.get('road_quality', -1))
     except ValueError:
+        road_quality = -1
+    except TypeError:
         road_quality = -1
 
     if not latitude:
@@ -81,6 +87,8 @@ def update_location(location_id):
     try:
         value = float(value)
     except ValueError:
+        return main.create_response('error', "value not valid", 400)
+    except TypeError:
         return main.create_response('error', "value not valid", 400)
 
     if key == "road_quality":

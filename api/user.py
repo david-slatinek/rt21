@@ -9,6 +9,9 @@ def register():
         age = int(request.form.get('age', None))
     except ValueError:
         age = None
+    except TypeError:
+        age = None
+
     nickname = request.form.get('nickname', None)
     email = request.form.get('email', None)
     password = request.form.get('password', None)
@@ -103,6 +106,8 @@ def update_user(user_id):
         try:
             value = int(value)
         except ValueError:
+            return create_response('age', "age not valid", 400)
+        except TypeError:
             return create_response('age', "age not valid", 400)
 
     if key == "password":

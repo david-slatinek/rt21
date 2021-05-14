@@ -19,10 +19,14 @@ def create_sign():
         latitude = float(main.request.form.get('latitude', None))
     except ValueError:
         latitude = None
+    except TypeError:
+        latitude = None
 
     try:
         longitude = main.request.form.get('longitude', None)
     except ValueError:
+        longitude = None
+    except TypeError:
         longitude = None
 
     if not sign_type:
@@ -79,6 +83,8 @@ def update_sign(sign_id):
         try:
             value = float(value)
         except ValueError:
+            return main.create_response('error', "value not valid", 400)
+        except TypeError:
             return main.create_response('error', "value not valid", 400)
 
     main.SignCollection.update_one({'_id': main.ObjectId(sign_id)}, {'$set': {key: value}})

@@ -67,13 +67,16 @@ def update_drive(drive_id):
             value = int(value)
         except ValueError:
             return main.create_response('error', "value not valid", 400)
+        except TypeError:
+            return main.create_response('error', "value not valid", 400)
 
     if key == "length" or key == "mean_speed" or key == "max_speed":
         try:
             value = float(value)
         except ValueError:
             return main.create_response('error', "value not valid", 400)
-
+        except TypeError:
+            return main.create_response('error', "value not valid", 400)
     main.DriveCollection.update_one({'_id': main.ObjectId(drive_id)}, {'$set': {key: value}})
 
     return get_drive(drive_id)
