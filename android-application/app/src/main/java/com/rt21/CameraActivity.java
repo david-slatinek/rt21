@@ -52,9 +52,11 @@ import timber.log.Timber;
 
 public class CameraActivity extends AppCompatActivity{
 
+    private boolean driving = false;
     private TextView txtLocation;
     private TextureView textureViewCameraFlowPreview;
     private Button buttonTakePicture;
+    private Button btnStartDrive;
     private ImageView imageViewCapturedPhoto;
 
     private MapView mapView;
@@ -81,6 +83,9 @@ public class CameraActivity extends AppCompatActivity{
         textureViewCameraFlowPreview = (TextureView) findViewById(R.id.textureViewCameraPreview);
         buttonTakePicture = findViewById(R.id.buttonTakePicture);
         imageViewCapturedPhoto = findViewById(R.id.imageView);
+        btnStartDrive = findViewById(R.id.btnStartDrive);
+
+        btnStartDrive.setText("Start drive");
 
         txtLocation.setText(String.format("Longitude: %s\t\nLatitude: %s", lng, lat));
 
@@ -195,15 +200,21 @@ public class CameraActivity extends AppCompatActivity{
 
     // when this method is called every x seconds new image will be taken
     public void onClickEnableTimerToTakeImage(View view) {
+        btnStartDrive.setText(!driving ? "Stop drive" : "Start drive");
         // simulate user click on button
-        buttonTakePicture.performClick();
-        // every x seconds execute code in run function
-        myHandler.postDelayed(myRunnable = new Runnable() {
-            public void run() {
-                myHandler.postDelayed(myRunnable, delayMilliSeconds);
-                // simulate user click on button
-                buttonTakePicture.performClick();
-            }
-        }, delayMilliSeconds);
+        driving = !driving;
+
+        if (driving) {
+            buttonTakePicture.performClick();
+            // every x seconds execute code in run function
+            myHandler.postDelayed(myRunnable = new Runnable() {
+                public void run() {
+                    myHandler.postDelayed(myRunnable, delayMilliSeconds);
+                    // simulate user click on button
+                    buttonTakePicture.performClick();
+                }
+            }, delayMilliSeconds);
+        }
+        //TODO - if user clicks stop -> stop tracking and taking pictures
     }
 }

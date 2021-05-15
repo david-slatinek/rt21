@@ -7,7 +7,7 @@
     tools:context=".CameraActivity">
 
     <Button
-        android:id="@+id/buttonEnableTimer"
+        android:id="@+id/btnStartDrive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onClickEnableTimerToTakeImage"
@@ -25,7 +25,7 @@
         android:text="Take a picture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonEnableTimer"
+        app:layout_constraintStart_toEndOf="@+id/btnStartDrive"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
