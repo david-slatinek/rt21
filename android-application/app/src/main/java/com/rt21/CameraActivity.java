@@ -2,10 +2,17 @@ package com.rt21;
 
 // activity to test Camera class
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Rational;
@@ -15,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,21 +34,33 @@ import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureConfig;
 import androidx.camera.core.Preview;
 import androidx.camera.core.PreviewConfig;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LifecycleOwner;
 
 import org.jetbrains.annotations.NotNull;
+import org.osmdroid.api.IMapController;
+import org.osmdroid.config.Configuration;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapController;
+import org.osmdroid.views.MapView;
 
 import java.io.File;
 
-
-public class CameraActivity extends AppCompatActivity {
-
-
-    TextureView textureViewCameraFlowPreview;
-    Button buttonTakePicture;
-    ImageView imageViewCapturedPhoto;
+import timber.log.Timber;
 
 
+public class CameraActivity extends AppCompatActivity{
+
+    private TextView txtLocation;
+    private TextureView textureViewCameraFlowPreview;
+    private Button buttonTakePicture;
+    private ImageView imageViewCapturedPhoto;
+
+    private MapView mapView;
+    private MapController mapController;
+    private double lat = 46.55898260175286;
+    private double lng = 15.637994971467204;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int ACTIVITY_ID = 102;
@@ -56,9 +77,25 @@ public class CameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
-        textureViewCameraFlowPreview = (TextureView)findViewById(R.id.textureViewCameraPreview);
+        txtLocation = findViewById(R.id.txtLocationHolder);
+        textureViewCameraFlowPreview = (TextureView) findViewById(R.id.textureViewCameraPreview);
         buttonTakePicture = findViewById(R.id.buttonTakePicture);
         imageViewCapturedPhoto = findViewById(R.id.imageView);
+
+        txtLocation.setText(String.format("Longitude: %s\t\nLatitude: %s", lng, lat));
+
+        Configuration.getInstance().setUserAgentValue(getPackageName());
+
+        mapView = (MapView) findViewById(R.id.mapView);
+        mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
+        mapView.setBuiltInZoomControls(true);
+        mapController = (MapController) mapView.getController();
+        mapController.setZoom(13);
+
+        //TODO - get current location
+        //TODO - realtime get location attributes -> onLocationChanged()
+        GeoPoint gPt = new GeoPoint(lat, lng);
+        mapController.setCenter(gPt);
 
         // when activity starts begin with camera preview
         startCameraFlow();
@@ -155,7 +192,6 @@ public class CameraActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
     }
-
 
     // when this method is called every x seconds new image will be taken
     public void onClickEnableTimerToTakeImage(View view) {

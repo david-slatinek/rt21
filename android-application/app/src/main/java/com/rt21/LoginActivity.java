@@ -194,7 +194,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    //TODO - i works but Callback doesn't start
     private boolean onRegistration() {
         try {
             JsonObject json = Ion.with(getBaseContext())
