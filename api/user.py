@@ -19,7 +19,7 @@ def register():
     if not name:
         return create_response('error', 'name not given', 400)
     if not last_name:
-        return create_response('error', 'last_name not given', 400)
+        return create_response('error', 'last name not given', 400)
     if not age:
         return create_response('error', 'age not given', 400)
     if not nickname:
@@ -30,7 +30,7 @@ def register():
         return create_response('error', 'password not given', 400)
 
     if UserCollection.find_one({"email": email}):
-        return create_response('error', 'email already exists', 400)
+        return create_response('error', 'Email already exists', 400)
 
     obj = {
         'name': name,
@@ -45,7 +45,7 @@ def register():
     if obj_id:
         return json.loads(json_util.dumps(obj_id)), 201
     else:
-        return create_response('error', 'error when creating user', 500)
+        return create_response('error', 'Error when creating user', 500)
 
 
 def login():
@@ -65,9 +65,9 @@ def login():
             user.pop('password')
             return user
         else:
-            return create_response('error', 'invalid email/password', 404)
+            return create_response('error', 'Invalid email or password', 404)
     else:
-        return create_response('error', 'invalid email/password', 404)
+        return create_response('error', 'Invalid email or password', 404)
 
 
 def get_user(user_id):
@@ -80,7 +80,7 @@ def get_user(user_id):
         user.pop("password")
         return user
     else:
-        return create_response('error', 'user not found', 404)
+        return create_response('error', 'User not found', 404)
 
 
 def update_user(user_id):
