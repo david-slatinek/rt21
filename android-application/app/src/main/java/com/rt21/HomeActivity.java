@@ -90,6 +90,11 @@ public class HomeActivity extends AppCompatActivity {
         SharedPreferences sprefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sprefs.edit();
         editor.remove("remember_user");
+        editor.remove("_id");
+        editor.remove("fullname");
+        editor.remove("email");
+        editor.remove("age");
+        editor.remove("username");
         editor.apply();
 
 

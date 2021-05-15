@@ -27,9 +27,21 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sprefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (sprefs.getBoolean("remember_user", false)) {
-            //get user data to save into app class
-            Intent i = new Intent(getBaseContext(), HomeActivity.class);
-            startActivityForResult(i, HomeActivity.ACTIVITY_ID);
+
+            String _id = sprefs.getString("_id", "");
+            String username = sprefs.getString("username", "");
+            String fullname = sprefs.getString("fullname", "");
+            String email = sprefs.getString("email", "");
+            int age = sprefs.getInt("age", 0);
+
+            if (!_id.equals("") && !username.equals("") && !fullname.equals("") &&
+                !email.equals("") && age != 0)
+            {
+                Intent i = new Intent(getBaseContext(), HomeActivity.class);
+                startActivityForResult(i, HomeActivity.ACTIVITY_ID);
+            } else {
+                Timber.i("Error getting shared preference data.");
+            }
         }
     }
 

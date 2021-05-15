@@ -21,6 +21,10 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
+import com.rt21.data.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -101,9 +105,13 @@ public class LoginActivity extends AppCompatActivity {
                                 SharedPreferences sprefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                                 SharedPreferences.Editor editor = sprefs.edit();
                                 editor.putBoolean("remember_user", true);
+                                editor.putString("_id", app.user.getId());
+                                editor.putString("username", app.user.getUsername());
+                                editor.putString("email", app.user.getEmail());
+                                editor.putInt("age", app.user.getAge());
+                                editor.putString("fullname", app.user.getName());
                                 editor.apply();
                             }
-                            Timber.i("Login pressed");
                             returnBack(1);
                         } else {
                             CommonMethods.displayToastShort("User doesn't exist!", getApplicationContext());
@@ -147,47 +155,45 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    //TODO - i works but Callback doesn't start
     private boolean onLogin() {
-        /*Ion.with(getBaseContext())
-                .load("POST","https://rt21-api.herokuapp.com/api/user/login")
-                .setHeader(app.getKeyName(), app.getApiKey())
-                .setBodyParameter("email", etEmail.getText().toString())
-                .setBodyParameter("password", etPassword.getText().toString())
-                .asJsonObject()
-                .withResponse()
-                .setCallback(new FutureCallback<Response<JsonObject>>() {
-                    @Override
-                    public void onCompleted(Exception e, Response<JsonObject> result) {
-                        if (result != null) {
-                            if (result.getHeaders().code() == 200) {
-                                Timber.i("onCompleted success");
-                                Timber.i(result.toString());
-                            } else {
-                                Timber.i("Error!");
-                            }
-                        }
-                    }
-                });*/
-
         /**
-         * Testing: request to get data of a testUser from API
-         * Ion sends GET request to api with id in url and header that contains api key name and api key value
-         * as a result it gets JsonObject
+         * Login request to get data of a testUser from API
+         * Ion sends POST request to api with id in url and header that contains api key name and api key value
+         * as a result it gets JsonObject with user data
          */
         try {
-            JsonObject json = Ion.with(this)
-                    .load("https://rt21-api.herokuapp.com/api/user/609e9bc42327d6e860ff7113")
+            JsonObject json = Ion.with(getBaseContext())
+                    .load("POST","https://rt21-api.herokuapp.com/api/user/login")
                     .setHeader(app.getKeyName(), app.getApiKey())
+                    .setBodyParameter("email", etEmail.getText().toString())
+                    .setBodyParameter("password", etPassword.getText().toString())
                     .asJsonObject()
                     .get();
 
-            Timber.i(json.toString());
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
+            JSONObject jsonObject = new JSONObject(json.toString());
+            if (jsonObject.has("error")) {
+                Toast.makeText(getBaseContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
+                return false;
+            } else {
+                Toast.makeText(getBaseContext(), "Log in success", Toast.LENGTH_SHORT).show();
+                String name = jsonObject.getString("name");
+                String last_name = jsonObject.getString("last_name");
+                String nickname = jsonObject.getString("nickname");
+                String email = jsonObject.getString("email");
+                int age = Integer.parseInt(jsonObject.getString("age"));
+                JSONObject json_id = jsonObject.getJSONObject("_id");
+                String _id = json_id.getString("$oid");
 
-        return true;
+                app.user = new User(_id, name+" "+last_name, nickname, email, age);
+                Timber.i(app.user.toString());
+                return true;
+            }
+
+
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     //TODO - i works but Callback doesn't start

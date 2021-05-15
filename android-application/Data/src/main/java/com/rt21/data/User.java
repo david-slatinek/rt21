@@ -4,37 +4,34 @@ import java.net.UnknownServiceException;
 import java.util.UUID;
 
 public class User {
-    private String userUUID;
+    private String _id;
     private String name;
     private String username;
     private String email;
-    private String password;
+    private int age;
 
-    public User(String name, String username, String email, String password) {
-        this.userUUID = UUID.randomUUID().toString().replace("-", "");
+    public User(String id, String name, String username, String email, int age) {
+        this._id = id;
         this.name = name;
         this.username = username;
         this.email = email;
-        this.password = password;
+        this.age = age;
     }
 
-    public String getUserUUID() { return userUUID; }
+    public String getId() { return _id; }
     public String getName() { return name; }
     public String getUsername() { return username; }
     public String getEmail() { return email; }
-    public String getPassword() { return password; }
-
-    //TODO - setters if needed
-
+    public int getAge() { return age; }
 
     @Override
     public String toString() {
         return "User {\n" +
-                "\tuserUUID='" + userUUID + "'\n" +
+                "\t_id='" + _id + "'\n" +
                 "\tname='" + name + "'\n" +
                 "\tusername='" + username + "'\n" +
                 "\temail='" + email + "'\n" +
-                "\tpassword='" + password + "'\n" +
+                "\tage='" + age + "'\n" +
                 '}';
     }
 }

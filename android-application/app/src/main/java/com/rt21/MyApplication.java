@@ -13,6 +13,7 @@ public class MyApplication extends Application {
     private final String keyName = "X-API-Key";
     private final String apiKey = "04fca805-c486-4519-9bdb-7dd80733dfd1";
 
+    public User user;
     public User testUser;
     public int distance;
     public int signs;
@@ -29,7 +30,7 @@ public class MyApplication extends Application {
 
         Random rand = new Random();
 
-        testUser = new User("Test Subject", "Test Username", "test.subject@mail.com", "testPswd");
+        testUser = new User("testId123151assd","Test Subject", "Test Username", "test.subject@mail.com", 21);
         distance = rand.nextInt(1000);
         signs = rand.nextInt(1000);
     }
