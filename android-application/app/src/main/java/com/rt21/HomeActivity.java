@@ -40,7 +40,7 @@ public class HomeActivity extends AppCompatActivity {
 
         app = (MyApplication) getApplication();
 
-        txtUsername.setText(app.testUser.getUsername());
+        txtUsername.setText(app.user.getUsername());
         txtKilometerTraveled.setText(String.format(getString(R.string.distance_traveled_format), Integer.toString(app.distance)));
         txtSignsPassed.setText(String.format(getString(R.string.road_signs_passed_format), Integer.toString(app.signs)));
     }

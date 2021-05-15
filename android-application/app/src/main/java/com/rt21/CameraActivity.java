@@ -5,6 +5,7 @@ package com.rt21;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Rational;
@@ -124,8 +125,13 @@ public class CameraActivity extends AppCompatActivity {
                         CommonMethods.displayToastShort("Image was captured and saved in: " + file.getAbsolutePath(), getApplicationContext());
 
                         // read that file and show it in imageView with Bitmap object
-                        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                        imageViewCapturedPhoto.setImageBitmap(bitmap);
+                        Bitmap original = BitmapFactory.decodeFile(file.getAbsolutePath());
+
+                        Matrix matrix = new Matrix();
+                        matrix.postRotate(90);
+                        Bitmap rotated = Bitmap.createBitmap(original, 0,0, original.getWidth(), original.getHeight(), matrix, true);
+
+                        imageViewCapturedPhoto.setImageBitmap(rotated);
                     }
 
                     @Override
