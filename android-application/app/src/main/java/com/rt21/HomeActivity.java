@@ -19,7 +19,6 @@ public class HomeActivity extends AppCompatActivity {
 
     private MyApplication app;
 
-    private TextView txtUsername;
     private TextView txtKilometerTraveled;
     private TextView txtSignsPassed;
 
@@ -34,13 +33,11 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        txtUsername = findViewById(R.id.txtHomeUsername);
         txtKilometerTraveled = findViewById(R.id.txtKilometersTraveled);
         txtSignsPassed = findViewById(R.id.txtSignsPassed);
 
         app = (MyApplication) getApplication();
 
-        txtUsername.setText(app.user.getUsername());
         txtKilometerTraveled.setText(String.format(getString(R.string.distance_traveled_format), Integer.toString(app.distance)));
         txtSignsPassed.setText(String.format(getString(R.string.road_signs_passed_format), Integer.toString(app.signs)));
     }
@@ -102,5 +99,10 @@ public class HomeActivity extends AppCompatActivity {
         i.putExtra("sign_out", true);
         setResult(RESULT_OK, i);
         finish();
+    }
+
+    public void onClickOpenProfile(View view) {
+        Intent i = new Intent(getBaseContext(), ProfileActivity.class);
+        startActivity(i);
     }
 }

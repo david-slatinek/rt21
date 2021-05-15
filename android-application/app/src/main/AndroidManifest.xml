@@ -4,6 +4,7 @@
     package="com.rt21">
 
     <uses-feature android:name="android.hardware.camera.any" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,28 +18,33 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RT21">
         <activity
+            android:name=".ProfileActivity"
+            android:launchMode="singleInstance"
+            android:parentActivityName=".HomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".HomeActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".InfoActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".LoginActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".CameraActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".HomeActivity" />
+            android:parentActivityName=".HomeActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleInstance" >
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

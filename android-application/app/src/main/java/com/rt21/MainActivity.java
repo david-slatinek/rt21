@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.rt21.data.User;
+
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             if (!_id.equals("") && !username.equals("") && !fullname.equals("") &&
                 !email.equals("") && age != 0)
             {
+                app.user = new User(_id, fullname, username, email, age);
                 Intent i = new Intent(getBaseContext(), HomeActivity.class);
                 startActivityForResult(i, HomeActivity.ACTIVITY_ID);
             } else {

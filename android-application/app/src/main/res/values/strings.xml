@@ -12,4 +12,8 @@
     <string name="add_location_button">add location</string>
     <string name="distance_traveled_format">Distance traveled with us: %s km</string>
     <string name="road_signs_passed_format">Road signs passed: %s</string>
+    <string name="name_s_profile">Name: %s</string>
+    <string name="age_s_profile">Age: %s</string>
+    <string name="username_s_profile">Username: %s</string>
+    <string name="email_s_profile">Email: %s</string>
 </resources>
