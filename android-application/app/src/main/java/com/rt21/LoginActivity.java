@@ -163,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
          */
         try {
             JsonObject json = Ion.with(getBaseContext())
-                    .load("POST","https://rt21-api.herokuapp.com/api/user/login")
+                    .load("POST", "https://rt21-api.herokuapp.com/api/user/login")
                     .setHeader(app.getKeyName(), app.getApiKey())
                     .setBodyParameter("email", etEmail.getText().toString())
                     .setBodyParameter("password", etPassword.getText().toString())
@@ -184,12 +184,10 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject json_id = jsonObject.getJSONObject("_id");
                 String _id = json_id.getString("$oid");
 
-                app.user = new User(_id, name+" "+last_name, nickname, email, age);
+                app.user = new User(_id, name + " " + last_name, nickname, email, age);
                 Timber.i(app.user.toString());
                 return true;
             }
-
-
         } catch (ExecutionException | InterruptedException | JSONException e) {
             e.printStackTrace();
             return false;
@@ -198,24 +196,31 @@ public class LoginActivity extends AppCompatActivity {
 
     //TODO - i works but Callback doesn't start
     private boolean onRegistration() {
-        Ion.with(getBaseContext())
-                .load("POST","https://rt21-api.herokuapp.com/api/user/login")
-                .setHeader(app.getKeyName(), app.getApiKey())
-                .setMultipartParameter("name", etName.getText().toString().split("\\s+")[0])
-                .setMultipartParameter("last_name", etName.getText().toString().split("\\s+")[1])
-                .setMultipartParameter("age", etAge.getText().toString())
-                .setMultipartParameter("age", "20")
-                .setMultipartParameter("nickname", etUsername.getText().toString())
-                .setMultipartParameter("email", etEmail.getText().toString())
-                .setMultipartParameter("password", etPassword.getText().toString())
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                   public void onCompleted(Exception e, JsonObject result) {
-                       Timber.i(result.toString());
-                   }
-                });
+        try {
+            JsonObject json = Ion.with(getBaseContext())
+                    .load("POST", "https://rt21-api.herokuapp.com/api/user/register")
+                    .setHeader(app.getKeyName(), app.getApiKey())
+                    .setBodyParameter("name", etName.getText().toString().split("\\s+")[0])
+                    .setBodyParameter("last_name", etName.getText().toString().split("\\s+")[1])
+                    .setBodyParameter("age", etAge.getText().toString())
+                    .setBodyParameter("nickname", etUsername.getText().toString())
+                    .setBodyParameter("email", etEmail.getText().toString())
+                    .setBodyParameter("password", etPassword.getText().toString())
+                    .asJsonObject()
+                    .get();
 
-        return true;
+            JSONObject jsonObject = new JSONObject(json.toString());
+            if (jsonObject.has("error")) {
+                Toast.makeText(getBaseContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
+                return false;
+            } else {
+                Toast.makeText(getBaseContext(), "User registered", Toast.LENGTH_SHORT).show();
+                Timber.i(jsonObject.toString());
+                return true;
+            }
+        } catch (InterruptedException | ExecutionException | JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
