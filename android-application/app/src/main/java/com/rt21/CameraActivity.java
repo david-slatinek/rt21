@@ -2,17 +2,10 @@ package com.rt21;
 
 // activity to test Camera class
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Rational;
@@ -23,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,11 +26,9 @@ import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureConfig;
 import androidx.camera.core.Preview;
 import androidx.camera.core.PreviewConfig;
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LifecycleOwner;
 
 import org.jetbrains.annotations.NotNull;
-import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -46,8 +36,6 @@ import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 
 import java.io.File;
-
-import timber.log.Timber;
 
 
 public class CameraActivity extends AppCompatActivity{
@@ -66,6 +54,16 @@ public class CameraActivity extends AppCompatActivity{
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int ACTIVITY_ID = 102;
+
+    public static final String IMAGE_RESOLUTION = "IMAGE_RESOLUTION";
+    public static final int IMAGE240p = 240;
+    public static final int IMAGE480p = 480;
+    public static final int IMAGE720p = 720;
+    public static final int IMAGE768p = 768;
+    public static final int IMAGE1080p = 1080;
+
+    private Size imageResolutionFinal;
+
 
     // handler will be used to trigger code to take a picture every X seconds
     Handler myHandler = new Handler();
@@ -102,8 +100,39 @@ public class CameraActivity extends AppCompatActivity{
         GeoPoint gPt = new GeoPoint(lat, lng);
         mapController.setCenter(gPt);
 
+        //set resolution of photo from value which was passed in intent
+        imageResolutionFinal = getImageResolution(getIntent().getExtras().getInt(IMAGE_RESOLUTION));
+
         // when activity starts begin with camera preview
         startCameraFlow();
+    }
+
+    /**
+     * @param resolution constant of image size. Class CameraActivity.IMAGE___p
+     * @return Object Size(width, height) of image
+     */
+    // returns Size object
+    public Size getImageResolution(int resolution){
+        switch (resolution){
+            case IMAGE240p:
+                return new Size( 240, 320);
+
+            case IMAGE480p:
+                return new Size( 480, 640);
+
+            case IMAGE720p:
+                return new Size( 720, 960);
+
+            case IMAGE768p:
+                return new Size( 768, 1024);
+
+            case IMAGE1080p:
+                return new Size(1080, 1440);
+
+                // if none of constants is matching with resolution parameter pick a default value
+            default:
+                return new Size( 192, 256);
+        }
     }
 
     public void startCameraFlow(){
@@ -145,7 +174,7 @@ public class CameraActivity extends AppCompatActivity{
         // flash is turned off and desired resolution is set to 1280x720. cameraX takes the photo of nearest possible resolution
         ImageCaptureConfig imageCaptureConfig = new ImageCaptureConfig.Builder().setCaptureMode(ImageCapture.CaptureMode.MIN_LATENCY)
                 .setTargetRotation(getWindowManager().getDefaultDisplay().getRotation())
-                .setFlashMode(FlashMode.OFF).setTargetResolution(new Size(1280, 720)).build();
+                .setFlashMode(FlashMode.OFF).setTargetResolution(imageResolutionFinal).build();
 
         final ImageCapture imageCapture = new ImageCapture(imageCaptureConfig);
 
