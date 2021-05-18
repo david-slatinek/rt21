@@ -40,6 +40,8 @@ import java.io.File;
 
 public class CameraActivity extends AppCompatActivity{
 
+    private MyApplication app;
+
     private boolean driving = false;
     private TextView txtLocation;
     private TextureView textureViewCameraFlowPreview;
@@ -76,6 +78,8 @@ public class CameraActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+
+        app = (MyApplication) getApplication();
 
         txtLocation = findViewById(R.id.txtLocationHolder);
         textureViewCameraFlowPreview = (TextureView) findViewById(R.id.textureViewCameraPreview);
@@ -184,7 +188,7 @@ public class CameraActivity extends AppCompatActivity{
             public void onClick(View v) {
 
                 // create new file. name is from current time
-                File file = new File(getFilesDir(), System.currentTimeMillis() + ".jpg");
+                File file = new File(getFilesDir(), app.user.getId() + "_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
 
                 // take a picture from camera and save it to file and check if it was saved
                 imageCapture.takePicture(file, new ImageCapture.OnImageSavedListener() {
@@ -193,6 +197,7 @@ public class CameraActivity extends AppCompatActivity{
                     public void onImageSaved(@NonNull @NotNull File file) {
                         // notify user where image was saved with absolute path
 
+                        //TODO - remove message when application is finished
                         CommonMethods.displayToastShort("Image was captured and saved in: " + file.getAbsolutePath(), getApplicationContext());
 
                         // read that file and show it in imageView with Bitmap object
