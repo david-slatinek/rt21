@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
@@ -155,12 +154,12 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Login request to get data of a testUser from API
+     * Ion sends POST request to api with id in url and header that contains api key name and api key value
+     * as a result it gets JsonObject with user data
+     */
     private boolean onLogin() {
-        /**
-         * Login request to get data of a testUser from API
-         * Ion sends POST request to api with id in url and header that contains api key name and api key value
-         * as a result it gets JsonObject with user data
-         */
         try {
             JsonObject json = Ion.with(getBaseContext())
                     .load("POST", "https://rt21-api.herokuapp.com/api/user/login")
@@ -172,10 +171,10 @@ public class LoginActivity extends AppCompatActivity {
 
             JSONObject jsonObject = new JSONObject(json.toString());
             if (jsonObject.has("error")) {
-                Toast.makeText(getBaseContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
+                CommonMethods.displayToastShort("error", getApplicationContext());
                 return false;
             } else {
-                Toast.makeText(getBaseContext(), "Log in success", Toast.LENGTH_SHORT).show();
+                CommonMethods.displayToastShort("Log in success", getApplicationContext());
                 String name = jsonObject.getString("name");
                 String last_name = jsonObject.getString("last_name");
                 String nickname = jsonObject.getString("nickname");
@@ -210,10 +209,10 @@ public class LoginActivity extends AppCompatActivity {
 
             JSONObject jsonObject = new JSONObject(json.toString());
             if (jsonObject.has("error")) {
-                Toast.makeText(getBaseContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
+                CommonMethods.displayToastShort(jsonObject.getString("error"), getApplicationContext());
                 return false;
             } else {
-                Toast.makeText(getBaseContext(), "User registered", Toast.LENGTH_SHORT).show();
+                CommonMethods.displayToastShort("User registered", getApplicationContext());
                 Timber.i(jsonObject.toString());
                 return true;
             }
