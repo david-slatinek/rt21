@@ -44,7 +44,7 @@ def create_sign():
     }
 
     obj_id = main.SignCollection.insert_one(obj).inserted_id
-    if not obj_id:
+    if obj_id:
         return main.json.loads(main.json_util.dumps(obj_id)), 201
     else:
         return main.create_response('error', 'error when creating sign', 500)
@@ -102,3 +102,21 @@ def delete_sign(sign_id):
     main.SignCollection.delete_one({'_id': main.ObjectId(sign_id)})
 
     return main.create_response('success', 'location deleted', 200)
+
+
+def get_sings(drive_id):
+    if len(drive_id) != 24:
+        return main.create_response('error', 'invalid id length', 400)
+
+    if not main.DriveCollection.find_one({"_id": main.ObjectId(drive_id)}):
+        return main.create_response('error', 'drive not found', 404)
+
+    signs = main.SignCollection.find({"drive_id": drive_id})
+
+    result = {}
+    i_d = 0
+    for x in signs:
+        result[i_d] = main.json_util.loads(main.json_util.dumps(x))
+        i_d += 1
+
+    return main.json.loads(main.json_util.dumps(result))

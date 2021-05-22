@@ -158,5 +158,12 @@ def delete_sign(sign_id):
     return sign.delete_sign(sign_id)
 
 
+@app.route('/api/sign/getSigns/<drive_id>', methods=['GET'])
+def get_sings(drive_id):
+    if request.headers.get('X-API-Key') != api_key:
+        return create_response("error", "api key not given or invalid", 401)
+    return sign.get_sings(drive_id)
+
+
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
