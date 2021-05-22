@@ -123,6 +123,13 @@ def delete_location(location_id):
     return location.delete_location(location_id)
 
 
+@app.route('/api/location/getLocations/<drive_id>', methods=['GET'])
+def get_locations(drive_id):
+    if request.headers.get('X-API-Key') != api_key:
+        return create_response("error", "api key not given or invalid", 401)
+    return location.get_locations(drive_id)
+
+
 @app.route('/api/sign/create', methods=['POST'])
 def create_sign():
     if request.headers.get('X-API-Key') != api_key:

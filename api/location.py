@@ -49,7 +49,7 @@ def create_location():
     }
 
     obj_id = main.LocationCollection.insert_one(obj).inserted_id
-    if not obj_id:
+    if obj_id:
         return main.json.loads(main.json_util.dumps(obj_id)), 201
     else:
         return main.create_response('error', 'error when creating location', 500)
@@ -110,3 +110,21 @@ def delete_location(location_id):
     main.LocationCollection.delete_one({'_id': main.ObjectId(location_id)})
 
     return main.create_response('success', 'location deleted', 200)
+
+
+def get_locations(drive_id):
+    if len(drive_id) != 24:
+        return main.create_response('error', 'invalid id length', 400)
+
+    if not main.DriveCollection.find_one({"_id": main.ObjectId(drive_id)}):
+        return main.create_response('error', 'drive not found', 404)
+
+    locations = main.LocationCollection.find({"drive_id": drive_id})
+
+    result = {}
+    i_d = 0
+    for x in locations:
+        result[i_d] = main.json_util.loads(main.json_util.dumps(x))
+        i_d += 1
+
+    return main.json.loads(main.json_util.dumps(result))
