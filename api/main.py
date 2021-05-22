@@ -88,6 +88,13 @@ def delete_drive(drive_id):
     return drive.delete_drive(drive_id)
 
 
+@app.route('/api/drive/getDrives/<user_id>', methods=['GET'])
+def get_drives(user_id):
+    if request.headers.get('X-API-Key') != api_key:
+        return create_response("error", "api key not given or invalid", 401)
+    return drive.get_drives(user_id)
+
+
 @app.route('/api/location/create', methods=['POST'])
 def create_location():
     if request.headers.get('X-API-Key') != api_key:

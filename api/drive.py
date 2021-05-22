@@ -1,4 +1,7 @@
+import json
 from datetime import datetime
+
+import time
 import main
 
 
@@ -16,8 +19,8 @@ def create_drive():
 
     obj = {
         'user_id': user_id,
-        'start': datetime.now(),
-        'end': datetime.now(),
+        'start': time.time(),
+        'end': time.time(),
         'length': 0.0,
         'speed_limit_exceed': 0,
         'mean_speed': 0.0,
@@ -26,7 +29,7 @@ def create_drive():
     }
 
     obj_id = main.DriveCollection.insert_one(obj).inserted_id
-    if not obj_id:
+    if obj_id:
         return main.json.loads(main.json_util.dumps(obj_id)), 201
     else:
         return main.create_response('error', 'error when creating drive', 500)
@@ -92,3 +95,21 @@ def delete_drive(drive_id):
     main.DriveCollection.delete_one({'_id': main.ObjectId(drive_id)})
 
     return main.create_response('success', 'drive deleted', 200)
+
+
+def get_drives(user_id):
+    if len(user_id) != 24:
+        return main.create_response('error', 'invalid id length', 400)
+
+    if not main.UserCollection.find_one({"_id": main.ObjectId(user_id)}):
+        return main.create_response('error', 'user not found', 404)
+
+    drives = main.DriveCollection.find({"user_id": user_id})
+
+    result = {}
+    i_d = 0
+    for x in drives:
+        result[i_d] = main.json_util.loads(main.json_util.dumps(x))
+        i_d += 1
+
+    return main.json.loads(main.json_util.dumps(result))
