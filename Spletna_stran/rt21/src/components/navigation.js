@@ -28,13 +28,13 @@ const Navigation = () => {
         
             <Switch>
                 <Route path="/" exact>
-                <Home/>
+                    <Home/>
                 </Route>
                 <Route path="/login">
-                <Login user={"testing"}/>
+                    <Login user={"testing"}/>
                 </Route>
                 <Route path="/register">
-                <Register />
+                    <Register />
                 </Route>
             </Switch>
         </Router>

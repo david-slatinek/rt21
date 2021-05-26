@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Login = (props) => {
     return (
@@ -9,11 +10,11 @@ const Login = (props) => {
             <div className="card-body">
                 <form>
                     <div className="input-group mb-3">
-                        <span className="input-group-addon"><i className="glyphicon glyphicon-user"></i></span>
+                        <div class="input-group-text">👤</div>
                         <input type="text" className="form-control" name="username" placeholder="Username"/>
                     </div>
                     <div className="input-group mb-3">
-                        <span className="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        <div className="input-group-text">🔒</div>
                         <input type="password" className="form-control" name="password" placeholder="Password"/>
                     </div>
                     <div className="text-center">
