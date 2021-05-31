@@ -7,11 +7,19 @@ const Home = () => {
     const [markers, setMarkers] = useState([]);
 
 
+    var user = JSON.parse(localStorage.getItem("userSessionID"));
+
+    function componetWillMount() {
+        //get road signs locations and types -> setMarksers
+    }
+
     return (
     <div>
         <p style={{color: 'green'}}><b>TODO:</b> connect to API and show driving statistics</p>
         <h1>Home</h1>
         <p>Glavna stran za prikaz statistike uporabnika če je ta prijavlen... če ni ga ob zagonu rediratamo na login</p>
+
+        {(localStorage.getItem("userSessionID") !== null ? <p> Hello {user.nickname} </p> : null)}
 
         <div id="mapid" className="w-50 m-auto">
             <MapContainer center={[46.55903587583584, 15.63822697025317]} zoom={13} scrollWheelZoom={false}>

@@ -12,22 +12,22 @@ const Register = () => {
 
         var fullnameSplit = fullname.split(" ");
 
+        console.log(fullnameSplit);
+
+        const formData = new FormData();
+        formData.append("name", fullnameSplit[0]);
+        formData.append("last_name", fullnameSplit[1]);
+        formData.append("age", 21);
+        formData.append("nickname", username);
+        formData.append("email", email);
+        formData.append("password", password);
+
         await fetch('https://rt21-api.herokuapp.com/api/user/register', {
             method: 'POST',
-            withCredentials: true,
-            credentials: 'include',
             headers: {
-                'Authorization': 'Bearer rt21-api',
                 'X-API-Key': '04fca805-c486-4519-9bdb-7dd80733dfd1',
-                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                name: fullnameSplit[0],
-                last_name: fullnameSplit[1],
-                nickname: username,
-                email: email,
-                password: password
-            })
+            body: formData
         })
         .then(response => {
             if (!response.ok) {
@@ -45,7 +45,7 @@ const Register = () => {
 
             console.log(data);
 
-            window.location = '/';
+            window.location = '/login';
         }) 
         .catch((error) => {
             console.log("error: " + error);

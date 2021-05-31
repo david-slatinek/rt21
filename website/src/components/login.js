@@ -8,19 +8,16 @@ const Login = (props) => {
     async function onLogin(e) {
         e.preventDefault();
 
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("password", password);
+
         await fetch('https://rt21-api.herokuapp.com/api/user/login', {
             method: 'POST',
-            withCredentials: true,
-            credentials: 'include',
             headers: {
-              'Authorization': 'Bearer rt21-api',
-              'X-API-Key': '04fca805-c486-4519-9bdb-7dd80733dfd1',
-              'Content-Type': 'application/json'
+                'X-API-Key': '04fca805-c486-4519-9bdb-7dd80733dfd1',
             },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
+            body: formData
         })
         .then(response => {
             if (!response.ok) {
@@ -29,12 +26,11 @@ const Login = (props) => {
             return response.json();
         })
         .then(data => {
-            console.log("success");
-
             setEmail("");
             setPassword("");
 
-            console.log(data);
+            //console.log(data);
+            localStorage.setItem('userSessionID', JSON.stringify(data));
 
             window.location = '/';
         })

@@ -7,6 +7,15 @@ import Home from './home';
 import Profile from './profile';
 
 const Navigation = () => {
+
+    function logOut() {
+        localStorage.removeItem("userSessionID");
+        
+        window.location = '/';
+    }
+
+    //if localStorage.getItem("userSessionID") !== null -> different header
+
     return (
     <div>
         <Router>
@@ -29,7 +38,7 @@ const Navigation = () => {
                         <a className="nav-link" href="/profile">Profile</a>
                     </li>
                     <li>
-                        <a className="nav-link" href="#">Log out</a>
+                        <a className="nav-link" onClick={logOut}>Log out</a>
                     </li>
                 </ul>
             </nav>
