@@ -34,6 +34,5 @@
     ">0.2%",
     "not dead",
     "not op_mini all"
-  ],
-  "proxy": "https://rt21-api.herokuapp.com/api/"
+  ]
 }

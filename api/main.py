@@ -10,12 +10,14 @@ import os
 from common import create_response
 from bson.objectid import ObjectId
 from bson import json_util
-from flask import request
+from flask import request, jsonify
 from flask_bcrypt import Bcrypt
+from flask_cors import CORS
 
 key = config.KEY
 api_key = config.API_KEY
 app = flask.Flask(__name__)
+CORS(app)
 bcrypt = Bcrypt()
 
 app.config["MONGO_URI"] = "mongodb+srv://david:" + key + "@apicluster.knc1y.mongodb.net/rt21Db?retryWrites=true"
