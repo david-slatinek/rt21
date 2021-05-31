@@ -14,31 +14,25 @@ const Navigation = () => {
         window.location = '/';
     }
 
-    //if localStorage.getItem("userSessionID") !== null -> different header
-
     return (
     <div>
         <Router>
-            <p style={{color: 'green'}}><b>TODO:</b> if user is logged in show HOME, PROFILE and LOG OUT else the only thing that users see is login and register page</p>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
                 <ul className="navbar-nav">
                     <li className="nav-item">
-                        {/* <Link to="/">Home</Link> */}
-                        <a className="nav-link" href="/">Home</a>
+                       <a className="nav-link" href="/">Home</a>
                     </li>
                     <li className="nav-item">
-                        {/* <Link to="/login">Login</Link> */}
-                        <a className="nav-link" href="/login">Login</a>
+                        {(localStorage.getItem("userSessionID") === null ? <a className="nav-link" href="/login">Login</a> : null)}
                     </li>
                     <li className="nav-item">
-                        {/* <Link to="/register">Register</Link> */}
-                        <a className="nav-link" href="/register">Register</a>
+                        {(localStorage.getItem("userSessionID") === null ?  <a className="nav-link" href="/register">Register</a> : null)}
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="/profile">Profile</a>
+                        {(localStorage.getItem("userSessionID") !== null ? <a className="nav-link" href="/profile">Profile</a> : null)}
                     </li>
                     <li>
-                        <a className="nav-link" onClick={logOut}>Log out</a>
+                        {(localStorage.getItem("userSessionID") !== null ? <a className="nav-link" onClick={logOut}>Log out</a> : null)}
                     </li>
                 </ul>
             </nav>
