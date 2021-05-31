@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.leaflet-container {
+  height: 400px;
+  width: 400px;
+}
+
+#mapid {height: 200px;}
