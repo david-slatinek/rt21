@@ -20,46 +20,56 @@ const Home = () => {
             <h1>Home</h1>
         </div>
 
-        <div id="mapid" className="w-50 m-auto">
-            <MapContainer center={[46.55903587583584, 15.63822697025317]} zoom={13} scrollWheelZoom={false}>
-                <TileLayer
-                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <Marker position={[46.55903587583584, 15.63822697025317]}>
-                    <Popup>
-                        Maribort, FERI
-                    </Popup>
-                </Marker>
+        {(localStorage.getItem("userSessionID") === null ? 
+            <div className="card w-25 m-auto text-center p-3">
+                <p>For accessing to driving statistics and road signs detected while driving please<br/>
+                <a href="/login">log in</a> or <a href="/register">create a new account</a>
+                <br/>and start your new journey.</p>
+            </div>   
+            
+            :
 
-                {markers.map(marker => {
-                    <Marker
-                        key={marker._id}
-                        position={[
-                            marker.latitude,
-                            marker.longitude
-                        ]}
-                    onClick={() => {
-                        setActiveMarker(marker);
-                    }}
-                    ></Marker>
-                })}
+            <div id="mapid" className="w-50 m-auto">
+                <MapContainer center={[46.55903587583584, 15.63822697025317]} zoom={13} scrollWheelZoom={false}>
+                    <TileLayer
+                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker position={[46.55903587583584, 15.63822697025317]}>
+                        <Popup>
+                            Maribort, FERI
+                        </Popup>
+                    </Marker>
 
-                {activeMarker && (
-                    <Popup
-                        position={[
-                            activeMarker.latitude,
-                            activeMarker.longitude
-                        ]}
-                    >
-                        <div>
-                            <h1>activeMarker.type</h1>
-                        </div>
-                    </Popup>
-                )}
+                    {markers.map(marker => {
+                        <Marker
+                            key={marker._id}
+                            position={[
+                                marker.latitude,
+                                marker.longitude
+                            ]}
+                        onClick={() => {
+                            setActiveMarker(marker);
+                        }}
+                        ></Marker>
+                    })}
 
-            </MapContainer>
-        </div>
+                    {activeMarker && (
+                        <Popup
+                            position={[
+                                activeMarker.latitude,
+                                activeMarker.longitude
+                            ]}
+                        >
+                            <div>
+                                <h1>activeMarker.type</h1>
+                            </div>
+                        </Popup>
+                    )}
+
+                </MapContainer>
+            </div>
+        )}
     </div>
     )
 }
