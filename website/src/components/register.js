@@ -55,7 +55,6 @@ const Register = () => {
 
     return (
         <div className="card w-75 m-auto mt-5">
-            <p style={{color: 'green'}}><b>TODO:</b> connect to API and add new user to database</p>
             <div className="card-header text-center">
                 <h3>Register</h3>
             </div>

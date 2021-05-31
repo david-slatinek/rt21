@@ -16,10 +16,9 @@ const Home = () => {
     return (
     <div>
         <p style={{color: 'green'}}><b>TODO:</b> connect to API and show driving statistics</p>
-        <h1>Home</h1>
-        <p>Glavna stran za prikaz statistike uporabnika če je ta prijavlen... če ni ga ob zagonu rediratamo na login</p>
-
-        {(localStorage.getItem("userSessionID") !== null ? <p> Hello {user.nickname} </p> : null)}
+        <div className="text-center mb-3">
+            <h1>Home</h1>
+        </div>
 
         <div id="mapid" className="w-50 m-auto">
             <MapContainer center={[46.55903587583584, 15.63822697025317]} zoom={13} scrollWheelZoom={false}>
@@ -27,11 +26,11 @@ const Home = () => {
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                {/* <Marker position={[51.505, -0.09]}>
+                <Marker position={[46.55903587583584, 15.63822697025317]}>
                     <Popup>
-                        A pretty CSS3 popup. <br /> Easily customizable.
+                        Maribort, FERI
                     </Popup>
-                </Marker> */}
+                </Marker>
 
                 {markers.map(marker => {
                     <Marker

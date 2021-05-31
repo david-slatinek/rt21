@@ -5,6 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding-bottom: 5%;
+  padding-top: 1%;
 }
 
 code {
@@ -13,8 +15,8 @@ code {
 }
 
 .leaflet-container {
-  height: 400px;
-  width: 400px;
+  height: 100%;
+  width: 100%;
 }
 
-#mapid {height: 200px;}
+#mapid {height: 400px;}

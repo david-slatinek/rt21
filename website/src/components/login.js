@@ -41,7 +41,6 @@ const Login = (props) => {
 
     return (
         <div className="card w-75 m-auto mt-5">
-            <p style={{color: 'green'}}><b>TODO:</b> connect to API and check if user credentials are ok</p>
             <div className="card-header text-center">
                 <h3>Login</h3>
             </div>
