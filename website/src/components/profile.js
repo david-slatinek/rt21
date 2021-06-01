@@ -26,9 +26,9 @@ const Profile = (props) => {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error("HTTP status code " + response.status);
                 setError(true);
                 setErrorMessage('HTTP status code ' + response.status)
+                throw new Error("HTTP status code " + response.status);
             }
             return response.json();
         })
@@ -36,11 +36,9 @@ const Profile = (props) => {
             setPassword("");
 
             console.log(data);
-            //localStorage.setItem('userSessionID', JSON.stringify(data));
 
             setEdit(false);
             setSuccess(true);
-            //window.location = '/profile';
         })
         .catch((error) => {
             console.log("error: " + error);
@@ -113,8 +111,8 @@ const Profile = (props) => {
                                     </a>
                                 </div>
                                 <div className="col-sm-9">
-                                    {(success ? <div className="alert alert-success" role="alert"> SUCCESS </div> : null)}
-                                    {(error ? <div className="alert alert-danger" role="alert"> {errorMessage} </div> : null)}
+                                    {(success ? <div className="alert alert-success" role="alert">SUCCESS</div> : null)}
+                                    {(error ? <div className="alert alert-danger" role="alert">{errorMessage}</div> : null)}
                                 </div>
                             </div>
                             

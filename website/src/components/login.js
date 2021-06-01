@@ -4,6 +4,7 @@ const Login = (props) => {
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
 
+    const[errorMessage, setErrorMessage] = useState('');
 
     async function onLogin(e) {
         e.preventDefault();
@@ -21,7 +22,7 @@ const Login = (props) => {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error("HTTP status code " + response.status);
+                return response.json().then(response => {throw new Error(response.error)})
             }
             return response.json();
         })
@@ -29,19 +30,17 @@ const Login = (props) => {
             setEmail("");
             setPassword("");
 
-            //console.log(data);
             localStorage.setItem('userSessionID', JSON.stringify(data));
 
             window.location = '/';
         })
-        .catch((error) => {
-            console.log("error: " + error);
+        .catch(error => {
+            setErrorMessage('' + error);
         });
     }
 
     return (
         <div className="card w-75 m-auto mt-5">
-            <p style={{color: 'green'}}><b>TODO:</b> if unssuccesful login show error on bottom</p>
             <div className="card-header text-center">
                 <h3>Login</h3>
             </div>
@@ -60,6 +59,11 @@ const Login = (props) => {
                     </div>
                 </form>
             </div>
+            { errorMessage !== '' &&
+                <div style={{background: '#f8d7da'}} className="card-footer border-danger">
+                    <span style={{color: '#721c24'}}>{errorMessage}</span> 
+                </div>
+            }
         </div>
     )
 }
