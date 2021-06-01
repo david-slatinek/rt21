@@ -32,7 +32,7 @@ const Navigation = () => {
                         {(localStorage.getItem("userSessionID") !== null ? <a className="nav-link" href="/profile">Profile</a> : null)}
                     </li>
                     <li>
-                        {(localStorage.getItem("userSessionID") !== null ? <a className="nav-link" onClick={logOut}>Log out</a> : null)}
+                        {(localStorage.getItem("userSessionID") !== null ? <button id="logoutButton" className="nav-link" onClick={logOut}>Log out</button> : null)}
                     </li>
                 </ul>
             </nav>

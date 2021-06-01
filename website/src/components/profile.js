@@ -97,7 +97,7 @@ const Profile = (props) => {
                         <div className="col-sm-9 text-secondary">
                             <div className="row">
                                 <div className="col-sm-3">
-                                    <a className="btn btn-info" onClick={() => {
+                                    <button className="btn btn-info" onClick={() => {
                                         if (edit) {
                                             setEdit(false)
                                         } else {
@@ -108,7 +108,7 @@ const Profile = (props) => {
                                         }
                                     }}> 
                                         {(edit ? "Cancle" : "Edit")}
-                                    </a>
+                                    </button>
                                 </div>
                                 <div className="col-sm-9">
                                     {(success ? <div className="alert alert-success" role="alert">SUCCESS</div> : null)}

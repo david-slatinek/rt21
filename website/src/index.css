@@ -20,3 +20,12 @@ code {
 }
 
 #mapid {height: 400px;}
+
+#logoutButton {
+  background: none;
+	color: inherit;
+	border: none;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
