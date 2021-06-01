@@ -1,21 +1,74 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 const Home = () => {
     const [activeMarker, setActiveMarker] = useState(null);
-    const [markers, setMarkers] = useState([]);
-
+    const [markersRoadSigns, setMarkersRoadSigns] = useState(null);
+    // const [markersRoadQuality, setMarkersRoadQuality] = useState([]);
+    
 
     var user = JSON.parse(localStorage.getItem("userSessionID"));
 
-    function componetWillMount() {
+    useEffect(() => {
         //get road signs locations and types -> setMarksers
-    }
+        async function fetchAPI() {
+            //get all user drives
+            let response = await fetch('https://rt21-api.herokuapp.com/api/drive/getDrives/' + user._id.$oid, {
+                method: 'GET',
+                headers: {
+                    'X-API-Key': '04fca805-c486-4519-9bdb-7dd80733dfd1',
+                }
+            });
+            if (!response.ok) {
+                response.json().then(res => {
+                    console.log(res.error);
+                });
+                return;
+            } 
+
+            //store all user drives
+            var data = await response.json();
+            //get latest user drive
+            var latesDrive = data[2]._id.$oid;
+
+            //get all road quality location of latest drive
+            response = await fetch('https://rt21-api.herokuapp.com/api/sign/getSigns/' + latesDrive, {
+                method: 'GET',
+                headers: {
+                    'X-API-Key': '04fca805-c486-4519-9bdb-7dd80733dfd1',
+                }
+            });  
+            if (!response.ok) {
+                response.json().then(res => {
+                    console.log(res.error);
+                });
+                return;
+            } 
+
+            //store all locations drives
+            data = await response.json();
+            
+            let tmpArray = [];
+            Object.entries(data).forEach(([key, value]) => {
+                tmpArray.push(value);
+            });
+
+            await setMarkersRoadSigns(tmpArray);
+        }
+        
+        if (localStorage.getItem("userSessionID") !== null) {
+            fetchAPI();
+            console.log(markersRoadSigns);
+        }
+    }, []);
 
     return (
     <div>
         <p style={{color: 'green'}}><b>TODO:</b> connect to API and show driving statistics</p>
+        <p style={{color: 'green'}}><b>TODO:</b> make list of all old drives -{'>'} onClick() ={'>'} get locations and show them on the map</p>
+        <p style={{color: 'green'}}><b>TODO:</b> make 1st tab that show road quality and 2nd tab that shows road signs</p>
+        
         <div className="text-center mb-3">
             <h1>Home</h1>
         </div>
@@ -41,9 +94,16 @@ const Home = () => {
                         </Popup>
                     </Marker>
 
-                    {markers.map(marker => {
+                    <Marker position={[46.34076659732073, 15.431010914065373]}>
+                        <Popup>
+                            Konjice
+                        </Popup>
+                    </Marker>
+
+                    { markersRoadSigns !== null && markersRoadSigns.map(marker => {
+                        console.log(marker);
                         <Marker
-                            key={marker._id}
+                            //key={marker._id}
                             position={[
                                 marker.latitude,
                                 marker.longitude
@@ -51,10 +111,14 @@ const Home = () => {
                         onClick={() => {
                             setActiveMarker(marker);
                         }}
-                        ></Marker>
+                        >
+                            <Popup>
+                                marker.type
+                            </Popup>
+                        </Marker>
                     })}
-
-                    {activeMarker && (
+                    
+                    {/* {activeMarker && (
                         <Popup
                             position={[
                                 activeMarker.latitude,
@@ -65,7 +129,7 @@ const Home = () => {
                                 <h1>activeMarker.type</h1>
                             </div>
                         </Popup>
-                    )}
+                    )} */}
 
                 </MapContainer>
             </div>
