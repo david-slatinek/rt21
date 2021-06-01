@@ -5,8 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 const Home = () => {
     const [activeMarker, setActiveMarker] = useState(null);
     const [markersRoadSigns, setMarkersRoadSigns] = useState(null);
-    // const [markersRoadQuality, setMarkersRoadQuality] = useState([]);
-    
+    const [markersRoadQuality, setMarkersRoadQuality] = useState(null);
 
     var user = JSON.parse(localStorage.getItem("userSessionID"));
 
@@ -45,21 +44,35 @@ const Home = () => {
                 });
                 return;
             } 
-
-            //store all locations drives
             data = await response.json();
-            
             let tmpArray = [];
             Object.entries(data).forEach(([key, value]) => {
                 tmpArray.push(value);
             });
-
             await setMarkersRoadSigns(tmpArray);
+
+            response = await fetch('https://rt21-api.herokuapp.com/api/location/getLocations/' + latesDrive, {
+                method: 'GET',
+                headers: {
+                    'X-API-Key': '04fca805-c486-4519-9bdb-7dd80733dfd1',
+                }
+            });
+            if (!response.ok) {
+                response.json().then(res => {
+                    console.log(res.error);
+                });
+                return;
+            }
+            data = await response.json();
+            tmpArray = [];
+            Object.entries(data).forEach(([key, value]) => {
+                tmpArray.push(value);
+            });
+            await setMarkersRoadQuality(tmpArray)
         }
         
         if (localStorage.getItem("userSessionID") !== null) {
             fetchAPI();
-            console.log(markersRoadSigns);
         }
     }, []);
 
@@ -83,18 +96,16 @@ const Home = () => {
             :
 
             <div id="mapid" className="w-50 m-auto">
-                <MapContainer center={[46.55903587583584, 15.63822697025317]} zoom={13} scrollWheelZoom={false}>
+                {
+                    markersRoadSigns !== null && markersRoadQuality !== null && 
+               
+                <MapContainer center={[markersRoadSigns[0].latitude, markersRoadSigns[0].longitude]} zoom={13} scrollWheelZoom={false}>
                     <TileLayer
                         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <Marker position={[46.55903587583584, 15.63822697025317]}>
-                        <Popup>
-                            Maribort, FERI
-                        </Popup>
-                    </Marker>
 
-                    { markersRoadSigns !== null && markersRoadSigns.map(marker => (
+                    { markersRoadSigns.map(marker => (
                         <Marker
                             key={marker._id.$oid}
                             position={[marker.latitude, marker.longitude]}
@@ -103,25 +114,25 @@ const Home = () => {
                             }}
                         >
                             <Popup>
-                                {marker.type}
+                                <h4>Roadsign: {marker.type}</h4>
                             </Popup>
                         </Marker>
                     ))}
-                    
-                    {/* {activeMarker && (
-                        <Popup
-                            position={[
-                                activeMarker.latitude,
-                                activeMarker.longitude
-                            ]}
+                    { markersRoadQuality.map(marker => (
+                        <Marker
+                            key={marker._id.$oid}
+                            position={[marker.latitude, marker.longitude]}
+                            onClick={() => {
+                                setActiveMarker(marker);
+                            }}
                         >
-                            <div>
-                                <h1>activeMarker.type</h1>
-                            </div>
-                        </Popup>
-                    )} */}
-
+                            <Popup>
+                                <h4>Road quality: {marker.road_quality}</h4>
+                            </Popup>
+                        </Marker>
+                    ))}
                 </MapContainer>
+                }
             </div>
         )}
     </div>
