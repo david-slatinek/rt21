@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 const Login = (props) => {
-    const[email, setEmail] = useState('');
-    const[password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    const[errorMessage, setErrorMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     async function onLogin(e) {
         e.preventDefault();
@@ -20,23 +20,25 @@ const Login = (props) => {
             },
             body: formData
         })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(response => {throw new Error(response.error)})
-            }
-            return response.json();
-        })
-        .then(data => {
-            setEmail("");
-            setPassword("");
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(response => {
+                        throw new Error(response.error)
+                    })
+                }
+                return response.json();
+            })
+            .then(data => {
+                setEmail("");
+                setPassword("");
 
-            localStorage.setItem('userSessionID', JSON.stringify(data));
+                localStorage.setItem('userSessionID', JSON.stringify(data));
 
-            window.location = '/';
-        })
-        .catch(error => {
-            setErrorMessage('' + error);
-        });
+                window.location = '/';
+            })
+            .catch(error => {
+                setErrorMessage('' + error);
+            });
     }
 
     return (
@@ -46,23 +48,33 @@ const Login = (props) => {
             </div>
             <div className="card-body">
                 <form onSubmit={onLogin}>
+
                     <div className="input-group mb-3">
-                        <div class="input-group-text">📧</div>
-                        <input type="text" className="form-control" name="email" placeholder="Email" required="" value={email} onChange={(e) => {setEmail(e.target.value)}}/>
+                        <div className="input-group-text"><i className="fas fa-envelope"/></div>
+                        <input type="email" className="form-control" name="email" placeholder="Email" required
+                               value={email} onChange={(e) => {
+                            setEmail(e.target.value)
+                        }}/>
                     </div>
+
                     <div className="input-group mb-3">
-                        <div className="input-group-text">🔒</div>
-                        <input type="password" className="form-control" name="password" placeholder="Password" required="" value={password} onChange={(e) => {setPassword(e.target.value)}}/>
+                        <div className="input-group-text"><i className="fas fa-key"/></div>
+                        <input type="password" className="form-control" name="password" placeholder="Password"
+                               required value={password} onChange={(e) => {
+                            setPassword(e.target.value)
+                        }}/>
                     </div>
+
                     <div className="text-center">
-                        <input type="submit" className="btn btn-primary w-50" style={{fontSize: 17}} value="Login"/>
+                        <input type="submit" className="btn btn-dark w-50" style={{fontSize: 17}} value="Login"/>
                     </div>
+
                 </form>
             </div>
-            { errorMessage !== '' &&
-                <div style={{background: '#f8d7da'}} className="card-footer border-danger">
-                    <span style={{color: '#721c24'}}>{errorMessage}</span> 
-                </div>
+            {errorMessage !== '' &&
+            <div style={{background: '#f8d7da'}} className="card-footer border-danger">
+                <span style={{color: '#721c24'}}>{errorMessage}</span>
+            </div>
             }
         </div>
     )
