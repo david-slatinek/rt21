@@ -104,17 +104,18 @@ const Home = () => {
                     {
                         drives !== null &&
                         <div className="list-group text-center">
-                            <h4>Old drives locations</h4>
+                            <h4 className="mb-0 mt-3">Old drives locations</h4>
+                            <hr/>
                             {
                                 drives.map(drive => (
                                     <button 
                                         type="button" 
-                                        className="list-group-item list-group-item-action h-100" 
+                                        className="list-group-item list-group-item-action mb-2" 
                                         onClick={() => {
                                             getMarkers(drive._id.$oid)
                                         }}
                                         >
-                                            {new Date(drive.start).toLocaleString()} - {new Date(drive.end).toLocaleString()}
+                                            {new Date(drive.start * 1000).toLocaleString()} - {new Date(drive.end * 1000).toLocaleString()}
                                         </button>
                                 ))
                             }
