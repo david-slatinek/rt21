@@ -97,7 +97,7 @@ const Profile = (props) => {
                         <div className="col-sm-9 text-secondary">
                             <div className="row">
                                 <div className="col-sm-3">
-                                    <button className="btn btn-info" onClick={() => {
+                                    <button className="btn btn-dark" onClick={() => {
                                         if (edit) {
                                             setEdit(false)
                                         } else {
@@ -117,9 +117,9 @@ const Profile = (props) => {
                             </div>
                             
                             { edit && 
-                                <div className="card mt-2">
+                                <div className="card mt-3">
                                     <div className="card-header text-center">
-                                        <h3>Change password</h3>
+                                        <h5 className="mb-0">Change password</h5>
                                     </div>
                                     <div className="card-body">
                                         <form>
@@ -127,7 +127,7 @@ const Profile = (props) => {
                                                 <input type="password" className="form-control" name="password" placeholder="Password" value={password} onChange={(e) => {setPassword(e.target.value)}}/>
                                             </div>
                                             <div className="text-center">
-                                                <input type="button" className="btn btn-info" style={{fontSize: 17}} value="Save" onClick={onChangePassword}/>
+                                                <input type="button" className="btn btn-dark" style={{fontSize: 17}} value="Save" onClick={onChangePassword}/>
                                             </div>
                                         </form>
                                     </div>

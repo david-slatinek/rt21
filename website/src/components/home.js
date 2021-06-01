@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 const Home = () => {
-    const [activeMarker, setActiveMarker] = useState(null);
     const [drives, setDrives] = useState(null);
     const [markersRoadSigns, setMarkersRoadSigns] = useState(null);
     const [markersRoadQuality, setMarkersRoadQuality] = useState(null);
@@ -126,7 +125,7 @@ const Home = () => {
                     {
                         markersRoadSigns !== null && markersRoadQuality !== null && 
                 
-                        <MapContainer center={[markersRoadSigns[0].latitude, markersRoadSigns[0].longitude]} zoom={13} scrollWheelZoom={false}>
+                        <MapContainer center={[markersRoadSigns[0].latitude, markersRoadSigns[0].longitude]} zoom={10} scrollWheelZoom={false}>
                             <TileLayer
                                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -137,9 +136,6 @@ const Home = () => {
                                     <Marker
                                         key={marker._id.$oid}
                                         position={[marker.latitude, marker.longitude]}
-                                        onClick={() => {
-                                            setActiveMarker(marker);
-                                        }}
                                     >
                                         <Popup>
                                             <h4>Roadsign: {marker.type}</h4>
@@ -152,9 +148,6 @@ const Home = () => {
                                     <Marker
                                         key={marker._id.$oid}
                                         position={[marker.latitude, marker.longitude]}
-                                        onClick={() => {
-                                            setActiveMarker(marker);
-                                        }}
                                     >
                                         <Popup>
                                             <h4>Road quality: {marker.road_quality}</h4>
