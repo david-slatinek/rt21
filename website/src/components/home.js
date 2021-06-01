@@ -94,29 +94,19 @@ const Home = () => {
                         </Popup>
                     </Marker>
 
-                    <Marker position={[46.34076659732073, 15.431010914065373]}>
-                        <Popup>
-                            Konjice
-                        </Popup>
-                    </Marker>
-
-                    { markersRoadSigns !== null && markersRoadSigns.map(marker => {
-                        console.log(marker);
+                    { markersRoadSigns !== null && markersRoadSigns.map(marker => (
                         <Marker
-                            //key={marker._id}
-                            position={[
-                                marker.latitude,
-                                marker.longitude
-                            ]}
-                        onClick={() => {
-                            setActiveMarker(marker);
-                        }}
+                            key={marker._id.$oid}
+                            position={[marker.latitude, marker.longitude]}
+                            onClick={() => {
+                                setActiveMarker(marker);
+                            }}
                         >
                             <Popup>
-                                marker.type
+                                {marker.type}
                             </Popup>
                         </Marker>
-                    })}
+                    ))}
                     
                     {/* {activeMarker && (
                         <Popup
