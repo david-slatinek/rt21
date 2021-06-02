@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 const Home = () => {
+    const [roadsigns, setRoadsigns] = useState(true);
     const [drives, setDrives] = useState(null);
     const [markersRoadSigns, setMarkersRoadSigns] = useState(null);
     const [markersRoadQuality, setMarkersRoadQuality] = useState(null);
@@ -76,9 +77,14 @@ const Home = () => {
             });
             //get latest user drive
             setDrives(tmpArray);
-            var latesDrive = data[Object.entries(tmpArray).length - 1]._id.$oid;
 
-            getMarkers(latesDrive);
+            if (Object.entries(tmpArray).length > 0) {
+                var latesDrive = data[Object.entries(tmpArray).length - 1]._id.$oid;
+
+                getMarkers(latesDrive);
+            } else {
+
+            }
         }
         
         if (localStorage.getItem("userSessionID") !== null) {
@@ -103,11 +109,13 @@ const Home = () => {
                     {
                         drives !== null &&
                         <div className="list-group text-center">
-                            <h4 className="mb-0 mt-3">Old drives locations</h4>
-                            <hr/>
+                            { drives.length > 0 && 
+                                <div><h4 className="mb-0 mt-3">Old drives locations</h4><hr/></div>
+                            }
                             {
                                 drives.map(drive => (
-                                    <button 
+                                    <button
+                                        key={drive._id.$oid} 
                                         type="button" 
                                         className="list-group-item list-group-item-action mb-2" 
                                         onClick={() => {
@@ -123,40 +131,47 @@ const Home = () => {
                 </div>
                 <div id="mapid" className="col-md-8">
                     {
-                        markersRoadSigns !== null && markersRoadQuality !== null && 
-                
-                        <MapContainer center={[markersRoadSigns[0].latitude, markersRoadSigns[0].longitude]} zoom={10} scrollWheelZoom={false}>
-                            <TileLayer
-                                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            />
+                        (markersRoadSigns !== null && markersRoadQuality !== null ?
+                        <div id="mapDiv" className="text-center">
+                            <button type="button" className="btn btn-dark w-50 mb-3 mt-3" onClick={() => {setRoadsigns(!roadsigns)}}>{!roadsigns ? "Show roadsigns passed" : "Show road quality detected"}</button>
+                            <MapContainer center={[markersRoadSigns[0].latitude, markersRoadSigns[0].longitude]} zoom={10} scrollWheelZoom={false}>
+                                <TileLayer
+                                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                />
 
-                            { 
-                                markersRoadSigns.map(marker => (
-                                    <Marker
-                                        key={marker._id.$oid}
-                                        position={[marker.latitude, marker.longitude]}
-                                    >
-                                        <Popup>
-                                            <h4>Roadsign: {marker.type}</h4>
-                                        </Popup>
-                                    </Marker>
-                                ))
-                            }
-                            { 
-                                markersRoadQuality.map(marker => (
-                                    <Marker
-                                        key={marker._id.$oid}
-                                        position={[marker.latitude, marker.longitude]}
-                                    >
-                                        <Popup>
-                                            <h4>Road quality: {marker.road_quality}</h4>
-                                        </Popup>
-                                    </Marker>
-                                ))
-                            }
-                        </MapContainer>
-                    }
+                                {( roadsigns === true ?
+                                    markersRoadSigns.map(marker => (
+                                        <Marker
+                                            key={marker._id.$oid}
+                                            position={[marker.latitude, marker.longitude]}
+                                        >
+                                            <Popup>
+                                                <h4>Roadsign: {marker.type}</h4>
+                                            </Popup>
+                                        </Marker>
+                                    ))
+
+                                    :
+
+                                    markersRoadQuality.map(marker => (
+                                        <Marker
+                                            key={marker._id.$oid}
+                                            position={[marker.latitude, marker.longitude]}
+                                        >
+                                            <Popup>
+                                                <h4>Road quality: {marker.road_quality}</h4>
+                                            </Popup>
+                                        </Marker>
+                                    ))
+                                )}
+                            </MapContainer>
+                        </div>
+
+                        :
+                        
+                        <div class="alert alert-info mt-5" role="alert"><h5>No drives were made with this account yet.</h5></div>
+                    )}
                 </div>
             </div>
         )}
