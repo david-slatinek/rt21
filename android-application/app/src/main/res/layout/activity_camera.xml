@@ -10,7 +10,7 @@
         android:id="@+id/btnStartDrive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onClickEnableTimerToTakeImage"
+        android:onClick="onClickEnableTimerToTakeImageAndLocation"
         android:text="Enable Timer"
         app:layout_constraintBaseline_toBaselineOf="@+id/buttonTakePicture"
         app:layout_constraintEnd_toStartOf="@+id/buttonTakePicture"

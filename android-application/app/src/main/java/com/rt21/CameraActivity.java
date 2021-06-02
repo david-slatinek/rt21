@@ -2,10 +2,13 @@ package com.rt21;
 
 // activity to test Camera class
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Rational;
@@ -26,14 +29,21 @@ import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureConfig;
 import androidx.camera.core.Preview;
 import androidx.camera.core.PreviewConfig;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LifecycleOwner;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
 
 import java.io.File;
 
@@ -68,11 +78,19 @@ public class CameraActivity extends AppCompatActivity{
 
 
     // handler will be used to trigger code to take a picture every X seconds
-    Handler myHandler = new Handler();
+    Handler myHandler;
     // runnable stores the code that will execute every x seconds
     Runnable myRunnable;
     // timer is set to 5 seconds
     int delayMilliSeconds = 5000;
+
+
+    // Google's interface that consumes less energy because it is optimized
+    // It uses Google Play Services
+    private FusedLocationProviderClient client;
+
+    /** icon on map that will show device's current location**/
+    Marker currentLocationMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,13 +107,14 @@ public class CameraActivity extends AppCompatActivity{
 
         btnStartDrive.setText("Start drive");
 
-        txtLocation.setText(String.format("Longitude: %s\t\nLatitude: %s", lng, lat));
 
         Configuration.getInstance().setUserAgentValue(getPackageName());
 
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
-        mapView.setBuiltInZoomControls(true);
+        mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT);
+        mapView.setMultiTouchControls(true);
+
         mapController = (MapController) mapView.getController();
         mapController.setZoom(13);
 
@@ -109,6 +128,12 @@ public class CameraActivity extends AppCompatActivity{
 
         // when activity starts begin with camera preview
         startCameraFlow();
+
+        // create new object
+        client = LocationServices.getFusedLocationProviderClient(this);
+
+        // put marker on map
+        initializeLocationMarker();
     }
 
     /**
@@ -187,8 +212,16 @@ public class CameraActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
+                getGPS_Location();
+
+                // create new folder in application storage
+                File direcoryPictures = new File(getFilesDir().getAbsolutePath() + File.separator + "Pictures");
+                if(!direcoryPictures.exists())
+                    direcoryPictures.mkdirs();
+
+
                 // create new file. name is from current time
-                File file = new File(getFilesDir(), app.user.getId() + "_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
+                File file = new File(direcoryPictures, app.user.getId() + "_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
 
                 // take a picture from camera and save it to file and check if it was saved
                 imageCapture.takePicture(file, new ImageCapture.OnImageSavedListener() {
@@ -233,7 +266,7 @@ public class CameraActivity extends AppCompatActivity{
     }
 
     // when this method is called every x seconds new image will be taken
-    public void onClickEnableTimerToTakeImage(View view) {
+    public void onClickEnableTimerToTakeImageAndLocation(View view) {
         btnStartDrive.setText(!driving ? "Stop drive" : "Start drive");
         // simulate user click on button
         driving = !driving;
@@ -241,6 +274,7 @@ public class CameraActivity extends AppCompatActivity{
         if (driving) {
             buttonTakePicture.performClick();
             // every x seconds execute code in run function
+            myHandler = new Handler();
             myHandler.postDelayed(myRunnable = new Runnable() {
                 public void run() {
                     myHandler.postDelayed(myRunnable, delayMilliSeconds);
@@ -249,6 +283,64 @@ public class CameraActivity extends AppCompatActivity{
                 }
             }, delayMilliSeconds);
         }
-        //TODO - if user clicks stop -> stop tracking and taking pictures
+        else {
+            // Inform user that the driving has stopped
+            CommonMethods.displayToastShort("Driving stopped", this);
+            // stop handler from calling clicks on button
+            myHandler.removeCallbacks(myRunnable);
+            myHandler.removeCallbacksAndMessages(null);
+            // set both handler and runnable to null
+            myHandler = null;
+            myRunnable = null;
+        }
     }
+
+    private void getGPS_Location(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        // in new thread wait for client to return location.
+        client.getLastLocation().addOnSuccessListener(CameraActivity.this, new OnSuccessListener<Location>() {
+            @Override
+            // when location is returned
+            public void onSuccess(Location location) {
+                // check if it is not null
+                if (location != null) {
+                    // pass location to method
+                    showOnMap(location);
+                }
+            }
+        });
+    }
+
+    private void showOnMap(Location location){
+        mapController = (MapController) mapView.getController();
+        mapController.setZoom(18.5);
+
+        GeoPoint currentLocation = new GeoPoint(location.getLatitude(), location.getLongitude());
+        mapController.setCenter(currentLocation);
+        //mapView.invalidate();
+
+        currentLocationMarker.setPosition(currentLocation);
+        //mapView.invalidate();
+
+        txtLocation.setText(String.format("Longitude: %s\t\nLatitude: %s", location.getLongitude(), location.getLatitude()));
+    }
+
+    private void initializeLocationMarker(){
+        currentLocationMarker = new Marker(mapView);
+        currentLocationMarker.setTitle("My location");
+        currentLocationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        currentLocationMarker.setIcon(getResources().getDrawable(R.drawable.ic_location_found));
+        mapView.getOverlays().add(currentLocationMarker);
+    }
+
 }

@@ -47,7 +47,7 @@ public class HomeActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSIONS_ALL);
         } else {
             Intent i = new Intent(getBaseContext(), CameraActivity.class);
-            i.putExtra(CameraActivity.IMAGE_RESOLUTION, CameraActivity.IMAGE480p);
+            i.putExtra(CameraActivity.IMAGE_RESOLUTION, CameraActivity.IMAGE240p);
             startActivity(i);
         }
     }
