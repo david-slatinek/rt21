@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react/cjs/react.development';
+import config from '../config';
 
 const Profile = (props) => {
     const [edit, setEdit] = useState(false);
@@ -9,6 +10,7 @@ const Profile = (props) => {
     const [errorMessage, setErrorMessage] = useState('');
 
     var user = JSON.parse(localStorage.getItem("userSessionID"));
+    var api_key_val = config.API_KEY_VALUE;
 
     async function onChangePassword() {
         console.log("change password");
@@ -20,7 +22,7 @@ const Profile = (props) => {
         await fetch('https://rt21-api.herokuapp.com/api/user/' + user._id.$oid, {
             method: 'PUT',
             headers: {
-                'X-API-Key': '04fca805-c486-4519-9bdb-7dd80733dfd1',
+                'X-API-Key': api_key_val,
             },
             body: formData   
         })

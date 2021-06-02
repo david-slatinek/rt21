@@ -19,7 +19,7 @@ code {
   width: 100%;
 }
 
-#mapid, #mapDiv {height: 600px;}
+#mapid, #mapDiv {height: 550px; padding-bottom: 3%;}
 
 #logoutButton {
   background: none;

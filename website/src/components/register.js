@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import config from '../config'
 
 const Register = () => {
     const [fullname, setFullname] = useState('');
@@ -15,6 +16,7 @@ const Register = () => {
 
         var fullnameSplit = fullname.split(" ");
 
+        var api_key_val = config.API_KEY_VALUE;
         const formData = new FormData();
         formData.append("name", fullnameSplit[0]);
         formData.append("last_name", fullnameSplit[1]);
@@ -26,7 +28,7 @@ const Register = () => {
         await fetch('https://rt21-api.herokuapp.com/api/user/register', {
             method: 'POST',
             headers: {
-                'X-API-Key': '04fca805-c486-4519-9bdb-7dd80733dfd1',
+                'X-API-Key': api_key_val,
             },
             body: formData
         })
