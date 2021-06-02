@@ -1,21 +1,24 @@
 import React, {useEffect, useState} from 'react';
+import config from '../config';
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 const Home = () => {
+    const [active, setActive] = useState(null);
     const [roadsigns, setRoadsigns] = useState(true);
     const [drives, setDrives] = useState(null);
     const [markersRoadSigns, setMarkersRoadSigns] = useState(null);
     const [markersRoadQuality, setMarkersRoadQuality] = useState(null);
 
     var user = JSON.parse(localStorage.getItem("userSessionID"));
+    var api_key_val = config.API_KEY_VALUE;
 
     async function getMarkers(id) {
         //get all road quality location
         let response = await fetch('https://rt21-api.herokuapp.com/api/sign/getSigns/' + id, {
             method: 'GET',
             headers: {
-                'X-API-Key': '04fca805-c486-4519-9bdb-7dd80733dfd1',
+                'X-API-Key': api_key_val,
             }
         });  
         if (!response.ok) {
@@ -35,7 +38,7 @@ const Home = () => {
         response = await fetch('https://rt21-api.herokuapp.com/api/location/getLocations/' + id, {
             method: 'GET',
             headers: {
-                'X-API-Key': '04fca805-c486-4519-9bdb-7dd80733dfd1',
+                'X-API-Key': api_key_val,
             }
         });
         if (!response.ok) {
@@ -59,7 +62,7 @@ const Home = () => {
             let response = await fetch('https://rt21-api.herokuapp.com/api/drive/getDrives/' + user._id.$oid, {
                 method: 'GET',
                 headers: {
-                    'X-API-Key': '04fca805-c486-4519-9bdb-7dd80733dfd1',
+                    'X-API-Key': api_key_val,
                 }
             });
             if (!response.ok) {
@@ -82,8 +85,7 @@ const Home = () => {
                 var latesDrive = data[Object.entries(tmpArray).length - 1]._id.$oid;
 
                 getMarkers(latesDrive);
-            } else {
-
+                setActive(data[Object.entries(tmpArray).length - 1]);
             }
         }
         
@@ -94,8 +96,6 @@ const Home = () => {
 
     return (
     <div>
-        <p style={{color: 'green'}}><b>TODO:</b> make 1st tab that show road quality and 2nd tab that shows road signs</p>
-
         {(localStorage.getItem("userSessionID") === null ? 
             <div className="card w-25 m-auto text-center p-3">
                 <p>For accessing to driving statistics and road signs detected while driving please<br/>
@@ -119,7 +119,10 @@ const Home = () => {
                                         type="button" 
                                         className="list-group-item list-group-item-action mb-2" 
                                         onClick={() => {
-                                            getMarkers(drive._id.$oid)
+                                            getMarkers(drive._id.$oid);
+                                            setActive(drives.find((el) => {
+                                                return el._id.$oid === drive._id.$oid
+                                            }));
                                         }}
                                         >
                                             {new Date(drive.start * 1000).toLocaleString()} - {new Date(drive.end * 1000).toLocaleString()}
@@ -132,45 +135,67 @@ const Home = () => {
                 <div id="mapid" className="col-md-8">
                     {
                         (markersRoadSigns !== null && markersRoadQuality !== null ?
-                        <div id="mapDiv" className="text-center">
-                            <button type="button" className="btn btn-dark w-50 mb-3 mt-3" onClick={() => {setRoadsigns(!roadsigns)}}>{!roadsigns ? "Show roadsigns passed" : "Show road quality detected"}</button>
-                            <MapContainer center={[markersRoadSigns[0].latitude, markersRoadSigns[0].longitude]} zoom={10} scrollWheelZoom={false}>
-                                <TileLayer
-                                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                />
+                        <div>
+                            <div id="mapDiv" className="text-center">
+                                <button type="button" className="btn btn-dark w-50 mb-3 mt-3" onClick={() => {setRoadsigns(!roadsigns)}}>{!roadsigns ? "Show roadsigns passed" : "Show road quality detected"}</button>
+                                <MapContainer center={[markersRoadSigns[0].latitude, markersRoadSigns[0].longitude]} zoom={10} scrollWheelZoom={false}>
+                                    <TileLayer
+                                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    />
 
-                                {( roadsigns === true ?
-                                    markersRoadSigns.map(marker => (
-                                        <Marker
-                                            key={marker._id.$oid}
-                                            position={[marker.latitude, marker.longitude]}
-                                        >
-                                            <Popup>
-                                                <h4>Roadsign: {marker.type}</h4>
-                                            </Popup>
-                                        </Marker>
-                                    ))
+                                    {( roadsigns === true ?
+                                        markersRoadSigns.map(marker => (
+                                            <Marker
+                                                key={marker._id.$oid}
+                                                position={[marker.latitude, marker.longitude]}
+                                            >
+                                                <Popup>
+                                                    <h4>Roadsign: {marker.type}</h4>
+                                                </Popup>
+                                            </Marker>
+                                        ))
 
-                                    :
+                                        :
 
-                                    markersRoadQuality.map(marker => (
-                                        <Marker
-                                            key={marker._id.$oid}
-                                            position={[marker.latitude, marker.longitude]}
-                                        >
-                                            <Popup>
-                                                <h4>Road quality: {marker.road_quality}</h4>
-                                            </Popup>
-                                        </Marker>
-                                    ))
-                                )}
-                            </MapContainer>
+                                        markersRoadQuality.map(marker => (
+                                            <Marker
+                                                key={marker._id.$oid}
+                                                position={[marker.latitude, marker.longitude]}
+                                            >
+                                                <Popup>
+                                                    <h4>Road quality: {marker.road_quality}</h4>
+                                                </Popup>
+                                            </Marker>
+                                        ))
+                                    )}
+                                </MapContainer>
+                            </div>
+                            <table className="table table-striped w-50 m-auto mt-5">
+                                <tbody className="mt-5">
+                                    <tr>
+                                        <th scope="row">Lenght of drive:</th>
+                                        <th>{active.length} km</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Maximal speed reached:</th>
+                                        <th>{active.max_speed} km/h</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Avarage speed:</th>
+                                        <th>{active.mean_speed} km/h</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Number of full stops:</th>
+                                        <th>{active.nr_of_stops}</th>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
 
                         :
                         
-                        <div class="alert alert-info mt-5" role="alert"><h5>No drives were made with this account yet.</h5></div>
+                        <div className="alert alert-info mt-5" role="alert"><h5>No drives were made with this account yet.</h5></div>
                     )}
                 </div>
             </div>
