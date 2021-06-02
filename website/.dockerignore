@@ -1,0 +1,9 @@
+node_modules
+build
+.dockerignore
+.git
+.gitignore
+README.md
+Dockerfile
+.idea
+heroku.sh
