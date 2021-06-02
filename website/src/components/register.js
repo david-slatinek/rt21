@@ -68,7 +68,8 @@ const Register = () => {
                 <form onSubmit={onRegister}>
                     <div className="input-group mb-3">
                         <div className="input-group-text"><i className="fas fa-user-edit"/></div>
-                        <input type="text" className="form-control" name="fullname" placeholder="Name and lastname" required
+                        <input type="text" className="form-control" name="fullname" placeholder="Name and lastname"
+                               required
                                value={fullname} onChange={(e) => {
                             setFullname(e.target.value)
                         }}/>
@@ -92,7 +93,7 @@ const Register = () => {
 
                     <div className="input-group mb-3">
                         <div className="input-group-text"><i className="far fa-calendar"/></div>
-                        <input type="number" className="form-control" name="age" placeholder="Age"
+                        <input type="number" className="form-control" name="age" placeholder="Age" min={18}
                                required value={age} onChange={(e) => {
                             setAge(e.target.value)
                         }}/>
@@ -108,7 +109,7 @@ const Register = () => {
                     </div>
 
                     <div className="text-center">
-                        <input type="submit" className="btn btn-dark w-50" style={{fontSize: 17}} value="Register"/>
+                        <input type="submit" className="btn btn-dark" style={{fontSize: 17}} value="Register"/>
                     </div>
                 </form>
             </div>

@@ -17,22 +17,22 @@ const Navigation = () => {
     return (
     <div>
         <Router>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <ul className="navbar-nav">
                     <li className="nav-item">
-                       <a className="nav-link" href="/">Home</a>
+                       <a className="nav-link text-white" href="/">Home</a>
                     </li>
                     <li className="nav-item">
-                        {(localStorage.getItem("userSessionID") === null ? <a className="nav-link" href="/login">Login</a> : null)}
+                        {(localStorage.getItem("userSessionID") === null ? <a className="nav-link text-white" href="/login">Login</a> : null)}
                     </li>
-                    <li className="nav-item">
-                        {(localStorage.getItem("userSessionID") === null ?  <a className="nav-link" href="/register">Register</a> : null)}
+                    <li className="nav-item text-white">
+                        {(localStorage.getItem("userSessionID") === null ?  <a className="nav-link text-white" href="/register">Register</a> : null)}
                     </li>
-                    <li className="nav-item">
-                        {(localStorage.getItem("userSessionID") !== null ? <a className="nav-link" href="/profile">Profile</a> : null)}
+                    <li className="nav-item text-white">
+                        {(localStorage.getItem("userSessionID") !== null ? <a className="nav-link text-white" href="/profile">Profile</a> : null)}
                     </li>
                     <li>
-                        {(localStorage.getItem("userSessionID") !== null ? <button id="logoutButton" className="nav-link" onClick={logOut}>Log out</button> : null)}
+                        {(localStorage.getItem("userSessionID") !== null ? <button id="logoutButton" className="nav-link text-white" onClick={logOut}>Log out</button> : null)}
                     </li>
                 </ul>
             </nav>

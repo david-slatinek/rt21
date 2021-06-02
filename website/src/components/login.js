@@ -68,7 +68,7 @@ const Login = (props) => {
                     </div>
 
                     <div className="text-center">
-                        <input type="submit" className="btn btn-dark w-50" style={{fontSize: 17}} value="Login"/>
+                        <input type="submit" className="btn btn-dark" style={{fontSize: 17}} value="Login"/>
                     </div>
 
                 </form>
