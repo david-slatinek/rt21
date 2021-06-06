@@ -2,3 +2,8 @@ config.py
 /api/.idea
 /api/__pycache__
 /api/venv
+/RoadSignRecognitionScripts/myData
+/RoadSignRecognitionScripts/labels.csv
+/RoadSignRecognitionScripts/StopSignDataset
+/RoadSignRecognitionScripts/backup
+/RoadSignRecognitionScripts/testing
