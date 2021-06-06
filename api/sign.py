@@ -120,3 +120,26 @@ def get_sings(drive_id):
         i_d += 1
 
     return main.json.loads(main.json_util.dumps(result))
+
+
+def recognize_sign(drive_id):
+    if len(drive_id) != 24:
+        return main.create_response('error', 'invalid id length', 400)
+
+    if not main.DriveCollection.find_one({"_id": main.ObjectId(drive_id)}):
+        return main.create_response('error', 'drive not found', 404)
+
+    if 'image' not in main.request.files:
+        main.create_response('error', 'image not given', 400)
+
+    image = main.request.files['image']
+
+    if image.filename == '':
+        main.create_response('error', 'image not given', 400)
+
+    file_ext = main.os.path.splitext(image.filename)[1]
+    if file_ext not in main.app.config['UPLOAD_EXTENSIONS']:
+        main.create_response('error', 'invalid image extension', 400)
+
+    if image:
+        pass

@@ -20,6 +20,8 @@ app = flask.Flask(__name__)
 CORS(app)
 bcrypt = Bcrypt()
 
+app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.jpeg']
 app.config["MONGO_URI"] = "mongodb+srv://david:" + key + "@apicluster.knc1y.mongodb.net/rt21Db?retryWrites=true"
 mongo = PyMongo(app)
 db = mongo.db
@@ -137,6 +139,13 @@ def create_sign():
     if request.headers.get('X-API-Key') != api_key:
         return create_response("error", "api key not given or invalid", 401)
     return sign.create_sign()
+
+
+@app.route('/api/sign/sign/<drive_id>', methods=['POST'])
+def recognize_sign(drive_id):
+    if request.headers.get('X-API-Key') != api_key:
+        return create_response("error", "api key not given or invalid", 401)
+    return sign.recognize_sign(drive_id)
 
 
 @app.route('/api/sign/<sign_id>', methods=['GET'])
