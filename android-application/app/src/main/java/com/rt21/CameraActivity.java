@@ -1,9 +1,9 @@
 package com.rt21;
 
-// activity to test Camera class
-
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +11,8 @@ import android.graphics.Matrix;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.util.Rational;
 import android.util.Size;
 import android.view.TextureView;
@@ -30,11 +32,21 @@ import androidx.camera.core.ImageCaptureConfig;
 import androidx.camera.core.Preview;
 import androidx.camera.core.PreviewConfig;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.config.Configuration;
@@ -48,7 +60,7 @@ import org.osmdroid.views.overlay.Marker;
 import java.io.File;
 
 
-public class CameraActivity extends AppCompatActivity{
+public class CameraActivity extends AppCompatActivity {
 
     private MyApplication app;
 
@@ -87,10 +99,32 @@ public class CameraActivity extends AppCompatActivity{
 
     // Google's interface that consumes less energy because it is optimized
     // It uses Google Play Services
-    private FusedLocationProviderClient client;
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
     /** icon on map that will show device's current location**/
     Marker currentLocationMarker;
+
+        LocationRequest locationRequest;
+
+    // here we can get location every X seconds (depends of settings in locationSettings method)
+    private LocationCallback locationCallback = new LocationCallback() {
+        // waits when location is returned
+        @Override
+        public void onLocationResult(@NonNull @NotNull LocationResult locationResult) {
+            if(locationResult == null){
+                // result was empty. Exit method
+                return;
+            }
+
+            // for each returned location: show it on map and put to log
+            for(Location location : locationResult.getLocations()){
+                showOnMap(location);
+                // Log.d("location", "onLocationResult: " + location.toString());
+            }
+        }
+    };
+
+    public int LOCATION_REQUEST_CODE = 10001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,42 +163,85 @@ public class CameraActivity extends AppCompatActivity{
         // when activity starts begin with camera preview
         startCameraFlow();
 
-        // create new object
-        client = LocationServices.getFusedLocationProviderClient(this);
-
         // put marker on map
         initializeLocationMarker();
+
+        // create new object
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        // set interval and precision of location
+        locationSettings();
+
     }
+
+    private void locationSettings(){
+        // create new subscriber for location
+        locationRequest = LocationRequest.create();
+
+        // every 10 seconds ask for location
+        locationRequest.setInterval(10000);
+
+        // if location is being retreived by another application at the same time
+        // interval be lowered to as little as 5 seconds but no less
+        locationRequest.setFastestInterval(5000);
+
+        // we need high precision
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // when app stops stop listening for location
+        stopLocationUpdates();
+    }
+
+    // start location updates
+    @SuppressLint("MissingPermission")
+    private void startLocationUpdate(){
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+    }
+
+
+    // stop location update
+    private void stopLocationUpdates(){
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+    }
+
+
 
     /**
      * @param resolution constant of image size. Class CameraActivity.IMAGE___p
      * @return Object Size(width, height) of image
      */
     // returns Size object
-    public Size getImageResolution(int resolution){
-        switch (resolution){
+    public Size getImageResolution(int resolution) {
+        switch (resolution) {
             case IMAGE240p:
-                return new Size( 240, 320);
+                return new Size(240, 320);
 
             case IMAGE480p:
-                return new Size( 480, 640);
+                return new Size(480, 640);
 
             case IMAGE720p:
-                return new Size( 720, 960);
+                return new Size(720, 960);
 
             case IMAGE768p:
-                return new Size( 768, 1024);
+                return new Size(768, 1024);
 
             case IMAGE1080p:
                 return new Size(1080, 1440);
 
-                // if none of constants is matching with resolution parameter pick a default value
+            // if none of constants is matching with resolution parameter pick a default value
             default:
-                return new Size( 192, 256);
+                return new Size(192, 256);
         }
     }
 
-    public void startCameraFlow(){
+    public void startCameraFlow() {
         // close other instances if they use camera at this moment
         CameraX.unbindAll();
 
@@ -172,7 +249,7 @@ public class CameraActivity extends AppCompatActivity{
         Rational aspectRatio = new Rational(textureViewCameraFlowPreview.getWidth(), textureViewCameraFlowPreview.getHeight());
 
         // get size of field where camera flow will be shown
-        Size screen = new Size(textureViewCameraFlowPreview.getWidth(),  textureViewCameraFlowPreview.getHeight());
+        Size screen = new Size(textureViewCameraFlowPreview.getWidth(), textureViewCameraFlowPreview.getHeight());
 
         // object which holds configuration (aspect ratio and size) for preview.
         PreviewConfig previewConfig = new PreviewConfig.Builder().setTargetAspectRatio(aspectRatio).setTargetResolution(screen).build();
@@ -212,11 +289,9 @@ public class CameraActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
-                getGPS_Location();
-
                 // create new folder in application storage
                 File direcoryPictures = new File(getFilesDir().getAbsolutePath() + File.separator + "Pictures");
-                if(!direcoryPictures.exists())
+                if (!direcoryPictures.exists())
                     direcoryPictures.mkdirs();
 
 
@@ -238,7 +313,7 @@ public class CameraActivity extends AppCompatActivity{
 
                         Matrix matrix = new Matrix();
                         matrix.postRotate(90);
-                        Bitmap rotated = Bitmap.createBitmap(original, 0,0, original.getWidth(), original.getHeight(), matrix, true);
+                        Bitmap rotated = Bitmap.createBitmap(original, 0, 0, original.getWidth(), original.getHeight(), matrix, true);
 
                         imageViewCapturedPhoto.setImageBitmap(rotated);
                     }
@@ -255,7 +330,7 @@ public class CameraActivity extends AppCompatActivity{
         });
 
         // initialize camera again to life cycle owner after image was captured
-        CameraX.bindToLifecycle((LifecycleOwner)this, preview, imageCapture);
+        CameraX.bindToLifecycle((LifecycleOwner) this, preview, imageCapture);
     }
 
 
@@ -272,6 +347,10 @@ public class CameraActivity extends AppCompatActivity{
         driving = !driving;
 
         if (driving) {
+
+            // start receiving location
+            startLocationUpdate();
+
             buttonTakePicture.performClick();
             // every x seconds execute code in run function
             myHandler = new Handler();
@@ -282,10 +361,13 @@ public class CameraActivity extends AppCompatActivity{
                     buttonTakePicture.performClick();
                 }
             }, delayMilliSeconds);
-        }
-        else {
+        } else {
             // Inform user that the driving has stopped
             CommonMethods.displayToastShort("Driving stopped", this);
+
+            // stop receiving location
+            stopLocationUpdates();
+
             // stop handler from calling clicks on button
             myHandler.removeCallbacks(myRunnable);
             myHandler.removeCallbacksAndMessages(null);
@@ -295,43 +377,27 @@ public class CameraActivity extends AppCompatActivity{
         }
     }
 
-    private void getGPS_Location(){
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
 
-        // in new thread wait for client to return location.
-        client.getLastLocation().addOnSuccessListener(CameraActivity.this, new OnSuccessListener<Location>() {
-            @Override
-            // when location is returned
-            public void onSuccess(Location location) {
-                // check if it is not null
-                if (location != null) {
-                    // pass location to method
-                    showOnMap(location);
-                }
-            }
-        });
-    }
+
+
 
     private void showOnMap(Location location){
+        // mapcontroller controls map layout
         mapController = (MapController) mapView.getController();
+
+        // zoom to
         mapController.setZoom(18.5);
 
+        // retrieve latitude and longitude from Location and save it to GeoPoint
         GeoPoint currentLocation = new GeoPoint(location.getLatitude(), location.getLongitude());
+
+        // move map so the geopoint is on center of map
         mapController.setCenter(currentLocation);
-        //mapView.invalidate();
 
+        // move marker to GeoPoint location on map
         currentLocationMarker.setPosition(currentLocation);
-        //mapView.invalidate();
 
+        // write coordinates on display
         txtLocation.setText(String.format("Longitude: %s\t\nLatitude: %s", location.getLongitude(), location.getLatitude()));
     }
 
