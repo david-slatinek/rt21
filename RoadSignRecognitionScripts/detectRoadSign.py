@@ -9,8 +9,7 @@ import numpy as np
 import pandas as pd
 
 from skimage import io
-from keras import models
-from tensorflow import keras
+from tensorflow.python.keras import models
 
 def main(argv):
     image = ''

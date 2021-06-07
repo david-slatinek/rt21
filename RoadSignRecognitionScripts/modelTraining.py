@@ -6,14 +6,14 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from keras.layers import Dense
-from keras.optimizers import Adam
-from keras.models import Sequential
-from keras.layers import Dropout, Flatten
-from keras.utils.np_utils import to_categorical
+from tensorflow.python.keras.layers import Input, Dense
+from tensorflow.keras.optimizers import Adam
+from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.layers import Dropout, Flatten
+from tensorflow.python.keras.utils.np_utils import to_categorical
 from sklearn.model_selection import train_test_split
-from keras.preprocessing.image import ImageDataGenerator
-from keras.layers.convolutional import Conv2D, MaxPooling2D
+from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.python.keras.layers.convolutional import Conv2D, MaxPooling2D
  
 ### Parameters ###
 path = "myData"             # folder with all the class folders
