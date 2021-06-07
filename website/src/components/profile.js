@@ -108,7 +108,7 @@ const Profile = (props) => {
                                             setSuccess(false);
                                         }
                                     }}>
-                                        {(edit ? "Cancle" : "Edit")}
+                                        {(edit ? "Cancel" : "Edit")}
                                     </button>
                                 </div>
                                 <div className="col-sm-9">
