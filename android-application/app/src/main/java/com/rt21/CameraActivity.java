@@ -65,6 +65,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
 import java.io.File;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 import timber.log.Timber;
@@ -129,6 +130,7 @@ public class CameraActivity extends AppCompatActivity {
             // for each returned location: show it on map and put to log
             for(Location location : locationResult.getLocations()){
                 showOnMap(location);
+                sendLocation(location);
                 // Log.d("location", "onLocationResult: " + location.toString());
             }
         }
@@ -317,7 +319,7 @@ public class CameraActivity extends AppCompatActivity {
                     public void onImageSaved(@NonNull @NotNull File file) {
                         // notify user where image was saved with absolute path
 
-                        //TODO - remove message when application is finished
+                        // toast user that image was saved
                         //CommonMethods.displayToastShort("Image was captured and saved in: " + file.getAbsolutePath(), getApplicationContext());
 
                         // read that file and show it in imageView with Bitmap object
@@ -458,6 +460,38 @@ public class CameraActivity extends AppCompatActivity {
         mapView.getOverlays().add(currentLocationMarker);
     }
 
+
+    private void sendLocation(Location location){
+        CommonMethods.displayToastShort("trying to send location", this);
+
+        // check if drive on database was created previously
+        if (app.driveID == null) {
+            // we dont have drive_id so we cant assign location to it.
+            return;
+        }
+        try {
+            Random random = new Random();
+
+            JsonObject json = Ion.with(getBaseContext())
+                    .load("POST", "https://rt21-api.herokuapp.com/api/location/create")
+                    .setHeader(app.getKeyName(), app.getApiKey())
+                    .setBodyParameter("drive_id", app.driveID)
+                    .setBodyParameter("latitude", String.valueOf(location.getLatitude()))
+                    .setBodyParameter("longitude", String.valueOf(location.getLongitude()))
+                    .setBodyParameter("road_quality", String.valueOf(random.nextInt(10) + 1))
+                    .asJsonObject()
+                    .get();
+
+            JSONObject jsonObject = new JSONObject(json.toString());
+            if (jsonObject.has("error")) {
+                CommonMethods.displayToastShort("error", getApplicationContext());
+            } else {
+                CommonMethods.displayToastShort("location was sent", this);
+            }
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }
