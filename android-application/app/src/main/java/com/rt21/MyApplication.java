@@ -13,6 +13,7 @@ public class MyApplication extends Application {
     private final String keyName = "X-API-Key";
     private final String apiKey = "04fca805-c486-4519-9bdb-7dd80733dfd1";
 
+    public String driveID;
     public User user;
     public User testUser;
     public int distance;

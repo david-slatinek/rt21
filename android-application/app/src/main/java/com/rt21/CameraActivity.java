@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,6 +50,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.koushikdutta.ion.Ion;
 import com.rt21.data.User;
+import com.google.gson.JsonObject;
+import com.koushikdutta.ion.Ion;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -111,7 +114,7 @@ public class CameraActivity extends AppCompatActivity {
     /** icon on map that will show device's current location**/
     Marker currentLocationMarker;
 
-        LocationRequest locationRequest;
+    LocationRequest locationRequest;
 
     // here we can get location every X seconds (depends of settings in locationSettings method)
     private LocationCallback locationCallback = new LocationCallback() {
@@ -296,6 +299,8 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                //TODO - send picture and location
+
                 // create new folder in application storage
                 File direcoryPictures = new File(getFilesDir().getAbsolutePath() + File.separator + "Pictures");
                 if (!direcoryPictures.exists())
@@ -313,7 +318,7 @@ public class CameraActivity extends AppCompatActivity {
                         // notify user where image was saved with absolute path
 
                         //TODO - remove message when application is finished
-                        CommonMethods.displayToastShort("Image was captured and saved in: " + file.getAbsolutePath(), getApplicationContext());
+                        //CommonMethods.displayToastShort("Image was captured and saved in: " + file.getAbsolutePath(), getApplicationContext());
 
                         // read that file and show it in imageView with Bitmap object
                         Bitmap original = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -369,9 +374,6 @@ public class CameraActivity extends AppCompatActivity {
 
     private void stopDriving(){
 
-        // create entry in database
-        createNewDrive();
-
         // Inform user that the driving has stopped
         CommonMethods.displayToastShort("Driving stopped", this);
 
@@ -389,9 +391,33 @@ public class CameraActivity extends AppCompatActivity {
 
     // when this method is called every x seconds new image will be taken
     public void onClickEnableTimerToTakeImageAndLocation(View view) {
+
+        if(!driving) {
+            try {
+                JsonObject json = Ion.with(getBaseContext())
+                        .load("POST", "https://rt21-api.herokuapp.com/api/drive/create")
+                        .setHeader(app.getKeyName(), app.getApiKey())
+                        .setBodyParameter("user_id", app.user.getId())
+                        .asJsonObject()
+                        .get();
+
+                JSONObject jsonObject = new JSONObject(json.toString());
+                if (jsonObject.has("error")) {
+                    CommonMethods.displayToastShort("error", getApplicationContext());
+                } else {
+                    app.driveID = jsonObject.getString("_id");
+                }
+            } catch (ExecutionException | InterruptedException | JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         btnStartDrive.setText(!driving ? "Stop drive" : "Start drive");
         // simulate user click on button
         driving = !driving;
+        if (!driving) {
+            app.driveID = "";
+        }
 
         if (driving) {
             startDriving();
@@ -433,34 +459,5 @@ public class CameraActivity extends AppCompatActivity {
     }
 
 
-
-    private boolean createNewDrive() {
-        try {
-            JsonObject json = Ion.with(getBaseContext())
-                    .load("POST", "https://rt21-api.herokuapp.com/api/drive/create_drive")
-                    .setHeader(app.getKeyName(), app.getApiKey())
-                    .setBodyParameter("user_id", app.user.getId())
-                    .asJsonObject()
-                    .get();
-
-            JSONObject jsonObject = new JSONObject(json.toString());
-            if (jsonObject.has("error")) {
-                CommonMethods.displayToastShort("error", getApplicationContext());
-                return false;
-            } else {
-                CommonMethods.displayToastShort("New drive on database was created", getApplicationContext());
-
-                JSONObject json_id = jsonObject.getJSONObject("_id");
-                String _id = json_id.getString("$oid");
-
-                Log.d("loca", "id of drive: " + _id);
-                Timber.i(app.user.toString());
-                return true;
-            }
-        } catch (ExecutionException | InterruptedException | JSONException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 
 }
