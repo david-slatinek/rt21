@@ -47,8 +47,12 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.koushikdutta.ion.Ion;
+import com.rt21.data.User;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -58,6 +62,9 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
+
+import timber.log.Timber;
 
 
 public class CameraActivity extends AppCompatActivity {
@@ -340,6 +347,46 @@ public class CameraActivity extends AppCompatActivity {
 
     }
 
+    private void startDriving(){
+
+        // Inform user that the driving has started
+        CommonMethods.displayToastShort("Driving started", this);
+
+        // start receiving location
+        startLocationUpdate();
+
+        buttonTakePicture.performClick();
+        // every x seconds execute code in run function
+        myHandler = new Handler();
+        myHandler.postDelayed(myRunnable = new Runnable() {
+            public void run() {
+                myHandler.postDelayed(myRunnable, delayMilliSeconds);
+                // simulate user click on button
+                buttonTakePicture.performClick();
+            }
+        }, delayMilliSeconds);
+    }
+
+    private void stopDriving(){
+
+        // create entry in database
+        createNewDrive();
+
+        // Inform user that the driving has stopped
+        CommonMethods.displayToastShort("Driving stopped", this);
+
+        // stop receiving location
+        stopLocationUpdates();
+
+        // stop handler from calling clicks on button
+        myHandler.removeCallbacks(myRunnable);
+        myHandler.removeCallbacksAndMessages(null);
+        // set both handler and runnable to null
+        myHandler = null;
+        myRunnable = null;
+    }
+
+
     // when this method is called every x seconds new image will be taken
     public void onClickEnableTimerToTakeImageAndLocation(View view) {
         btnStartDrive.setText(!driving ? "Stop drive" : "Start drive");
@@ -347,33 +394,9 @@ public class CameraActivity extends AppCompatActivity {
         driving = !driving;
 
         if (driving) {
-
-            // start receiving location
-            startLocationUpdate();
-
-            buttonTakePicture.performClick();
-            // every x seconds execute code in run function
-            myHandler = new Handler();
-            myHandler.postDelayed(myRunnable = new Runnable() {
-                public void run() {
-                    myHandler.postDelayed(myRunnable, delayMilliSeconds);
-                    // simulate user click on button
-                    buttonTakePicture.performClick();
-                }
-            }, delayMilliSeconds);
-        } else {
-            // Inform user that the driving has stopped
-            CommonMethods.displayToastShort("Driving stopped", this);
-
-            // stop receiving location
-            stopLocationUpdates();
-
-            // stop handler from calling clicks on button
-            myHandler.removeCallbacks(myRunnable);
-            myHandler.removeCallbacksAndMessages(null);
-            // set both handler and runnable to null
-            myHandler = null;
-            myRunnable = null;
+            startDriving();
+        }else {
+            stopDriving();
         }
     }
 
@@ -407,6 +430,37 @@ public class CameraActivity extends AppCompatActivity {
         currentLocationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         currentLocationMarker.setIcon(getResources().getDrawable(R.drawable.ic_location_found));
         mapView.getOverlays().add(currentLocationMarker);
+    }
+
+
+
+    private boolean createNewDrive() {
+        try {
+            JsonObject json = Ion.with(getBaseContext())
+                    .load("POST", "https://rt21-api.herokuapp.com/api/drive/create_drive")
+                    .setHeader(app.getKeyName(), app.getApiKey())
+                    .setBodyParameter("user_id", app.user.getId())
+                    .asJsonObject()
+                    .get();
+
+            JSONObject jsonObject = new JSONObject(json.toString());
+            if (jsonObject.has("error")) {
+                CommonMethods.displayToastShort("error", getApplicationContext());
+                return false;
+            } else {
+                CommonMethods.displayToastShort("New drive on database was created", getApplicationContext());
+
+                JSONObject json_id = jsonObject.getJSONObject("_id");
+                String _id = json_id.getString("$oid");
+
+                Log.d("loca", "id of drive: " + _id);
+                Timber.i(app.user.toString());
+                return true;
+            }
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }
