@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,8 +36,12 @@ import androidx.lifecycle.LifecycleOwner;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.gson.JsonObject;
+import com.koushikdutta.ion.Ion;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -46,6 +51,9 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
+
+import timber.log.Timber;
 
 
 public class CameraActivity extends AppCompatActivity{
@@ -212,6 +220,8 @@ public class CameraActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
+                //TODO - send picture and location
+
                 getGPS_Location();
 
                 // create new folder in application storage
@@ -231,7 +241,7 @@ public class CameraActivity extends AppCompatActivity{
                         // notify user where image was saved with absolute path
 
                         //TODO - remove message when application is finished
-                        CommonMethods.displayToastShort("Image was captured and saved in: " + file.getAbsolutePath(), getApplicationContext());
+                        //CommonMethods.displayToastShort("Image was captured and saved in: " + file.getAbsolutePath(), getApplicationContext());
 
                         // read that file and show it in imageView with Bitmap object
                         Bitmap original = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -267,9 +277,33 @@ public class CameraActivity extends AppCompatActivity{
 
     // when this method is called every x seconds new image will be taken
     public void onClickEnableTimerToTakeImageAndLocation(View view) {
+
+        if(!driving) {
+            try {
+                JsonObject json = Ion.with(getBaseContext())
+                        .load("POST", "https://rt21-api.herokuapp.com/api/drive/create")
+                        .setHeader(app.getKeyName(), app.getApiKey())
+                        .setBodyParameter("user_id", app.user.getId())
+                        .asJsonObject()
+                        .get();
+
+                JSONObject jsonObject = new JSONObject(json.toString());
+                if (jsonObject.has("error")) {
+                    CommonMethods.displayToastShort("error", getApplicationContext());
+                } else {
+                    app.driveID = jsonObject.getString("_id");
+                }
+            } catch (ExecutionException | InterruptedException | JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         btnStartDrive.setText(!driving ? "Stop drive" : "Start drive");
         // simulate user click on button
         driving = !driving;
+        if (!driving) {
+            app.driveID = "";
+        }
 
         if (driving) {
             buttonTakePicture.performClick();
@@ -280,6 +314,8 @@ public class CameraActivity extends AppCompatActivity{
                     myHandler.postDelayed(myRunnable, delayMilliSeconds);
                     // simulate user click on button
                     buttonTakePicture.performClick();
+
+                    //TODO - send picture and location
                 }
             }, delayMilliSeconds);
         }
