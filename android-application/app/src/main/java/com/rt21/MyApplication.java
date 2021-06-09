@@ -16,8 +16,6 @@ public class MyApplication extends Application {
     public String driveID;
     public User user;
     public User testUser;
-    public int distance;
-    public int signs;
 
     @Override
     public void onCreate() {
@@ -32,8 +30,6 @@ public class MyApplication extends Application {
         Random rand = new Random();
 
         testUser = new User("testId123151assd","Test Subject", "Test Username", "test.subject@mail.com", 21);
-        distance = rand.nextInt(1000);
-        signs = rand.nextInt(1000);
     }
 
     public String getKeyName() {

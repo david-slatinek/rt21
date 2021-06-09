@@ -6,31 +6,45 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
+    <TextView
+        android:id="@+id/txtAvgSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/average_speed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtMaxSpeed" />
+
     <Button
         android:id="@+id/buttonCameraActivity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="156dp"
+        android:drawableEnd="@drawable/ic_camer"
         android:onClick="onClickOpenCamera"
         android:text="Open Camera"
-        android:drawableEnd="@drawable/ic_camer"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtSignsPassed" />
+        app:layout_constraintTop_toBottomOf="@+id/txtMaxSpeed"
+        app:layout_constraintVertical_bias="0.10" />
 
     <TextView
         android:id="@+id/txtKilometersTraveled"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/distance_traveled_format"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.08
+" />
 
     <TextView
-        android:id="@+id/txtSignsPassed"
+        android:id="@+id/txtMaxSpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -56,13 +70,14 @@
         android:id="@+id/btnProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Open profile"
         android:drawableEnd="@drawable/ic_username"
         android:onClick="onClickOpenProfile"
+        android:text="Open profile"
         app:layout_constraintBottom_toTopOf="@+id/btnLogout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCameraActivity" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonCameraActivity"
+        app:layout_constraintVertical_bias="0.15" />
 
 
     <!--TODO - beautify activity layout-->
