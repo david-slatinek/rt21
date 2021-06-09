@@ -73,8 +73,15 @@ public class CameraActivity extends AppCompatActivity {
 
     private MapView mapView;
     private MapController mapController;
+    private double oldLat = 0;
+    private double oldLng = 0;
     private double lat = 46.55898260175286;
     private double lng = 15.637994971467204;
+    private double maxSpeed = 0;
+    private double avgSpeed = 0;
+    private int speedChek = 0;
+    private int numOfStops = 0;
+    private double lenghtOfDrive = 0;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int ACTIVITY_ID = 102;
@@ -434,6 +441,71 @@ public class CameraActivity extends AppCompatActivity {
         // stop receiving location
         stopLocationUpdates();
 
+        try {
+            // update length of drive
+            double roundedLen = Math.round((double)(lenghtOfDrive / 1000) * 1000) / 1000.0;
+            JsonObject json = Ion.with(getBaseContext())
+                    .load("PUT", "https://rt21-api.herokuapp.com/api/drive/" + app.driveID)
+                    .setHeader(app.getKeyName(), app.getApiKey())
+                    .setBodyParameter("key", "length")
+                    .setBodyParameter("value", String.valueOf(roundedLen))
+                    .asJsonObject()
+                    .get();
+            JSONObject jsonObject = new JSONObject(json.toString());
+            if (jsonObject.has("error")) {
+                CommonMethods.displayToastShort("Error: " + jsonObject.getString("error"), getApplicationContext());
+            }
+
+            // update max speed
+            double roundedMaxSpeed = Math.round(maxSpeed * 100) / 100.0;
+            json = Ion.with(getBaseContext())
+                    .load("PUT", "https://rt21-api.herokuapp.com/api/drive/" + app.driveID)
+                    .setHeader(app.getKeyName(), app.getApiKey())
+                    .setBodyParameter("key", "max_speed")
+                    .setBodyParameter("value", String.valueOf(roundedMaxSpeed))
+                    .asJsonObject()
+                    .get();
+            jsonObject = new JSONObject(json.toString());
+            if (jsonObject.has("error")) {
+                CommonMethods.displayToastShort("Error: " + jsonObject.getString("error"), getApplicationContext());
+            }
+
+            // update avg speed
+            double roundedAvgSpeed = Math.round((avgSpeed / speedChek) * 100) / 100.0;
+            json = Ion.with(getBaseContext())
+                    .load("PUT", "https://rt21-api.herokuapp.com/api/drive/" + app.driveID)
+                    .setHeader(app.getKeyName(), app.getApiKey())
+                    .setBodyParameter("key", "mean_speed")
+                    .setBodyParameter("value", String.valueOf(roundedAvgSpeed))
+                    .asJsonObject()
+                    .get();
+            jsonObject = new JSONObject(json.toString());
+            if (jsonObject.has("error")) {
+                CommonMethods.displayToastShort("Error: " + jsonObject.getString("error"), getApplicationContext());
+            }
+
+            // update number of stops
+            json = Ion.with(getBaseContext())
+                    .load("PUT", "https://rt21-api.herokuapp.com/api/drive/" + app.driveID)
+                    .setHeader(app.getKeyName(), app.getApiKey())
+                    .setBodyParameter("key", "nr_of_stops")
+                    .setBodyParameter("value", String.valueOf(numOfStops))
+                    .asJsonObject()
+                    .get();
+            jsonObject = new JSONObject(json.toString());
+            if (jsonObject.has("error")) {
+                CommonMethods.displayToastShort("Error: " + jsonObject.getString("error"), getApplicationContext());
+            }
+
+            CommonMethods.displayToastShort("Length: "+ roundedLen +"\nMaxSpeed: "+ roundedMaxSpeed +"\nAverage speed: "+ roundedAvgSpeed +"\nNr of stops: "+ numOfStops, getApplicationContext());
+
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            CommonMethods.displayToastShort("Error: " + e, getApplicationContext());
+            Timber.i("Napaka json: %s", e.getMessage());
+            e.printStackTrace();
+        }
+
+        app.driveID = "";
         // stop handler from calling clicks on button
         myHandler.removeCallbacks(myRunnable);
         myHandler.removeCallbacksAndMessages(null);
@@ -470,9 +542,6 @@ public class CameraActivity extends AppCompatActivity {
         btnStartDrive.setText(!driving ? "Stop drive" : "Start drive");
         // simulate user click on button
         driving = !driving;
-        if (!driving) {
-            app.driveID = "";
-        }
 
         if (driving) {
             startDriving();
@@ -529,6 +598,34 @@ public class CameraActivity extends AppCompatActivity {
             return;
         }
         try {
+            //convert from m/s to km/h
+            double speed = location.getSpeed() * 3.6;
+
+            //check for full stops
+            if (speed < 0.01) {
+                numOfStops++;
+                CommonMethods.displayToastShort("Stops: " + numOfStops, this);
+
+            } else {
+                //calculate avg speed
+                speedChek++;
+                avgSpeed += speed;
+            }
+            //tracking avg speed
+            if (maxSpeed < speed) {
+                maxSpeed = speed;
+            }
+
+            // calculate distance traveled
+            if (oldLng != 0 && oldLat != 0) {
+                Location tmp = new Location("prev");
+                tmp.setLatitude(oldLat);
+                tmp.setLongitude(oldLng);
+                lenghtOfDrive += location.distanceTo(tmp);
+            }
+
+            oldLat = location.getLatitude();
+            oldLng = location.getLongitude();
 
             JsonObject json = Ion.with(getBaseContext())
                     .load("POST", "https://rt21-api.herokuapp.com/api/location/create")
