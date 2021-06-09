@@ -144,7 +144,7 @@ public class CameraActivity extends AppCompatActivity {
     // array to store values from sensor
     private static float[] arrayOfShakeValues;
     // size of array
-    private static int sizeOfArrayOfShakeValues = 20;
+    private static final int sizeOfArrayOfShakeValues = 20;
     // value that tells if onSensorChanged handler should write down the value or not
     private static boolean checkSensor;
     // index that tells where to write data in array
@@ -515,7 +515,12 @@ public class CameraActivity extends AppCompatActivity {
 
 
     private void sendLocation(Location location){
-        CommonMethods.displayToastShort("trying to send location", this);
+
+        // save road quality to string. 'java.util.Locale.US,"%.1f"' forces only one decimal number from float and dot (.) as decimal separator.
+        // getAverageOfShakes() returns average value from array and getRoadQualityFromAverage inverts it (1 to 10 and 9.2 to 1.8 ...)
+        String roadQuality = String.valueOf(String.format(java.util.Locale.US,"%.1f", getRoadQualityFromAverage(getAverageOfShakes())));
+        //TODO: remove message when application is finished
+        CommonMethods.displayToastShort("trying to send location, quality is: " + roadQuality, this);
 
         // check if drive on database was created previously
         if (app.driveID == null) {
@@ -524,7 +529,6 @@ public class CameraActivity extends AppCompatActivity {
             return;
         }
         try {
-            Random random = new Random();
 
             JsonObject json = Ion.with(getBaseContext())
                     .load("POST", "https://rt21-api.herokuapp.com/api/location/create")
@@ -532,7 +536,7 @@ public class CameraActivity extends AppCompatActivity {
                     .setBodyParameter("drive_id", app.driveID)
                     .setBodyParameter("latitude", String.valueOf(location.getLatitude()))
                     .setBodyParameter("longitude", String.valueOf(location.getLongitude()))
-                    .setBodyParameter("road_quality", String.valueOf(String.format(java.util.Locale.US,"%.1f", getAverageOfShakes())))
+                    .setBodyParameter("road_quality", roadQuality)
                     .asJsonObject()
                     .get();
 
@@ -575,6 +579,9 @@ public class CameraActivity extends AppCompatActivity {
                 float delta = acelVal - acelLast;
                 shake = shake * 0.9f + delta;
 
+                // if shake is negative multiply it with -1 to change it to positive
+                if(shake < 0)
+                    shake *= -1;
 
                 // set current shake value to textview
                 textViewSensor.setText(String.valueOf(shake));
@@ -595,26 +602,37 @@ public class CameraActivity extends AppCompatActivity {
 
     private float getAverageOfShakes(){
 
-        float average = 0.0f;
+        float sumOfArray = 0.0f;
 
         // sum all entries in array
         for(float f : arrayOfShakeValues){
-            average += f;
+            sumOfArray += f;
         }
 
         // divide sum of array with number of elements in array
-        float returnValue =  (average / sizeOfArrayOfShakeValues);
+        float average =  (sumOfArray / sizeOfArrayOfShakeValues);
 
         // if value is bigger than 10.0 return 10.0
-        if(returnValue > 10.0f)
+        if(average > 10.0f)
             return 10.0f;
 
         // if value is smaller than 1.0 return 1.0
-        if (returnValue < 1.0 )
+        if (average < 1.0 )
             return 1.0f;
 
         // return average
-        return returnValue;
+        return average;
+    }
 
+    private float getRoadQualityFromAverage(float average){
+        // multiply value with 10 and cast it to integer
+        int averageX10 = (int) (average * 10);
+        int invertedAverage;
+
+        // get inverted value by subtracting current average from sum of minimum and maximum value (10 + 100 - X = 110 - X)
+        invertedAverage = 55 - (averageX10 - 55);
+
+        // return quality divided by 10.0 so we get float type (e.g. 4.2)
+        return (invertedAverage / 10.0f);
     }
 }
