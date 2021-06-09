@@ -52,7 +52,7 @@ const Home = () => {
         Object.entries(data).forEach(([key, value]) => {
             tmpArray.push(value);
         });
-        await setMarkersRoadQuality(tmpArray)
+        await setMarkersRoadQuality(tmpArray);
     }
 
     useEffect(() => {
@@ -143,15 +143,16 @@ const Home = () => {
                                                         onClick={() => {
                                                             setRoadsigns(!roadsigns)
                                                         }}>{!roadsigns ? "Show roadsigns passed" : "Show road quality detected"}</button>
-                                                <MapContainer
-                                                    center={[markersRoadSigns[0].latitude, markersRoadSigns[0].longitude]}
-                                                    zoom={10} scrollWheelZoom={false}>
-                                                    <TileLayer
-                                                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                                    />
+                                                {(markersRoadSigns.length > 0 ?
+                                                    <MapContainer
+                                                        center={[markersRoadSigns[0].latitude, markersRoadSigns[0].longitude]}
+                                                        zoom={10} scrollWheelZoom={false}>
+                                                        <TileLayer
+                                                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                                        />
 
-                                                    {(roadsigns === true ?
+                                                        {(roadsigns === true ?
                                                             markersRoadSigns.map(marker => (
                                                                 <Marker
                                                                     key={marker._id.$oid}
@@ -163,7 +164,7 @@ const Home = () => {
                                                                 </Marker>
                                                             ))
 
-                                                            :
+                                                        :
 
                                                             markersRoadQuality.map(marker => (
                                                                 <Marker
@@ -175,8 +176,83 @@ const Home = () => {
                                                                     </Popup>
                                                                 </Marker>
                                                             ))
-                                                    )}
-                                                </MapContainer>
+                                                        )}
+                                                    </MapContainer>
+
+                                                :
+                                                markersRoadQuality.length > 0 ?
+                                                    <MapContainer
+                                                        center={[markersRoadQuality[0].latitude, markersRoadQuality[0].longitude]}
+                                                        zoom={10} scrollWheelZoom={false}>
+                                                        <TileLayer
+                                                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                                        />
+
+                                                        {(roadsigns === true ?
+                                                            markersRoadSigns.map(marker => (
+                                                                <Marker
+                                                                    key={marker._id.$oid}
+                                                                    position={[marker.latitude, marker.longitude]}
+                                                                >
+                                                                    <Popup>
+                                                                        <h4>Roadsign: {marker.type}</h4>
+                                                                    </Popup>
+                                                                </Marker>
+                                                            ))
+
+                                                        :
+
+                                                            markersRoadQuality.map(marker => (
+                                                                <Marker
+                                                                    key={marker._id.$oid}
+                                                                    position={[marker.latitude, marker.longitude]}
+                                                                >
+                                                                    <Popup>
+                                                                        <h4>Road quality: {marker.road_quality}</h4>
+                                                                    </Popup>
+                                                                </Marker>
+                                                            ))
+                                                        )}
+                                                    </MapContainer>
+
+                                                :
+
+                                                    <MapContainer
+                                                        center={[46.558989157839555, 15.638179450784106]}
+                                                        zoom={10} scrollWheelZoom={false}>
+                                                        <TileLayer
+                                                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                                        />
+
+                                                        {(roadsigns === true ?
+                                                            markersRoadSigns.map(marker => (
+                                                                <Marker
+                                                                    key={marker._id.$oid}
+                                                                    position={[marker.latitude, marker.longitude]}
+                                                                >
+                                                                    <Popup>
+                                                                        <h4>Roadsign: {marker.type}</h4>
+                                                                    </Popup>
+                                                                </Marker>
+                                                            ))
+
+                                                        :
+
+                                                            markersRoadQuality.map(marker => (
+                                                                <Marker
+                                                                    key={marker._id.$oid}
+                                                                    position={[marker.latitude, marker.longitude]}
+                                                                >
+                                                                    <Popup>
+                                                                        <h4>Road quality: {marker.road_quality}</h4>
+                                                                    </Popup>
+                                                                </Marker>
+                                                            ))
+                                                        )}
+                                                    </MapContainer>        
+                                                )}
                                             </div>
                                             <table className="table table-striped w-50 m-auto mt-5">
                                                 <tbody className="mt-5">
