@@ -1,18 +1,19 @@
 package com.rt21;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.util.Rational;
 import android.util.Size;
 import android.view.TextureView;
@@ -21,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,26 +32,15 @@ import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureConfig;
 import androidx.camera.core.Preview;
 import androidx.camera.core.PreviewConfig;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.koushikdutta.ion.Ion;
-import com.rt21.data.User;
 import com.google.gson.JsonObject;
-import com.koushikdutta.ion.Ion;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -68,7 +57,6 @@ import java.io.File;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
-import timber.log.Timber;
 
 
 public class CameraActivity extends AppCompatActivity {
@@ -107,6 +95,11 @@ public class CameraActivity extends AppCompatActivity {
     // timer is set to 5 seconds
     int delayMilliSeconds = 5000;
 
+    // handler will be used to trigger code to change checkSensor to true
+    Handler myHandlerSensor;
+    // runnable stores the code that will execute every x seconds
+    Runnable myRunnableSensor;
+
 
     // Google's interface that consumes less energy because it is optimized
     // It uses Google Play Services
@@ -137,6 +130,25 @@ public class CameraActivity extends AppCompatActivity {
     };
 
     public int LOCATION_REQUEST_CODE = 10001;
+
+
+    // here we will show current sensor state
+    TextView textViewSensor;
+
+    // sensor manager
+    private SensorManager sensorManager;
+    private float acelVal, acelLast, shake;
+
+
+    // array to store values from sensor
+    private static float[] arrayOfShakeValues;
+    // size of array
+    private static int sizeOfArrayOfShakeValues = 20;
+    // value that tells if onSensorChanged handler should write down the value or not
+    private static boolean checkSensor;
+    // index that tells where to write data in array
+    private static int counterSensorArray;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,6 +196,45 @@ public class CameraActivity extends AppCompatActivity {
         // set interval and precision of location
         locationSettings();
 
+        // get textview that shows sensor's state
+        textViewSensor = findViewById(R.id.txtViewSensor);
+
+
+        // assign system services to sensor manager
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
+        // subscribe to changes from accelerometer
+        sensorManager.registerListener(sensorListener, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
+
+        acelVal=SensorManager.GRAVITY_EARTH;
+        acelLast=SensorManager.GRAVITY_EARTH;
+        shake=0.000f;
+
+        // create new float array
+        arrayOfShakeValues = new float[sizeOfArrayOfShakeValues];
+        //for start set sensorCheck to true
+        checkSensor = true;
+        // index of array set to 0
+        counterSensorArray = 0;
+
+        // every x seconds execute code in run function
+        myHandlerSensor = new Handler();
+        myHandlerSensor.postDelayed(myRunnableSensor = new Runnable() {
+            public void run() {
+                myHandlerSensor.postDelayed(myRunnableSensor, 500);
+                // set check to true every half a second
+                checkSensor = true;
+            }
+        }, 500);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
     }
 
     private void locationSettings(){
@@ -195,7 +246,7 @@ public class CameraActivity extends AppCompatActivity {
 
         // if location is being retreived by another application at the same time
         // interval be lowered to as little as 5 seconds but no less
-        locationRequest.setFastestInterval(5000);
+        //locationRequest.setFastestInterval(5000);
 
         // we need high precision
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -467,6 +518,7 @@ public class CameraActivity extends AppCompatActivity {
         // check if drive on database was created previously
         if (app.driveID == null) {
             // we dont have drive_id so we cant assign location to it.
+            CommonMethods.displayToastShort("location wont be send", this);
             return;
         }
         try {
@@ -478,7 +530,7 @@ public class CameraActivity extends AppCompatActivity {
                     .setBodyParameter("drive_id", app.driveID)
                     .setBodyParameter("latitude", String.valueOf(location.getLatitude()))
                     .setBodyParameter("longitude", String.valueOf(location.getLongitude()))
-                    .setBodyParameter("road_quality", String.valueOf(random.nextInt(10) + 1))
+                    .setBodyParameter("road_quality", String.valueOf(String.format(java.util.Locale.US,"%.1f", getAverageOfShakes())))
                     .asJsonObject()
                     .get();
 
@@ -494,4 +546,73 @@ public class CameraActivity extends AppCompatActivity {
     }
 
 
+    // event listener
+    private final SensorEventListener sensorListener = new SensorEventListener() {
+
+        //when sensor changes state run this
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+
+            // run only if x amount of time is passed so the checkSensor was ticked to true
+            if(checkSensor) {
+
+                // if array is about to be full start overwriting it at the beginning so set counter to 0
+                if(counterSensorArray >= sizeOfArrayOfShakeValues)
+                    counterSensorArray = 0;
+
+                // set to false (handlerSensor will turn it on again after x seconds)
+                checkSensor = false;
+
+                // get xyz values
+                float x = event.values[0];
+                float y = event.values[1];
+                float z = event.values[2];
+
+                acelLast=acelVal;
+                acelVal = (float) Math.sqrt((double) (x * x) + (y * y) + (z * z));
+                float delta = acelVal - acelLast;
+                shake = shake * 0.9f + delta;
+
+
+                // set current shake value to textview
+                textViewSensor.setText(String.valueOf(shake));
+
+                // write current shake value to array at index counterSensorArray
+                arrayOfShakeValues[counterSensorArray++] = shake;
+
+
+            }
+        }
+
+        // we don't need this method for now but it can't be deleted
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+        }
+    };
+
+    private float getAverageOfShakes(){
+
+        float average = 0.0f;
+
+        // sum all entries in array
+        for(float f : arrayOfShakeValues){
+            average += f;
+        }
+
+        // divide sum of array with number of elements in array
+        float returnValue =  (average / sizeOfArrayOfShakeValues);
+
+        // if value is bigger than 10.0 return 10.0
+        if(returnValue > 10.0f)
+            return 10.0f;
+
+        // if value is smaller than 1.0 return 1.0
+        if (returnValue < 1.0 )
+            return 1.0f;
+
+        // return average
+        return returnValue;
+
+    }
 }
