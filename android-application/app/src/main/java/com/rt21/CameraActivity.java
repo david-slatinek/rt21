@@ -57,6 +57,7 @@ import java.io.File;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
+import timber.log.Timber;
 
 
 public class CameraActivity extends AppCompatActivity {
@@ -458,9 +459,10 @@ public class CameraActivity extends AppCompatActivity {
                 if (jsonObject.has("error")) {
                     CommonMethods.displayToastShort("error", getApplicationContext());
                 } else {
-                    app.driveID = jsonObject.getString("_id");
+                    app.driveID = jsonObject.getString("$oid");
                 }
             } catch (ExecutionException | InterruptedException | JSONException e) {
+                Timber.i("Napaka json: %s", e.getMessage());
                 e.printStackTrace();
             }
         }
