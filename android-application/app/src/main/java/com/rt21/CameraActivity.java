@@ -357,6 +357,8 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                // store location that was provided at the time image was taken
+                Location locationWhereImageWasCaptured = mostRecentLocation;
                 // create new folder in application storage
                 File direcoryPictures = new File(getFilesDir().getAbsolutePath() + File.separator + "Pictures");
                 if (!direcoryPictures.exists())
@@ -364,10 +366,10 @@ public class CameraActivity extends AppCompatActivity {
 
 
                 // create new file. name is from current time
-                File file = new File(direcoryPictures, app.user.getId() + "_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
+                    File fileImage = new File(direcoryPictures, app.user.getId() + "_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
 
                 // take a picture from camera and save it to file and check if it was saved
-                imageCapture.takePicture(file, new ImageCapture.OnImageSavedListener() {
+                imageCapture.takePicture(fileImage, new ImageCapture.OnImageSavedListener() {
                     @Override
                     // image was successfully saved to file
                     public void onImageSaved(@NonNull @NotNull File file) {
@@ -387,6 +389,41 @@ public class CameraActivity extends AppCompatActivity {
                         imageViewCapturedPhoto.setImageBitmap(rotated);
 
                         // image is saved on phone now send it to server and wait for response
+                        try {
+                            JsonObject json = Ion.with(getBaseContext())
+                                    .load("POST", "https://rt21-api.herokuapp.com/api/sign/recognize")
+                                    .setHeader(app.getKeyName(), app.getApiKey())
+                                    // add image to api post request
+                                    .setMultipartFile("image", file)
+                                    .asJsonObject()
+                                    .get();
+
+                            JSONObject jsonObject = new JSONObject(json.toString());
+                            if (jsonObject.has("error")) {
+                                // image was not sent correctly (e.g. wrong file extension)
+                                Log.d("sendImage", "Image was not sent");
+                            } else {
+                                // no error
+
+                                // check if returned object has sign_type field
+//                                if (jsonObject.has("sign_type"))
+//                                    Log.d("getSign", "api returned sign");
+
+                                // get sign from returned json object
+                                String signType = jsonObject.getString("sign_type");
+
+                                // write to log which sign it was
+                                Log.d("getSign", "sign: " + signType);
+
+
+                            }
+                            // if something went wrong
+                        } catch (ExecutionException | InterruptedException | JSONException e) {
+                            Timber.i("JSON parsing error: %s", e.getMessage());
+                            e.printStackTrace();
+                        }
+
+
                     }
 
                     @Override
