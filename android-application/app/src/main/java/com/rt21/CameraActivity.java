@@ -1,6 +1,7 @@
 package com.rt21;
 
 import android.annotation.SuppressLint;
+import android.app.UiModeManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -66,7 +67,6 @@ public class CameraActivity extends AppCompatActivity {
     private MyApplication app;
 
     private boolean driving = false;
-    private TextView txtLocation;
     private TextureView textureViewCameraFlowPreview;
     private Button buttonTakePicture;
     private Button btnStartDrive;
@@ -145,9 +145,6 @@ public class CameraActivity extends AppCompatActivity {
     public int LOCATION_REQUEST_CODE = 10001;
 
 
-    // here we will show current sensor state
-    TextView textViewSensor;
-
     // sensor manager
     private SensorManager sensorManager;
     private float acelVal, acelLast, shake;
@@ -170,14 +167,13 @@ public class CameraActivity extends AppCompatActivity {
 
         app = (MyApplication) getApplication();
 
-        txtLocation = findViewById(R.id.txtLocationHolder);
         textureViewCameraFlowPreview = (TextureView) findViewById(R.id.textureViewCameraPreview);
         buttonTakePicture = findViewById(R.id.buttonTakePicture);
+
         imageViewCapturedPhoto = findViewById(R.id.imageView);
         btnStartDrive = findViewById(R.id.btnStartDrive);
 
         btnStartDrive.setText("Start drive");
-
 
         Configuration.getInstance().setUserAgentValue(getPackageName());
 
@@ -208,10 +204,6 @@ public class CameraActivity extends AppCompatActivity {
 
         // set interval and precision of location
         locationSettings();
-
-        // get textview that shows sensor's state
-        textViewSensor = findViewById(R.id.txtViewSensor);
-
 
         // assign system services to sensor manager
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -559,9 +551,6 @@ public class CameraActivity extends AppCompatActivity {
 
         // move marker to GeoPoint location on map
         currentLocationMarker.setPosition(currentLocation);
-
-        // write coordinates on display
-        txtLocation.setText(String.format("Longitude: %s\t\nLatitude: %s", location.getLongitude(), location.getLatitude()));
     }
 
     private void initializeLocationMarker(){
@@ -670,13 +659,8 @@ public class CameraActivity extends AppCompatActivity {
                 if(shake < 0)
                     shake *= -1;
 
-                // set current shake value to textview
-                textViewSensor.setText(String.valueOf(shake));
-
                 // write current shake value to array at index counterSensorArray
                 arrayOfShakeValues[counterSensorArray++] = shake;
-
-
             }
         }
 
