@@ -14,6 +14,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.util.Rational;
 import android.util.Size;
 import android.view.TextureView;
@@ -118,6 +119,9 @@ public class CameraActivity extends AppCompatActivity {
 
     LocationRequest locationRequest;
 
+    // here is saved the most recent location
+    Location mostRecentLocation = null;
+
     // here we can get location every X seconds (depends of settings in locationSettings method)
     private LocationCallback locationCallback = new LocationCallback() {
         // waits when location is returned
@@ -127,11 +131,12 @@ public class CameraActivity extends AppCompatActivity {
                 // result was empty. Exit method
                 return;
             }
-
             // for each returned location: show it on map and put to log
             for(Location location : locationResult.getLocations()){
                 showOnMap(location);
                 sendLocation(location);
+                mostRecentLocation = location;
+                buttonTakePicture.performClick();
                 // Log.d("location", "onLocationResult: " + location.toString());
             }
         }
@@ -360,8 +365,6 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //TODO - send picture and location
-
                 // create new folder in application storage
                 File direcoryPictures = new File(getFilesDir().getAbsolutePath() + File.separator + "Pictures");
                 if (!direcoryPictures.exists())
@@ -380,6 +383,7 @@ public class CameraActivity extends AppCompatActivity {
 
                         // toast user that image was saved
                         //CommonMethods.displayToastShort("Image was captured and saved in: " + file.getAbsolutePath(), getApplicationContext());
+                        Log.d("location", "Image was captured and saved in: " + file.getAbsolutePath());
 
                         // read that file and show it in imageView with Bitmap object
                         Bitmap original = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -389,6 +393,8 @@ public class CameraActivity extends AppCompatActivity {
                         Bitmap rotated = Bitmap.createBitmap(original, 0, 0, original.getWidth(), original.getHeight(), matrix, true);
 
                         imageViewCapturedPhoto.setImageBitmap(rotated);
+
+                        // image is saved on phone now send it to server and wait for response
                     }
 
                     @Override
@@ -421,16 +427,6 @@ public class CameraActivity extends AppCompatActivity {
         // start receiving location
         startLocationUpdate();
 
-        buttonTakePicture.performClick();
-        // every x seconds execute code in run function
-        myHandler = new Handler();
-        myHandler.postDelayed(myRunnable = new Runnable() {
-            public void run() {
-                myHandler.postDelayed(myRunnable, delayMilliSeconds);
-                // simulate user click on button
-                buttonTakePicture.performClick();
-            }
-        }, delayMilliSeconds);
     }
 
     private void stopDriving(){
@@ -506,12 +502,6 @@ public class CameraActivity extends AppCompatActivity {
         }
 
         app.driveID = "";
-        // stop handler from calling clicks on button
-        myHandler.removeCallbacks(myRunnable);
-        myHandler.removeCallbacksAndMessages(null);
-        // set both handler and runnable to null
-        myHandler = null;
-        myRunnable = null;
     }
 
 
