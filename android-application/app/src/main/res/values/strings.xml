@@ -17,4 +17,6 @@
     <string name="username_s_profile">Username: %s</string>
     <string name="email_s_profile">Email: %s</string>
     <string name="average_speed">Average speed:\n%s km/h</string>
+    <string name="openNavDrawer">Navigation Drawer Open</string>
+    <string name="closeNavDrawer">Navigation Drawer Close</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.rt21;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -11,13 +12,18 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.koushikdutta.ion.Ion;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,10 +31,11 @@ import org.json.JSONObject;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
+import java.util.function.ToLongBiFunction;
 
 import timber.log.Timber;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final int ACTIVITY_ID = 103;
     private static final int PERMISSIONS_ALL = 1002;
 
@@ -37,6 +44,10 @@ public class HomeActivity extends AppCompatActivity {
     private TextView txtKilometerTraveled;
     private TextView txtMaxSpeed;
     private TextView txtAvgSpeed;
+
+    private Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private NavigationView navView;
 
 
     String[] PERMISSIONS = {
@@ -53,6 +64,16 @@ public class HomeActivity extends AppCompatActivity {
         txtKilometerTraveled = findViewById(R.id.txtKilometersTraveled);
         txtMaxSpeed = findViewById(R.id.txtMaxSpeed);
         txtAvgSpeed = findViewById(R.id.txtAvgSpeed);
+
+        toolbar = findViewById(R.id.main_toolbar);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navView = findViewById(R.id.nav_view);
+
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openNavDrawer, R.string.closeNavDrawer);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        navView.setNavigationItemSelectedListener(this);
 
         app = (MyApplication) getApplication();
 
@@ -138,26 +159,29 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickLogOut(View view) {
-        SharedPreferences sprefs = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sprefs.edit();
-        editor.remove("remember_user");
-        editor.remove("_id");
-        editor.remove("fullname");
-        editor.remove("email");
-        editor.remove("age");
-        editor.remove("username");
-        editor.apply();
+    @Override
+    public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+        if (item.getItemId() == R.id.btnMenuProfile) {
+            Intent i = new Intent(getBaseContext(), ProfileActivity.class);
+            startActivity(i);
+        }
+        else if(item.getItemId() == R.id.btnMenuLogOut) {
+            SharedPreferences sprefs = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sprefs.edit();
+            editor.remove("remember_user");
+            editor.remove("_id");
+            editor.remove("fullname");
+            editor.remove("email");
+            editor.remove("age");
+            editor.remove("username");
+            editor.apply();
 
+            Intent i = getIntent();
+            i.putExtra("sign_out", true);
+            setResult(RESULT_OK, i);
+            finish();
+        }
 
-        Intent i = getIntent();
-        i.putExtra("sign_out", true);
-        setResult(RESULT_OK, i);
-        finish();
-    }
-
-    public void onClickOpenProfile(View view) {
-        Intent i = new Intent(getBaseContext(), ProfileActivity.class);
-        startActivity(i);
+        return false;
     }
 }
