@@ -5,26 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeActivity"
-    android:id="@+id/drawer_layout" >
+    android:id="@+id/drawer_layout"
+    android:theme="@style/Theme.RT21">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:theme="@style/Theme.RT21" >
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:theme="@style/Theme.RT21">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/main_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize" />
+                android:layout_height="?attr/actionBarSize"
+                android:theme="@style/Theme.RT21" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:theme="@style/Theme.RT21">
 
             <TextView
                 android:id="@+id/txtAvgSpeed"
@@ -42,13 +47,14 @@
 
             <Button
                 android:id="@+id/buttonCameraActivity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="203dp"
+                android:layout_height="73dp"
+                android:height="50dp"
                 android:drawableEnd="@drawable/ic_camer"
                 android:onClick="onClickOpenCamera"
                 android:text="Open Camera  "
-                android:textSize="20sp"
-                android:height="50dp"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
