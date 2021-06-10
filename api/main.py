@@ -141,11 +141,11 @@ def create_sign():
     return sign.create_sign()
 
 
-@app.route('/api/sign/sign/<drive_id>', methods=['POST'])
-def recognize_sign(drive_id):
+@app.route('/api/sign/recognize', methods=['POST'])
+def recognize_sign():
     if request.headers.get('X-API-Key') != api_key:
         return create_response("error", "api key not given or invalid", 401)
-    return sign.recognize_sign(drive_id)
+    return sign.recognize_sign()
 
 
 @app.route('/api/sign/<sign_id>', methods=['GET'])

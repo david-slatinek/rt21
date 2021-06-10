@@ -1,4 +1,5 @@
 import main
+from detectRoadSign import recognize
 
 
 def create_sign():
@@ -122,17 +123,11 @@ def get_sings(drive_id):
     return main.json.loads(main.json_util.dumps(result))
 
 
-def recognize_sign(drive_id):
-    if len(drive_id) != 24:
-        return main.create_response('error', 'invalid id length', 400)
-
-    if not main.DriveCollection.find_one({"_id": main.ObjectId(drive_id)}):
-        return main.create_response('error', 'drive not found', 404)
-
-    if 'image' not in main.request.files:
-        main.create_response('error', 'image not given', 400)
-
+def recognize_sign():
     image = main.request.files['image']
+
+    if not image:
+        main.create_response('error', 'image not given', 400)
 
     if image.filename == '':
         main.create_response('error', 'image not given', 400)
@@ -142,4 +137,7 @@ def recognize_sign(drive_id):
         main.create_response('error', 'invalid image extension', 400)
 
     if image:
-        pass
+        image.save("image" + file_ext)
+        return main.create_response('sign_type', recognize("image" + file_ext), 200)
+
+    return main.create_response('error', 'image not given', 400)

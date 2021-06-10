@@ -4,3 +4,5 @@ venv
 Dockerfile
 heroku.sh
 .dockerignore
+.gitignore
+test_data.py
