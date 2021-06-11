@@ -413,7 +413,37 @@ public class CameraActivity extends AppCompatActivity {
                                 String signType = jsonObject.getString("sign_type");
 
                                 // write to log which sign it was
-                                Log.d("getSign", "sign: " + signType);
+                                //Log.d("getSign", "sign: " + signType);
+
+
+                                // now that we have a sign we need to send it to database with drive id and location coordinates
+                                {
+                                    try {
+                                        // send key, drive id, locaton, and type of sign
+                                        JsonObject jsonSign = Ion.with(getBaseContext())
+                                                .load("POST", "https://rt21-api.herokuapp.com/api/sign/create")
+                                                .setHeader(app.getKeyName(), app.getApiKey())
+                                                .setBodyParameter("drive_id", app.driveID)
+                                                .setBodyParameter("latitude", String.valueOf(locationWhereImageWasCaptured.getLatitude()))
+                                                .setBodyParameter("longitude", String.valueOf(locationWhereImageWasCaptured.getLongitude()))
+                                                .setBodyParameter("sign_type", signType)
+                                                .asJsonObject()
+                                                .get();
+
+                                        JSONObject jsonObjectSign = new JSONObject(jsonSign.toString());
+                                        // if returned json contains error field
+                                        if (jsonObjectSign.has("error")) {
+                                            // something went wrong
+                                            Log.d("sendSign", "Recognized sign was not sent");
+                                        }
+
+                                        // if something goes wrong
+                                    } catch (ExecutionException | InterruptedException | JSONException e) {
+                                        // print error message
+                                        Timber.i("JSON parsing error here: %s", e.getMessage());
+                                        e.printStackTrace();
+                                    }
+                                }
 
 
                             }
