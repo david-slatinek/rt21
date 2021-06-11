@@ -56,6 +56,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
@@ -97,13 +98,6 @@ public class CameraActivity extends AppCompatActivity {
     private Size imageResolutionFinal;
 
 
-    // handler will be used to trigger code to take a picture every X seconds
-    Handler myHandler;
-    // runnable stores the code that will execute every x seconds
-    Runnable myRunnable;
-    // timer is set to 5 seconds
-    int delayMilliSeconds = 5000;
-
     // handler will be used to trigger code to change checkSensor to true
     Handler myHandlerSensor;
     // runnable stores the code that will execute every x seconds
@@ -141,8 +135,6 @@ public class CameraActivity extends AppCompatActivity {
             }
         }
     };
-
-    public int LOCATION_REQUEST_CODE = 10001;
 
 
     // sensor manager
@@ -561,6 +553,21 @@ public class CameraActivity extends AppCompatActivity {
         }
 
         app.driveID = "";
+
+
+        // delete all image from Pictures folder
+        // internal storage/Pictures
+        File direcoryPictures = new File(getFilesDir().getAbsolutePath() + File.separator + "Pictures");
+
+        // check if directory exists
+        if (direcoryPictures.exists()){
+            // foreach file in directory.list of files
+            for (File file: direcoryPictures.listFiles()) {
+                // delete specified file
+                file.delete();
+            }
+        }
+
     }
 
 
