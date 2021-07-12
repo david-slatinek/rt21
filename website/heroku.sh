@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 heroku container:login
 #heroku create rt21-website --region eu
