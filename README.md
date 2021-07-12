@@ -27,7 +27,7 @@
 </p>
 
 # About
-Project at big data analysis for real-world applications at FERI, 2nd year, CS. Project theme was traffic. The project consist of 4 main components: database, API, website and android application as shown in the following image:
+Project at big data analysis for real-world applications at FERI, 2nd year, CS. Project theme was traffic. The project consist of 4 main components: database, API, website and android application as shown in the following image and table:
 
 <p align="center">
   <img alt="Project components" src="documents/images/project_components.png">
