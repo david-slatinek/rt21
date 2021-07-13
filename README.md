@@ -27,7 +27,10 @@
 </p>
 
 # About
-Project at big data analysis for real-world applications at FERI, 2nd year, CS. Project theme was traffic. The project consist of 4 main components: database, API, website and android application as shown in the following image and table:
+Project at big data analysis for real-world applications at FERI, 2nd year, CS. The project theme was traffic. The android application takes camera feed and sends that image to API for road signs recognition. Android app also uses GPS to track location and detects vibration to determine road quality. API stores all essential info in the database. The website displays stored data and other statistical info to the user.
+
+<br>
+The project consists of 4 main components: database, API, website and android application as shown in the following image and table:
 
 <p align="center">
   <img alt="Project components" src="documents/images/project_components.png">
@@ -44,3 +47,9 @@ Project at big data analysis for real-world applications at FERI, 2nd year, CS. 
 | Android app     | Java                      |
 | Computer vision | OpenCV, TensorFlow, Keras |
 | Documents       | Latex                     |
+
+# Server
+
+For website and API hosting, we choose [Heroku](https://www.heroku.com). Both applications are running inside docker containers, and by doing that, we achieve easy transfer to another hosting provider in case of necessity. By using Heroku, all apps automatically get support for HTTPS protocol. For the web server, we choose Nginx.
+
+Contributor: [David Slatinek](https://github.com/david-slatinek).
