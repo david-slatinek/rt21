@@ -63,3 +63,23 @@ Collections can be seen from the following image:
 </p>
 
 Contributor: [David Slatinek](https://github.com/david-slatinek).
+
+# API
+The API serves as an intermediate link between the clients and the database. It limits unauthorized access to the database and makes the development of front-end applications simpler, as the developers working on it are not involved in retrieving data from the database, but instead retrieve it in a specific format and then use it in further development.
+
+The API was made with python framework flask, follows the REST architectural style, and returns data in JSON format. On the security aspect, the system contains the following security mechanisms:
+1. API key.
+2. HTTPS protocol.
+
+One of the methods:
+```
+@app.route('/api/user/<user_id>', methods=['GET'])
+def get_user(user_id):
+    if request.headers.get('X-API-Key') != api_key:
+        return create_response("error", "api key not given or invalid", 401)
+    return user.get_user(user_id)
+```
+
+The API supports all CRUD operations and can also identify traffic signs from a picture.
+
+Contributor: [David Slatinek](https://github.com/david-slatinek).
