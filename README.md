@@ -50,6 +50,16 @@ The project consists of 4 main components: database, API, website and android ap
 
 # Server
 
-For website and API hosting, we choose [Heroku](https://www.heroku.com). Both applications are running inside docker containers, and by doing that, we achieve easy transfer to another hosting provider in case of necessity. By using Heroku, all apps automatically get support for HTTPS protocol. For the web server, we choose Nginx.
+For website and API hosting, we choose [Heroku](https://www.heroku.com). Both applications are running inside docker containers, and by doing that, we achieve effortless transfer to another hosting provider in case of necessity. By using Heroku, all apps automatically get support for HTTPS protocol. For the web server, we choose Nginx.
+
+Contributor: [David Slatinek](https://github.com/david-slatinek).
+
+# Database
+For the database, we choose the NoSQL database type, specifically MongoDB. The database is being hosted by [MongoDB Atlas](https://www.mongodb.com/cloud/atlas). In the database, we store information about the user, his drives, the locations of these drives, and information about traffic signs.
+
+Collections can be seen from the following image:
+<p align="center">
+  <img alt="Collections" src="documents/images/collections.png">
+</p>
 
 Contributor: [David Slatinek](https://github.com/david-slatinek).
