@@ -1,4 +1,5 @@
 # rt21
+
 <p>
     <img alt="Docker" src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white"/>
     <img alt="Shell Script" src="https://img.shields.io/badge/shell_script-%23121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white"/>
@@ -43,13 +44,18 @@ The project consists of 4 main components: database, API, website and android ap
 | Server          | Docker, bash              |
 | Database        | MongoDB                   |
 | API             | Flask                     |
-| Website         | HTML5, Bootstrap, React   |
 | Android app     | Java                      |
+| Website         | HTML5, Bootstrap, React   |
 | Computer vision | OpenCV, TensorFlow, Keras |
 | Documents       | Latex                     |
 
-# Server
+# Table of Contents
+- [Server](#server)
+- [Database](#database)
+- [API](#api)
+- [Android app](#android-app)
 
+# Server
 For website and API hosting, we choose [Heroku](https://www.heroku.com). Both applications are running inside docker containers, and by doing that, we achieve effortless transfer to another hosting provider in case of necessity. By using Heroku, all apps automatically get support for HTTPS protocol. For the web server, we choose Nginx.
 
 Contributor: [David Slatinek](https://github.com/david-slatinek).
@@ -83,3 +89,8 @@ def get_user(user_id):
 The API supports all CRUD operations and can also identify traffic signs from a picture.
 
 Contributor: [David Slatinek](https://github.com/david-slatinek).
+
+# Android app
+Android app was made with java. The main app functionality is an image and data capture from sensors and sending them to the server. The app uses GPS to track location and detects vibration to determine road quality. In addition to that, the app also monitors speed.
+
+Contributors: [Marcel Iskrač](https://github.com/iskraM), [Marko Hiršel](https://github.com/markoHirsel).
