@@ -56,6 +56,7 @@ The project consists of 4 main components: database, API, website and android ap
 - [API](#api)
 - [Android app](#android-app)
 - [Computer vision](#computer-vision)
+- [Website](#website)
 
 # Server
 For website and API hosting, we choose [Heroku](https://www.heroku.com). Both applications are running inside docker containers, and by doing that, we achieve effortless transfer to another hosting provider in case of necessity. By using Heroku, all apps automatically get support for HTTPS protocol. For the web server, we choose Nginx.
@@ -80,7 +81,7 @@ The API was made with python framework flask, follows the REST architectural sty
 2. HTTPS protocol.
 
 One of the methods:
-```
+```python
 @app.route('/api/user/<user_id>', methods=['GET'])
 def get_user(user_id):
     if request.headers.get('X-API-Key') != api_key:
@@ -104,15 +105,23 @@ Contributors: [Marcel Iskrač](https://github.com/iskraM), [Marko Hiršel](https
 # Computer vision 
 For traffic sign recognition, we made a program with a convolutional neural network. The program is called by API when it receives an appropriate request.
 
-```
+```python
 prediction = model.predict(img)
 index = np.argmax(prediction)
 return class_names[index]
 ```
 
-```
+```python
 from detectRoadSign import recognize
 return main.create_response('sign_type', recognize("image" + file_ext), 200)
 ```
+
+Contributor: [Marcel Iskrač](https://github.com/iskraM).
+
+# Website
+The website was created using the React library, HTML and CSS, and Boostrap, which was used for easy design. We used React for the layout and calls to the application components and for communication between the API and the website. The main website functionality is data visualization.
+
+![Website - road sign](/documents/images/website_sign.png)
+![Website - road quality](/documents/images/website_road.png)
 
 Contributor: [Marcel Iskrač](https://github.com/iskraM).
