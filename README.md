@@ -21,6 +21,7 @@
     <img alt="TensorFlow" src="https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white" />
     <img alt="Keras" src="https://img.shields.io/badge/Keras-%23D00000.svg?style=for-the-badge&logo=Keras&logoColor=white"/>
     <img alt="NumPy" src="https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white" />
+    <img alt="Pandas" src="https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white" />
     <img alt="Markdown" src="https://img.shields.io/badge/markdown-%23000000.svg?style=for-the-badge&logo=markdown&logoColor=white"/>
     <img alt="LaTeX" src="https://img.shields.io/badge/latex-%23008080.svg?style=for-the-badge&logo=latex&logoColor=white"/>
     <img alt="Git" src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white"/>
@@ -45,8 +46,8 @@ The project consists of 4 main components: database, API, website and android ap
 | Database        | MongoDB                   |
 | API             | Flask                     |
 | Android app     | Java                      |
-| Website         | HTML5, Bootstrap, React   |
 | Computer vision | OpenCV, TensorFlow, Keras |
+| Website         | HTML5, Bootstrap, React   |
 | Documents       | Latex                     |
 
 # Table of Contents
@@ -54,6 +55,7 @@ The project consists of 4 main components: database, API, website and android ap
 - [Database](#database)
 - [API](#api)
 - [Android app](#android-app)
+- [Computer vision](#computer-vision)
 
 # Server
 For website and API hosting, we choose [Heroku](https://www.heroku.com). Both applications are running inside docker containers, and by doing that, we achieve effortless transfer to another hosting provider in case of necessity. By using Heroku, all apps automatically get support for HTTPS protocol. For the web server, we choose Nginx.
@@ -94,7 +96,23 @@ Contributor: [David Slatinek](https://github.com/david-slatinek).
 Android app was made with java. The main app functionality is an image and data capture from sensors and sending them to the server. The app uses GPS to track location and detects vibration to determine road quality. In addition to that, the app also monitors speed.
 
 <p align="center">
-  <img alt="App main form" src="documents/images/app_main.png" height=500 width=300>
+  <img alt="App main form" src="documents/images/app_main.png" height=520 width=300>
 </p>
 
 Contributors: [Marcel Iskrač](https://github.com/iskraM), [Marko Hiršel](https://github.com/markoHirsel).
+
+# Computer vision 
+For traffic sign recognition, we made a program with a convolutional neural network. The program is called by API when it receives an appropriate request.
+
+```
+prediction = model.predict(img)
+index = np.argmax(prediction)
+return class_names[index]
+```
+
+```
+from detectRoadSign import recognize
+return main.create_response('sign_type', recognize("image" + file_ext), 200)
+```
+
+Contributor: [Marcel Iskrač](https://github.com/iskraM).
