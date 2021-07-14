@@ -93,4 +93,8 @@ Contributor: [David Slatinek](https://github.com/david-slatinek).
 # Android app
 Android app was made with java. The main app functionality is an image and data capture from sensors and sending them to the server. The app uses GPS to track location and detects vibration to determine road quality. In addition to that, the app also monitors speed.
 
+<p align="center">
+  <img alt="App main form" src="documents/images/app_main.png" height=500 width=300>
+</p>
+
 Contributors: [Marcel Iskrač](https://github.com/iskraM), [Marko Hiršel](https://github.com/markoHirsel).
