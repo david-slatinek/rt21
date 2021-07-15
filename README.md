@@ -56,6 +56,7 @@ The project consists of 4 main components: database, API, website, and android a
 - [Computer vision](#computer-vision)
 - [Website](#website)
 - [Documents](#documents)
+- [Security and portability](#security-and-portability)
 
 # Server
 For website and API hosting, we choose [Heroku](https://www.heroku.com). Both applications are running inside docker containers, and by doing that, we achieve effortless transfer to another hosting provider in case of necessity. By using Heroku, all apps automatically get support for HTTPS protocol. For the web server, we choose Nginx.
@@ -137,3 +138,15 @@ We choose LaTeX due to the following advantages:
 All documents are available [here](/documents).
 
 Contributor: [David Slatinek](https://github.com/david-slatinek).
+
+# Security and portability
+Data security is of paramount importance in any project. For this purpose, we use the HTTPS protocol for all parts of the project, and user passwords are stored as hashes in the database. By using Docker, we achieve portability.
+The following table shows the security of the project and the portability of a specific part:
+
+| Project part | Security                          | Portability               |
+| ------------ | --------------------------------- | ------------------------- |
+| Server       | Service provider, HTTPS           | Yes, docker               |
+| Database     | Service provider, accounts, HTTPS | Yes, data transfer        |
+| API          | Service provider, API keys, HTTPS | Yes, docker               |
+| Android app  | HTTPS                             | No, only Android platform |
+| Website      | Service provider, HTTPS           | Yes, docker               |
