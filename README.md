@@ -1,6 +1,6 @@
 # rt21
 
-<p>
+<div align="center">
     <img alt="Docker" src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white"/>
     <img alt="Shell Script" src="https://img.shields.io/badge/shell_script-%23121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white"/>
     <img alt="Heroku" src="https://img.shields.io/badge/heroku-%23430098.svg?style=for-the-badge&logo=heroku&logoColor=white"/>
@@ -25,18 +25,16 @@
     <img alt="Markdown" src="https://img.shields.io/badge/markdown-%23000000.svg?style=for-the-badge&logo=markdown&logoColor=white"/>
     <img alt="LaTeX" src="https://img.shields.io/badge/latex-%23008080.svg?style=for-the-badge&logo=latex&logoColor=white"/>
     <img alt="Git" src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white"/>
-    <img alt="GitHub" src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white"/>
-</p>
+</div>
 
 # About
-Project at big data analysis for real-world applications at FERI, 2nd year, CS. The project theme was traffic. The android application takes camera feed and sends that image to API for road signs recognition. Android app also uses GPS to track location and detects vibration to determine road quality. API stores all essential info in the database. The website displays stored data and other statistical info to the user.
+Project at big data analysis for real-world applications at FERI, 2nd year, CS. The project theme was traffic. The android application takes the camera feed and sends that image to API for road signs recognition. Android app also uses GPS to track location and detects vibration to determine road quality. API stores all essential info in the database. The website displays stored data and other statistical info to the user.
 
 <br>
-The project consists of 4 main components: database, API, website and android application as shown in the following image and table:
-
-<p align="center">
+The project consists of 4 main components: database, API, website, and android application as shown in the following image and table:
+<div align="center">
   <img alt="Project components" src="documents/images/project_components.png">
-</p>
+</div>
 
 <br>
 
@@ -48,7 +46,7 @@ The project consists of 4 main components: database, API, website and android ap
 | Android app     | Java                      |
 | Computer vision | OpenCV, TensorFlow, Keras |
 | Website         | HTML5, Bootstrap, React   |
-| Documents       | Latex                     |
+| Documents       | LaTeX                     |
 
 # Table of Contents
 - [Server](#server)
@@ -57,6 +55,7 @@ The project consists of 4 main components: database, API, website and android ap
 - [Android app](#android-app)
 - [Computer vision](#computer-vision)
 - [Website](#website)
+- [Documents](#documents)
 
 # Server
 For website and API hosting, we choose [Heroku](https://www.heroku.com). Both applications are running inside docker containers, and by doing that, we achieve effortless transfer to another hosting provider in case of necessity. By using Heroku, all apps automatically get support for HTTPS protocol. For the web server, we choose Nginx.
@@ -67,9 +66,9 @@ Contributor: [David Slatinek](https://github.com/david-slatinek).
 For the database, we choose the NoSQL database type, specifically MongoDB. The database is being hosted by [MongoDB Atlas](https://www.mongodb.com/cloud/atlas). In the database, we store information about the user, his drives, the locations of these drives, and information about traffic signs.
 
 Collections can be seen from the following image:
-<p align="center">
+<div align="center">
   <img alt="Collections" src="documents/images/collections.png">
-</p>
+</div>
 
 Contributor: [David Slatinek](https://github.com/david-slatinek).
 
@@ -96,10 +95,10 @@ Contributor: [David Slatinek](https://github.com/david-slatinek).
 # Android app
 Android app was made with java. The main app functionality is an image and data capture from sensors and sending them to the server. The app uses GPS to track location and detects vibration to determine road quality. In addition to that, the app also monitors speed.
 
-<p align="center">
+<div align="center">
   <img alt="App main form" src="documents/images/app_main.png" height=520 width=300>
   <img alt="App drive form" src="documents/images/app_drive.png" height=520 width=300>
-</p>
+</div>
 
 Contributors: [Marcel Iskrač](https://github.com/iskraM), [Marko Hiršel](https://github.com/markoHirsel).
 
@@ -120,9 +119,21 @@ return main.create_response('sign_type', recognize("image" + file_ext), 200)
 Contributor: [Marcel Iskrač](https://github.com/iskraM).
 
 # Website
-The website was created using the React library, HTML and CSS, and Boostrap, which was used for easy design. We used React for the layout and calls to the application components and for communication between the API and the website. The main website functionality is data visualization.
+The website was created using the React library, HTML and CSS, and Boostrap, which was used for effortless design. We used React for the layout and calls to the application components and communication between the API and the website. The main website functionality is data visualization.
 
 ![Website - road sign](/documents/images/website_sign.png)
 ![Website - road quality](/documents/images/website_road.png)
 
 Contributor: [Marcel Iskrač](https://github.com/iskraM).
+
+# Documents 
+All documents were written with [LaTeX](https://www.latex-project.org/) on [Overleaf](https://www.overleaf.com/).
+We choose LaTeX due to the following advantages:
+- Appealing documents
+- Superb and consistent management of internal references and citations
+- Separation of content and style
+- Flexibility - a lot of packages
+
+All documents are available [here](/documents).
+
+Contributor: [David Slatinek](https://github.com/david-slatinek).
