@@ -5,7 +5,7 @@
 </div>
 
 # About
-Project at big data analysis for real-world applications at FERI, 2nd year, CS. The project theme was traffic. The android application takes the camera feed and sends that image to API for road signs recognition. Android app also uses GPS to track location and detects vibration to determine road quality. API stores all essential info in the database. The website displays stored data and other statistical info to the user.
+Project at big data analysis for real-world applications at FERI, 2nd year, CS. The project theme was traffic. The android application takes the camera feed and sends that image to API for road signs recognition. The android app also uses GPS to track location, monitors mean and max speed, and detects vibration to determine road quality. API stores all essential info in the database. The website displays stored data and other statistical info to the user.
 
 <br>
 The project consists of 4 main components: database, API, website, and android application as shown in the following image and table:
@@ -99,7 +99,7 @@ Contributor: [David Slatinek](https://github.com/david-slatinek).
   <img alt="OpenStreetMap" src="https://img.shields.io/badge/OpenStreetMap-7EBC6F?style=for-the-badge&logo=OpenStreetMap&logoColor=white"/>
 </div>
 
-Android app was made with java. The main app functionality is an image and data capture from sensors and sending them to the server. The app uses GPS to track location and detects vibration to determine road quality. In addition to that, the app also monitors speed.
+Android app was made with java. The main app functionality is an image and data capture from sensors and sending them to the server. The app uses GPS to track location and detects vibration to determine road quality. In addition to that, the app also monitors mean and max speed.
 
 <div align="center">
   <img alt="App main form" src="documents/images/app_main.png" height=520 width=300/>
