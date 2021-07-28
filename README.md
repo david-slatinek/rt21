@@ -49,7 +49,20 @@ The project consists of 4 main components: database, API, website, and android a
 
 For website and API hosting, we choose [Heroku](https://www.heroku.com). Both applications are running inside docker containers, and by doing that, we achieve effortless transfer to another hosting provider in case of necessity. By using Heroku, all apps automatically get support for HTTPS protocol. For the web server, we choose Nginx.
 
-Contributor: [David Slatinek](https://github.com/david-slatinek).
+Contributor:
+<table>
+    <tbody>
+        <tr>
+            <td align="center">
+                <a href="https://github.com/david-slatinek">
+                    <img src="https://avatars.githubusercontent.com/u/79467409?v=4" width="100px;" alt="David Slatinek Github avatar"/>
+                    <br/>
+                    <sub><b>David Slatinek</b></sub>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 # Database
 <div align="center">
@@ -64,7 +77,20 @@ Collections can be seen from the following image:
   <img alt="Collections" src="documents/images/collections.png"/>
 </div>
 
-Contributor: [David Slatinek](https://github.com/david-slatinek).
+Contributor:
+<table>
+    <tbody>
+        <tr>
+            <td align="center">
+                <a href="https://github.com/david-slatinek">
+                    <img src="https://avatars.githubusercontent.com/u/79467409?v=4" width="100px;" alt="David Slatinek Github avatar"/>
+                    <br/>
+                    <sub><b>David Slatinek</b></sub>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 # API
 <div align="center">
@@ -91,7 +117,20 @@ def get_user(user_id):
 
 The API supports all CRUD operations and can also identify traffic signs from a picture.
 
-Contributor: [David Slatinek](https://github.com/david-slatinek).
+Contributor:
+<table>
+    <tbody>
+        <tr>
+            <td align="center">
+                <a href="https://github.com/david-slatinek">
+                    <img src="https://avatars.githubusercontent.com/u/79467409?v=4" width="100px;" alt="David Slatinek Github avatar"/>
+                    <br/>
+                    <sub><b>David Slatinek</b></sub>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 # Android app
 <div align="center">
@@ -107,7 +146,27 @@ Android app was made with java. The main app functionality is an image and data 
   <img alt="App drive form" src="documents/images/app_drive.png" height=520 width=300/>
 </div>
 
-Contributors: [Marcel Iskrač](https://github.com/iskraM), [Marko Hiršel](https://github.com/markoHirsel).
+Contributors:
+<table>
+    <tbody>
+        <tr>
+            <td align="center">
+                <a href="https://github.com/iskraM">
+                    <img src="https://avatars.githubusercontent.com/u/40259973?v=4" width="100px;" alt="Marcel Iskrač Github avatar"/>
+                    <br/>
+                    <sub><b>Marcel Iskrač</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/markoHirsel">
+                    <img src="https://avatars.githubusercontent.com/u/80032554?v=4" width="100px;" alt="Marko Hiršel Github avatar"/>
+                    <br/>
+                    <sub><b>Marko Hiršel</b></sub>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 # Computer vision
 <div align="center">
@@ -131,7 +190,20 @@ from detectRoadSign import recognize
 return main.create_response('sign_type', recognize("image" + file_ext), 200)
 ```
 
-Contributor: [Marcel Iskrač](https://github.com/iskraM).
+Contributor:
+<table>
+    <tbody>
+        <tr>
+            <td align="center">
+                <a href="https://github.com/iskraM">
+                    <img src="https://avatars.githubusercontent.com/u/40259973?v=4" width="100px;" alt="Marcel Iskrač Github avatar"/>
+                    <br/>
+                    <sub><b>Marcel Iskrač</b></sub>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 # Website
 <div align="center">
@@ -147,7 +219,20 @@ The website was created using the React library, HTML and CSS, and Boostrap, whi
 ![Website - road sign](/documents/images/website_sign.png)
 ![Website - road quality](/documents/images/website_road.png)
 
-Contributor: [Marcel Iskrač](https://github.com/iskraM).
+Contributor:
+<table>
+    <tbody>
+        <tr>
+            <td align="center">
+                <a href="https://github.com/iskraM">
+                    <img src="https://avatars.githubusercontent.com/u/40259973?v=4" width="100px;" alt="Marcel Iskrač Github avatar"/>
+                    <br/>
+                    <sub><b>Marcel Iskrač</b></sub>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 # Documents
 <div align="center">
@@ -164,7 +249,20 @@ We choose LaTeX due to the following advantages:
 
 All documents are available [here](/documents).
 
-Contributor: [David Slatinek](https://github.com/david-slatinek).
+Contributor:
+<table>
+    <tbody>
+        <tr>
+            <td align="center">
+                <a href="https://github.com/david-slatinek">
+                    <img src="https://avatars.githubusercontent.com/u/79467409?v=4" width="100px;" alt="David Slatinek Github avatar"/>
+                    <br/>
+                    <sub><b>David Slatinek</b></sub>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 # Security and portability
 Data security is of paramount importance in any project. For this purpose, we use the HTTPS protocol for all parts of the project, and user passwords are stored as hashes in the database. By using Docker, we achieve portability.
