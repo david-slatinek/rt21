@@ -4,6 +4,17 @@
   <img alt="Logo" src="documents/images/logo.png">
 </div>
 
+# Table of Contents
+- [About](#about)
+- [Server](#server)
+- [Database](#database)
+- [API](#api)
+- [Android app](#android-app)
+- [Computer vision](#computer-vision)
+- [Website](#website)
+- [Documents](#documents)
+- [Security and portability](#security-and-portability)
+
 # About
 Project at big data analysis for real-world applications at FERI, 2nd year, CS. The project theme was traffic. The android application takes the camera feed and sends that image to API for road signs recognition. The android app also uses GPS to track location, monitors mean and max speed, and detects vibration to determine road quality. API stores all essential info in the database. The website displays stored data and other statistical info to the user.
 
@@ -24,16 +35,6 @@ The project consists of 4 main components: database, API, website, and android a
 | Computer vision | OpenCV, TensorFlow, Keras |
 | Website         | HTML5, Bootstrap, React   |
 | Documents       | LaTeX                     |
-
-# Table of Contents
-- [Server](#server)
-- [Database](#database)
-- [API](#api)
-- [Android app](#android-app)
-- [Computer vision](#computer-vision)
-- [Website](#website)
-- [Documents](#documents)
-- [Security and portability](#security-and-portability)
 
 # Server
 <div align="center">
