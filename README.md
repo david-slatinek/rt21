@@ -1,5 +1,3 @@
-# rt21
-
 <div align="center">
   <img alt="Logo" src="documents/images/logo.png">
 </div>
