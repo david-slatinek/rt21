@@ -3,6 +3,7 @@
 </div>
 
 # Table of Contents
+- [Table of Contents](#table-of-contents)
 - [About](#about)
 - [Server](#server)
 - [Database](#database)
@@ -153,13 +154,6 @@ Contributors:
                     <img src="https://avatars.githubusercontent.com/u/40259973?v=4" width="100px;" alt="Marcel Iskrač Github avatar"/>
                     <br/>
                     <sub><b>Marcel Iskrač</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/markoHirsel">
-                    <img src="https://avatars.githubusercontent.com/u/80032554?v=4" width="100px;" alt="Marko Hiršel Github avatar"/>
-                    <br/>
-                    <sub><b>Marko Hiršel</b></sub>
                 </a>
             </td>
         </tr>
