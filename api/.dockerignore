@@ -1,8 +1,9 @@
-__pycache__
-venv
-.idea
 Dockerfile
-heroku.sh
 .dockerignore
+.env
+.env.example
 .gitignore
+.idea/
 test_data.py
+upload.sh
+venv/

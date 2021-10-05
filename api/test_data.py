@@ -1,10 +1,12 @@
-import requests
-import config
-import string
-import random
 import json
+import random
+import string
 
-api_key = config.API_KEY
+import requests
+
+from __init__ import app
+
+api_key = app.config['API_KEY']
 
 
 def random_string(size=6):

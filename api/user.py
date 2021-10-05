@@ -1,5 +1,11 @@
-from main import app, json, UserCollection, ObjectId, create_response
-from main import json_util, request, bcrypt
+import json
+
+from bson import json_util
+from bson.objectid import ObjectId
+from flask import request
+
+from __init__ import UserCollection, bcrypt
+from common import create_response
 
 
 def register():
@@ -19,7 +25,7 @@ def register():
     if not name:
         return create_response('error', 'name not given', 400)
     if not last_name:
-        return create_response('error', 'last name not given', 400)
+        return create_response('error', 'last_name not given', 400)
     if not age:
         return create_response('error', 'age not given', 400)
     if not nickname:
@@ -29,7 +35,7 @@ def register():
     if not password:
         return create_response('error', 'password not given', 400)
 
-    if UserCollection.find_one({"email": email}):
+    if UserCollection.find_one({'email': email}):
         return create_response('error', 'Email already exists', 400)
 
     obj = {
@@ -57,11 +63,11 @@ def login():
     if not password:
         return create_response('error', 'password not given', 400)
 
-    obj = UserCollection.find_one({"email": email})
+    obj = UserCollection.find_one({'email': email})
     if obj:
         user = json.loads(json_util.dumps(obj))
 
-        if bcrypt.check_password_hash(user["password"], password.encode('utf-8')):
+        if bcrypt.check_password_hash(user['password'], password.encode('utf-8')):
             user.pop('password')
             return user
         else:
@@ -74,10 +80,10 @@ def get_user(user_id):
     if len(user_id) != 24:
         return create_response('error', 'invalid id length', 400)
 
-    obj = UserCollection.find_one({"_id": ObjectId(user_id)})
+    obj = UserCollection.find_one({'_id': ObjectId(user_id)})
     if obj:
         user = json.loads(json_util.dumps(obj))
-        user.pop("password")
+        user.pop('password')
         return user
     else:
         return create_response('error', 'User not found', 404)
@@ -87,30 +93,33 @@ def update_user(user_id):
     if len(user_id) != 24:
         return create_response('error', 'invalid id length', 400)
 
-    if not UserCollection.find_one({"_id": ObjectId(user_id)}):
+    if not UserCollection.find_one({'_id': ObjectId(user_id)}):
         return create_response('error', 'user not found', 404)
 
     key = request.form.get('key', None)
     value = request.form.get('value', None)
 
-    if not key or key == "_id":
+    if not key:
         return create_response('error', 'key not given/valid', 400)
+    if key == '_id':
+        return create_response('error', 'can\'t change _id', 400)
     if not value:
         return create_response('error', 'value not given', 400)
 
-    if key != "name" and key != "last_name" and key != "age" and key != "nickname" \
-            and key != "email" and key != "password":
-        return create_response('error', "key not valid", 400)
+    keys = ['name', 'last_name', 'age', 'nickname', 'email', 'password']
 
-    if key == "age":
+    if key not in keys:
+        return create_response('error', 'key not valid', 400)
+
+    if key == 'age':
         try:
             value = int(value)
-        except ValueError:
-            return create_response('age', "age not valid", 400)
-        except TypeError:
-            return create_response('age', "age not valid", 400)
+        except ValueError as error:
+            return create_response('age', str(error), 400)
+        except TypeError as error:
+            return create_response('age', str(error), 400)
 
-    if key == "password":
+    if key == 'password':
         value = bcrypt.generate_password_hash(value.encode('utf-8')).decode('utf-8')
 
     UserCollection.update_one({'_id': ObjectId(user_id)}, {'$set': {key: value}})

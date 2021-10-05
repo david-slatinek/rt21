@@ -1,14 +1,15 @@
-import os
 import cv2
 import numpy as np
 import pandas as pd
 from tensorflow.python.keras import models
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+from __init__ import environ
+
+environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
 def recognize(path):
-    model = models.load_model("classifier_model")
+    model = models.load_model("./classifier_model")
 
     data = pd.read_csv("labels.csv")
     class_names = []
