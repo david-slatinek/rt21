@@ -1,5 +1,5 @@
 <div align="center">
-  <img alt="Logo" src="documents/images/logo.png">
+  <img alt="Logo" src="images/logo.png">
 </div>
 
 # Table of Contents
@@ -15,12 +15,12 @@
 - [Security and portability](#security-and-portability)
 
 # About
-Project at big data analysis for real-world applications at FERI, 2nd year, CS. The project theme was traffic. The android application takes the camera feed and sends that image to API for road signs recognition. The android app also uses GPS to track location, monitors mean and max speed, and detects vibration to determine road quality. API stores all essential info in the database. The website displays stored data and other statistical info to the user.
+Project at big data analysis for real-world applications at FERI, 2nd and 3rd year, CS. The project theme was traffic. The android application takes the camera feed and sends that image to API for road signs recognition. The android app also uses GPS to track location, monitors mean and max speed, and detects vibration to determine road quality. API stores all essential info in the database. The website displays stored data and other statistical info to the user.
 
 <br>
 The project consists of 4 main components: database, API, website, and android application as shown in the following image and table:
 <div align="center">
-  <img alt="Project components" src="documents/images/project_components.png"/>
+  <img alt="Project components" src="images/project_components.png"/>
 </div>
 
 <br>
@@ -42,6 +42,7 @@ The project consists of 4 main components: database, API, website, and android a
   <img alt="Heroku" src="https://img.shields.io/badge/heroku-%23430098.svg?style=for-the-badge&logo=heroku&logoColor=white"/>
   <img alt="Nginx" src="https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white"/>
   <img alt="Linux" src="https://img.shields.io/badge/Linux_Mint-87CF3E?style=for-the-badge&logo=linux-mint&logoColor=white"/>
+  <img alt="GNU Bash" src="https://img.shields.io/badge/GNU%20Bash-4EAA25?style=for-the-badge&logo=GNU%20Bash&logoColor=white"/>
   <img alt="Markdown" src="https://img.shields.io/badge/markdown-%23000000.svg?style=for-the-badge&logo=markdown&logoColor=white"/>
   <img alt="Git" src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white"/>
 </div>
@@ -66,6 +67,7 @@ Contributor:
 # Database
 <div align="center">
  <img alt="MongoDB" src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white"/>
+ <img alt="diagrams.net" src="https://img.shields.io/badge/diagrams.net-F08705?style=for-the-badge&logo=diagrams.net&logoColor=white"/>
  <img alt="MongoDB Atlas" src="https://img.shields.io/badge/MongoDB_Atlas-47A248?style=for-the-badge&logo=MongoDB&logoColor=white"/>
 </div>
 
@@ -73,7 +75,7 @@ For the database, we choose the NoSQL database type, specifically MongoDB. The d
 
 Collections can be seen from the following image:
 <div align="center">
-  <img alt="Collections" src="documents/images/collections.png"/>
+  <img alt="Collections" src="images/collections.png"/>
 </div>
 
 Contributor:
@@ -96,22 +98,22 @@ Contributor:
   <img alt="Python" src="https://img.shields.io/badge/python-%2314354C.svg?style=for-the-badge&logo=python&logoColor=white"/>
   <img alt="Flask" src="https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white"/>
   <img alt="Postman" src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=red"/>
-  <img alt="Postman" src="https://img.shields.io/badge/JSON-000000?style=for-the-badge&logo=JSON&logoColor=white"/>
+  <img alt="JSON" src="https://img.shields.io/badge/JSON-000000?style=for-the-badge&logo=JSON&logoColor=white"/>
 </div>
 
 The API serves as an intermediate link between the clients and the database. It limits unauthorized access to the database and makes the development of front-end applications simpler, as the developers working on it are not involved in retrieving data from the database, but instead retrieve it in a specific format and then use it in further development.
 
-The API was made with python framework flask, follows the REST architectural style, and returns data in JSON format. On the security aspect, the system contains the following security mechanisms:
+The API was made with python framework **flask**, follows the REST architectural style, and returns data in JSON format. On the security aspect, the system contains the following security mechanisms:
 1. API key.
 2. HTTPS protocol.
 
 One of the methods:
 ```python
 @app.route('/api/user/<user_id>', methods=['GET'])
-def get_user(user_id):
-    if request.headers.get('X-API-Key') != api_key:
+def app_get_user(user_id):
+    if request.headers.get('X-API-Key') != app.config['API_KEY']:
         return create_response("error", "api key not given or invalid", 401)
-    return user.get_user(user_id)
+    return get_user(user_id)
 ```
 
 The API supports all CRUD operations and can also identify traffic signs from a picture.
@@ -138,14 +140,14 @@ Contributor:
   <img alt="OpenStreetMap" src="https://img.shields.io/badge/OpenStreetMap-7EBC6F?style=for-the-badge&logo=OpenStreetMap&logoColor=white"/>
 </div>
 
-Android app was made with java. The main app functionality is an image and data capture from sensors and sending them to the server. The app uses GPS to track location and detects vibration to determine road quality. In addition to that, the app also monitors mean and max speed.
+Android app was made with Java. The main app functionality is an image and data capture from sensors and sending them to the server. The app uses GPS to track location and detects vibration to determine road quality. In addition to that, the app also monitors mean and max speed.
 
 <div align="center">
-  <img alt="App main form" src="documents/images/app_main.png" height=520 width=300/>
-  <img alt="App drive form" src="documents/images/app_drive.png" height=520 width=300/>
+  <img alt="App main form" src="images/app_main.png" height=520 width=300/>
+  <img alt="App drive form" src="images/app_drive.png" height=520 width=300/>
 </div>
 
-Contributors:
+Contributor:
 <table>
     <tbody>
         <tr>
@@ -179,7 +181,7 @@ return class_names[index]
 
 ```python
 from detectRoadSign import recognize
-return main.create_response('sign_type', recognize("image" + file_ext), 200)
+return create_response('sign_type', recognize('image' + file_ext), 200)
 ```
 
 Contributor:
@@ -208,8 +210,8 @@ Contributor:
 
 The website was created using the React library, HTML and CSS, and Boostrap, which was used for effortless design. We used React for the layout and calls to the application components and communication between the API and the website. The main website functionality is data visualization.
 
-![Website - road sign](/documents/images/website_sign.png)
-![Website - road quality](/documents/images/website_road.png)
+![Website - road sign](/images/website_sign.png)
+![Website - road quality](/images/website_road.png)
 
 Contributor:
 <table>
