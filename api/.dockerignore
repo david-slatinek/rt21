@@ -4,6 +4,7 @@ Dockerfile
 .env.example
 .gitignore
 .idea/
+__pycache__/
 test_data.py
 upload.sh
 venv/

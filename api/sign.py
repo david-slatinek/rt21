@@ -5,9 +5,9 @@ from bson import json_util
 from bson.objectid import ObjectId
 from flask import request
 
-from __init__ import DriveCollection, LocationCollection, SignCollection, app
+from __init__ import DriveCollection, SignCollection, app
 from common import create_response
-from detectRoadSign import recognize
+from detect_road_sign import recognize
 
 
 def recognize_sign():
