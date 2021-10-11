@@ -180,7 +180,7 @@ return class_names[index]
 ```
 
 ```python
-from detectRoadSign import recognize
+from detect_road_sign import recognize
 return create_response('sign_type', recognize('image' + file_ext), 200)
 ```
 
