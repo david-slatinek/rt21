@@ -141,13 +141,19 @@ def get_locations(drive_id):
 
 def get_all_road_quality():
     road_quality = LocationCollection.find({}, {"_id": 0, "road_quality": 1})
+    error = ''
 
-    result = {}
-    i_d = 0
-    for x in road_quality:
-        result[i_d] = json_util.loads(json_util.dumps(x))
-        i_d += 1
+    try:
+        with open('numbers.txt', 'w') as file:
+            counter = 0
+            for x in road_quality:
+                file.write(f'{int(json_util.loads(json_util.dumps(x))["road_quality"])} ')
+                counter += 1
+                if counter % 10 == 0:
+                    file.write('\n')
+        success = True
+    except IOError as e:
+        error = str(e)
+        success = False
 
-    result["length"] = i_d
-
-    return json.loads(json_util.dumps(result))
+    return json.loads(json_util.dumps({"success": success, "error": error}))
