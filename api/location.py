@@ -137,3 +137,17 @@ def get_locations(drive_id):
         i_d += 1
 
     return json.loads(json_util.dumps(result))
+
+
+def get_all_road_quality():
+    road_quality = LocationCollection.find({}, {"_id": 0, "road_quality": 1})
+
+    result = {}
+    i_d = 0
+    for x in road_quality:
+        result[i_d] = json_util.loads(json_util.dumps(x))
+        i_d += 1
+
+    result["length"] = i_d
+
+    return json.loads(json_util.dumps(result))
