@@ -5,7 +5,7 @@ from common import create_response
 from drive import (create_drive, delete_drive, get_drive, get_drives,
                    update_drive)
 from location import (create_location, delete_location, get_location,
-                      get_locations, update_location, get_all_road_quality)
+                      get_locations, update_location, get_road_quality)
 from sign import (create_sign, delete_sign, get_sign, get_sings,
                   recognize_sign, update_sign)
 from user import get_user, login, register, update_user
@@ -114,11 +114,11 @@ def app_get_locations(drive_id):
     return get_locations(drive_id)
 
 
-@app.route('/api/location/getAllRoadQuality', methods=['GET'])
-def app_get_all_road_quality():
+@app.route('/api/location/getRoadQuality/<drive_id>', methods=['GET'])
+def app_get_road_quality(drive_id):
     if request.headers.get('X-API-Key') != app.config['API_KEY']:
         return create_response('error', 'api key not given or invalid', 401)
-    return get_all_road_quality()
+    return get_road_quality(drive_id)
 
 
 @app.route('/api/sign/recognize', methods=['POST'])

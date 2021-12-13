@@ -1,4 +1,5 @@
 import json
+import os
 
 from bson import json_util
 from bson.objectid import ObjectId
@@ -139,8 +140,14 @@ def get_locations(drive_id):
     return json.loads(json_util.dumps(result))
 
 
-def get_all_road_quality():
-    road_quality = LocationCollection.find({}, {"_id": 0, "road_quality": 1})
+def get_road_quality(drive_id):
+    if len(drive_id) != 24:
+        return create_response('error', 'invalid id length', 400)
+
+    if not DriveCollection.find_one({'_id': ObjectId(drive_id)}):
+        return create_response('error', 'drive not found', 404)
+
+    road_quality = LocationCollection.find({'drive_id': drive_id}, {"_id": 0, "road_quality": 1})
     error = ''
 
     try:
@@ -154,6 +161,11 @@ def get_all_road_quality():
         success = True
     except IOError as e:
         error = str(e)
+        success = False
+
+    try:
+        os.system('python3 main.py -c numbers.txt')
+    except:
         success = False
 
     return json.loads(json_util.dumps({"success": success, "error": error}))
