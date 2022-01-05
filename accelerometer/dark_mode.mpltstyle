@@ -1,0 +1,37 @@
+# LINES
+lines.linewidth : 1
+lines.linestyle : -
+
+# FONT
+font.family : monospace
+font.style : normal
+font.size : 8
+text.color : w
+
+# AXES
+axes.facecolor : 10121A
+axes.grid : True
+axes.labelsize : small
+axes.labelcolor : w
+axes.ymargin : 0.1
+axes.xmargin : 0
+axes.axisbelow : True
+
+# LEGEND
+legend.facecolor : 20222B
+legend.shadow : False
+
+# FIGURE
+figure.facecolor : 171922
+
+# GRID
+grid.color : 272D3C
+
+# SAVEFIG
+savefig.facecolor : 171922
+savefig.format : png
+
+# TICK
+xtick.color : w
+ytick.color : w
+xtick.minor.size : 0
