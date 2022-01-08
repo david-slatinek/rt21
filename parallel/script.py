@@ -2,6 +2,10 @@ from mpi4py import MPI
 import numpy as np
 import time
 
+# Local imports
+from detect_road_sign import recognize
+
+
 
 def _print(text):
 	""" Util print function that prepends processors rank and flushes stdout. """
@@ -9,9 +13,10 @@ def _print(text):
 	print(pre + str(text), flush=True)
 
 
-def process(image):
+def process(image:str) -> str:
 	_print(f"processing image '{str(image)}'")
-	return f"{str(image)} result"
+	
+	return recognize(image)
 
 
 
@@ -37,7 +42,7 @@ images = []
 
 # ============= MASTER - get list of images ============= 
 if rank == 0:
-	images = [str(i) for i in range(10)]	# TODO - get this from http/arguments/file/hard-coded
+	images = ["images\\image1.jpg", ".\\images\\image2.jpg", ".\\images\\image3.jpg"]	# TODO - get this from http/arguments/file/hard-coded
 
 
 # Broadcast images list (master -> slaves communication)
