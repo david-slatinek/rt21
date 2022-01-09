@@ -1,6 +1,7 @@
 from mpi4py import MPI
 import numpy as np
 import time
+import os
 
 # Local imports
 from detect_road_sign import recognize
@@ -42,8 +43,8 @@ images = []
 
 # ============= MASTER - get list of images ============= 
 if rank == 0:
-	images = ["images\\image1.jpg", ".\\images\\image2.jpg", ".\\images\\image3.jpg"]	# TODO - get this from http/arguments/file/hard-coded
-
+	images = [".\\images\\image3.jpg", ".\\images\\image5.jpg", ".\\images\\image8.jpg", ".\\images\\image9.jpg", "images\\image10.jpg", "images\\image12.jpg"]	# TODO - get this from http/arguments/file/hard-coded
+	#images = os.listdir("images")
 
 # Broadcast images list (master -> slaves communication)
 images = comm.bcast(images, root=0)
