@@ -4,7 +4,6 @@ import pandas as pd
 from tensorflow.python.keras import models
 
 
-
 def recognize(path):
     model = models.load_model("./classifier_model")
 
