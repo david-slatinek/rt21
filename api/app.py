@@ -140,6 +140,13 @@ def app_get_road_quality(drive_id):
 def app_recognize_sign():
     if request.headers.get('X-API-Key') != app.config['API_KEY']:
         return create_response('error', 'api key not given or invalid', 401)
+
+    @after_this_request
+    def remove_file(response):
+        if os.path.exists('image.jpg'):
+            os.remove('image.jpg')
+        return response
+
     return recognize_sign()
 
 
