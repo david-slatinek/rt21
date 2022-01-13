@@ -135,7 +135,7 @@ def delete_sign(sign_id):
     return create_response('success', 'sign deleted', 200)
 
 
-def get_sings(drive_id):
+def get_signs(drive_id):
     if len(drive_id) != 24:
         return create_response('error', 'invalid id length', 400)
 
@@ -151,3 +151,21 @@ def get_sings(drive_id):
         i_d += 1
 
     return json.loads(json_util.dumps(result))
+
+
+def get_sign_type(latitude, longitude):
+    try:
+        lat = float(latitude)
+        lon = float(longitude)
+    except ValueError as error:
+        return create_response('error', str(error), 400)
+    except TypeError as error:
+        return create_response('error', str(error), 400)
+
+    sign = SignCollection.find_one({"latitude": lat, "longitude": lon},
+                                   {"_id": 0, "drive_id": 0, "latitude": 0, "longitude": 0})
+
+    if sign:
+        return json.loads(json_util.dumps(sign))
+    else:
+        return create_response('error', 'latitude or longitude is invalid', 404)

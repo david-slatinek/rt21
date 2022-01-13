@@ -8,7 +8,7 @@ from drive import (create_drive, delete_drive, get_drive, get_drives,
                    update_drive)
 from location import (create_location, delete_location, get_location,
                       get_locations, get_road_quality, update_location)
-from sign import (create_sign, delete_sign, get_sign, get_sings,
+from sign import (create_sign, delete_sign, get_sign, get_sign_type, get_signs,
                   recognize_sign, update_sign)
 from user import get_user, login, register, update_user
 
@@ -175,7 +175,14 @@ def app_delete_sign(sign_id):
 def app_get_sings(drive_id):
     if request.headers.get('X-API-Key') != app.config['API_KEY']:
         return create_response('error', 'api key not given or invalid', 401)
-    return get_sings(drive_id)
+    return get_signs(drive_id)
+
+
+@app.route('/api/sign/<latitude>/<longitude>', methods=['GET'])
+def app_get_sign_type(latitude, longitude):
+    if request.headers.get('X-API-Key') != app.config['API_KEY']:
+        return create_response('error', 'api key not given or invalid', 401)
+    return get_sign_type(latitude, longitude)
 
 
 if __name__ == '__main__':
