@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import config from '../config';
-
 import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
+import API_KEY_VALUE from '../config.js'
 
 const Home = () => {
     const [active, setActive] = useState(null);
@@ -10,15 +9,14 @@ const Home = () => {
     const [markersRoadSigns, setMarkersRoadSigns] = useState(null);
     const [markersRoadQuality, setMarkersRoadQuality] = useState(null);
 
-    var user = JSON.parse(localStorage.getItem("userSessionID"));
-    var api_key_val = config.API_KEY_VALUE;
+    const user = JSON.parse(localStorage.getItem("userSessionID"));
 
     async function getMarkers(id) {
         //get all road quality location
         let response = await fetch('https://rt21-api.herokuapp.com/api/sign/getSigns/' + id, {
             method: 'GET',
             headers: {
-                'X-API-Key': api_key_val,
+                'X-API-Key': API_KEY_VALUE,
             }
         });
         if (!response.ok) {
@@ -38,7 +36,7 @@ const Home = () => {
         response = await fetch('https://rt21-api.herokuapp.com/api/location/getLocations/' + id, {
             method: 'GET',
             headers: {
-                'X-API-Key': api_key_val,
+                'X-API-Key': API_KEY_VALUE,
             }
         });
         if (!response.ok) {
@@ -62,7 +60,7 @@ const Home = () => {
             let response = await fetch('https://rt21-api.herokuapp.com/api/drive/getDrives/' + user._id.$oid, {
                 method: 'GET',
                 headers: {
-                    'X-API-Key': api_key_val,
+                    'X-API-Key': API_KEY_VALUE,
                 }
             });
             if (!response.ok) {
@@ -110,9 +108,9 @@ const Home = () => {
                                 drives !== null &&
                                 <div className="list-group text-center">
                                     {drives.length > 0 &&
-                                    <div><h4 className="mb-0 mt-3">Old drives locations</h4>
-                                        <hr/>
-                                    </div>
+                                        <div><h4 className="mb-0 mt-3">Old drives locations</h4>
+                                            <hr/>
+                                        </div>
                                     }
                                     {
                                         drives.map(drive => (
@@ -144,114 +142,117 @@ const Home = () => {
                                                             setRoadsigns(!roadsigns)
                                                         }}>{!roadsigns ? "Show roadsigns passed" : "Show road quality detected"}</button>
                                                 {(markersRoadSigns.length > 0 ?
-                                                    <MapContainer
-                                                        center={[markersRoadSigns[0].latitude, markersRoadSigns[0].longitude]}
-                                                        zoom={10} scrollWheelZoom={false}>
-                                                        <TileLayer
-                                                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                                        />
+                                                        <MapContainer
+                                                            center={[markersRoadSigns[0].latitude, markersRoadSigns[0].longitude]}
+                                                            zoom={10} scrollWheelZoom={false}>
+                                                            <TileLayer
+                                                                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                                            />
 
-                                                        {(roadsigns === true ?
-                                                            markersRoadSigns.map(marker => (
-                                                                <Marker
-                                                                    key={marker._id.$oid}
-                                                                    position={[marker.latitude, marker.longitude]}
-                                                                >
-                                                                    <Popup>
-                                                                        <h4>Roadsign: {marker.type}</h4>
-                                                                    </Popup>
-                                                                </Marker>
-                                                            ))
+                                                            {(roadsigns === true ?
+                                                                    markersRoadSigns.map(marker => (
+                                                                        <Marker
+                                                                            key={marker._id.$oid}
+                                                                            position={[marker.latitude, marker.longitude]}
+                                                                        >
+                                                                            <Popup>
+                                                                                <h4>Roadsign: {marker.type}</h4>
+                                                                            </Popup>
+                                                                        </Marker>
+                                                                    ))
 
-                                                        :
+                                                                    :
 
-                                                            markersRoadQuality.map(marker => (
-                                                                <Marker
-                                                                    key={marker._id.$oid}
-                                                                    position={[marker.latitude, marker.longitude]}
-                                                                >
-                                                                    <Popup>
-                                                                        <h4>Road quality: {marker.road_quality}</h4>
-                                                                    </Popup>
-                                                                </Marker>
-                                                            ))
-                                                        )}
-                                                    </MapContainer>
-
-                                                :
-                                                markersRoadQuality.length > 0 ?
-                                                    <MapContainer
-                                                        center={[markersRoadQuality[0].latitude, markersRoadQuality[0].longitude]}
-                                                        zoom={10} scrollWheelZoom={false}>
-                                                        <TileLayer
-                                                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                                        />
-
-                                                        {(roadsigns === true ?
-                                                            markersRoadSigns.map(marker => (
-                                                                <Marker
-                                                                    key={marker._id.$oid}
-                                                                    position={[marker.latitude, marker.longitude]}
-                                                                >
-                                                                    <Popup>
-                                                                        <h4>Roadsign: {marker.type}</h4>
-                                                                    </Popup>
-                                                                </Marker>
-                                                            ))
+                                                                    markersRoadQuality.map(marker => (
+                                                                        <Marker
+                                                                            key={marker._id.$oid}
+                                                                            position={[marker.latitude, marker.longitude]}
+                                                                        >
+                                                                            <Popup>
+                                                                                <h4>Road
+                                                                                    quality: {marker.road_quality}</h4>
+                                                                            </Popup>
+                                                                        </Marker>
+                                                                    ))
+                                                            )}
+                                                        </MapContainer>
 
                                                         :
+                                                        markersRoadQuality.length > 0 ?
+                                                            <MapContainer
+                                                                center={[markersRoadQuality[0].latitude, markersRoadQuality[0].longitude]}
+                                                                zoom={10} scrollWheelZoom={false}>
+                                                                <TileLayer
+                                                                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                                                />
 
-                                                            markersRoadQuality.map(marker => (
-                                                                <Marker
-                                                                    key={marker._id.$oid}
-                                                                    position={[marker.latitude, marker.longitude]}
-                                                                >
-                                                                    <Popup>
-                                                                        <h4>Road quality: {marker.road_quality}</h4>
-                                                                    </Popup>
-                                                                </Marker>
-                                                            ))
-                                                        )}
-                                                    </MapContainer>
+                                                                {(roadsigns === true ?
+                                                                        markersRoadSigns.map(marker => (
+                                                                            <Marker
+                                                                                key={marker._id.$oid}
+                                                                                position={[marker.latitude, marker.longitude]}
+                                                                            >
+                                                                                <Popup>
+                                                                                    <h4>Roadsign: {marker.type}</h4>
+                                                                                </Popup>
+                                                                            </Marker>
+                                                                        ))
 
-                                                :
+                                                                        :
 
-                                                    <MapContainer
-                                                        center={[46.558989157839555, 15.638179450784106]}
-                                                        zoom={10} scrollWheelZoom={false}>
-                                                        <TileLayer
-                                                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                                        />
+                                                                        markersRoadQuality.map(marker => (
+                                                                            <Marker
+                                                                                key={marker._id.$oid}
+                                                                                position={[marker.latitude, marker.longitude]}
+                                                                            >
+                                                                                <Popup>
+                                                                                    <h4>Road
+                                                                                        quality: {marker.road_quality}</h4>
+                                                                                </Popup>
+                                                                            </Marker>
+                                                                        ))
+                                                                )}
+                                                            </MapContainer>
 
-                                                        {(roadsigns === true ?
-                                                            markersRoadSigns.map(marker => (
-                                                                <Marker
-                                                                    key={marker._id.$oid}
-                                                                    position={[marker.latitude, marker.longitude]}
-                                                                >
-                                                                    <Popup>
-                                                                        <h4>Roadsign: {marker.type}</h4>
-                                                                    </Popup>
-                                                                </Marker>
-                                                            ))
+                                                            :
 
-                                                        :
+                                                            <MapContainer
+                                                                center={[46.558989157839555, 15.638179450784106]}
+                                                                zoom={10} scrollWheelZoom={false}>
+                                                                <TileLayer
+                                                                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                                                />
 
-                                                            markersRoadQuality.map(marker => (
-                                                                <Marker
-                                                                    key={marker._id.$oid}
-                                                                    position={[marker.latitude, marker.longitude]}
-                                                                >
-                                                                    <Popup>
-                                                                        <h4>Road quality: {marker.road_quality}</h4>
-                                                                    </Popup>
-                                                                </Marker>
-                                                            ))
-                                                        )}
-                                                    </MapContainer>        
+                                                                {(roadsigns === true ?
+                                                                        markersRoadSigns.map(marker => (
+                                                                            <Marker
+                                                                                key={marker._id.$oid}
+                                                                                position={[marker.latitude, marker.longitude]}
+                                                                            >
+                                                                                <Popup>
+                                                                                    <h4>Roadsign: {marker.type}</h4>
+                                                                                </Popup>
+                                                                            </Marker>
+                                                                        ))
+
+                                                                        :
+
+                                                                        markersRoadQuality.map(marker => (
+                                                                            <Marker
+                                                                                key={marker._id.$oid}
+                                                                                position={[marker.latitude, marker.longitude]}
+                                                                            >
+                                                                                <Popup>
+                                                                                    <h4>Road
+                                                                                        quality: {marker.road_quality}</h4>
+                                                                                </Popup>
+                                                                            </Marker>
+                                                                        ))
+                                                                )}
+                                                            </MapContainer>
                                                 )}
                                             </div>
                                             <table className="table table-striped w-50 m-auto mt-5">

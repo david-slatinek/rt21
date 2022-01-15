@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import config from '../config'
+import API_KEY_VALUE from '../config.js'
 
 const Register = () => {
     const [fullname, setFullname] = useState('');
@@ -10,13 +10,11 @@ const Register = () => {
 
     const [errorMessage, setErrorMessage] = useState('');
 
-
     async function onRegister(e) {
         e.preventDefault();
 
         var fullnameSplit = fullname.split(" ");
 
-        var api_key_val = config.API_KEY_VALUE;
         const formData = new FormData();
         formData.append("name", fullnameSplit[0]);
         formData.append("last_name", fullnameSplit[1]);
@@ -28,36 +26,31 @@ const Register = () => {
         await fetch('https://rt21-api.herokuapp.com/api/user/register', {
             method: 'POST',
             headers: {
-                'X-API-Key': api_key_val,
+                'X-API-Key': API_KEY_VALUE,
             },
             body: formData
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(response => {
-                        throw new Error(response.error)
-                    })
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("success");
+        }).then(response => {
+            if (!response.ok) {
+                return response.json().then(response => {
+                    throw new Error(response.error)
+                })
+            }
+            return response.json();
+        }).then(data => {
+            console.log("success");
 
-                setFullname("");
-                setUsername("");
-                setEmail("");
-                setPassword("");
-                setAge("");
+            setFullname("");
+            setUsername("");
+            setEmail("");
+            setPassword("");
+            setAge("");
 
-                console.log(data);
-
-                window.location = '/login';
-            })
-            .catch((error) => {
-                setErrorMessage('' + error);
-            });
+            console.log(data);
+            window.location = '/login';
+        }).catch((error) => {
+            setErrorMessage('' + error);
+        });
     }
-
 
     return (
         <div className="card w-75 m-auto mt-5">
@@ -114,9 +107,9 @@ const Register = () => {
                 </form>
             </div>
             {errorMessage !== '' &&
-            <div style={{background: '#f8d7da'}} className="card-footer border-danger">
-                <span style={{color: '#721c24'}}>{errorMessage}</span>
-            </div>
+                <div style={{background: '#f8d7da'}} className="card-footer border-danger">
+                    <span style={{color: '#721c24'}}>{errorMessage}</span>
+                </div>
             }
         </div>
     )

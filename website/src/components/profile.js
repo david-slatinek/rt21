@@ -1,19 +1,16 @@
 import React, {useState} from 'react';
-import config from '../config';
+import API_KEY_VALUE from '../config.js'
 
-const Profile = (props) => {
+const Profile = () => {
     const [edit, setEdit] = useState(false);
     const [password, setPassword] = useState('');
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    var user = JSON.parse(localStorage.getItem("userSessionID"));
-    var api_key_val = config.API_KEY_VALUE;
+    const user = JSON.parse(localStorage.getItem("userSessionID"));
 
     async function onChangePassword() {
-        console.log("change password");
-
         const formData = new FormData();
         formData.append("key", "password");
         formData.append("value", password);
@@ -21,31 +18,28 @@ const Profile = (props) => {
         await fetch('https://rt21-api.herokuapp.com/api/user/' + user._id.$oid, {
             method: 'PUT',
             headers: {
-                'X-API-Key': api_key_val,
+                'X-API-Key': API_KEY_VALUE,
             },
             body: formData
-        })
-            .then(response => {
-                if (!response.ok) {
-                    setError(true);
-                    setErrorMessage('HTTP status code ' + response.status)
-                    throw new Error("HTTP status code " + response.status);
-                }
-                return response.json();
-            })
-            .then(data => {
-                setPassword("");
-
-                console.log(data);
-
-                setEdit(false);
-                setSuccess(true);
-            })
-            .catch((error) => {
-                console.log("error: " + error);
+        }).then(response => {
+            if (!response.ok) {
                 setError(true);
-                setErrorMessage('error: ' + error);
-            });
+                setErrorMessage('HTTP status code ' + response.status)
+                throw new Error("HTTP status code " + response.status);
+            }
+            return response.json();
+        }).then(data => {
+            setPassword("");
+
+            console.log(data);
+
+            setEdit(false);
+            setSuccess(true);
+        }).catch((error) => {
+            console.log("error: " + error);
+            setError(true);
+            setErrorMessage('error: ' + error);
+        });
     }
 
     return (
@@ -119,25 +113,25 @@ const Profile = (props) => {
                             </div>
 
                             {edit &&
-                            <div className="card mt-3">
-                                <div className="card-header text-center">
-                                    <h5 className="mb-0">Change password</h5>
+                                <div className="card mt-3">
+                                    <div className="card-header text-center">
+                                        <h5 className="mb-0">Change password</h5>
+                                    </div>
+                                    <div className="card-body">
+                                        <form>
+                                            <div className="input-group mb-3">
+                                                <input type="password" className="form-control" name="password"
+                                                       placeholder="Password" value={password} onChange={(e) => {
+                                                    setPassword(e.target.value)
+                                                }}/>
+                                            </div>
+                                            <div className="text-center">
+                                                <input type="button" className="btn btn-dark" style={{fontSize: 17}}
+                                                       value="Save" onClick={onChangePassword}/>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
-                                <div className="card-body">
-                                    <form>
-                                        <div className="input-group mb-3">
-                                            <input type="password" className="form-control" name="password"
-                                                   placeholder="Password" value={password} onChange={(e) => {
-                                                setPassword(e.target.value)
-                                            }}/>
-                                        </div>
-                                        <div className="text-center">
-                                            <input type="button" className="btn btn-dark" style={{fontSize: 17}}
-                                                   value="Save" onClick={onChangePassword}/>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
                             }
                         </div>
                     </div>

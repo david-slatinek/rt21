@@ -1,16 +1,14 @@
 import React, {useState} from 'react';
-import config from '../config';
+import API_KEY_VALUE from '../config.js'
 
-const Login = (props) => {
+const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
     const [errorMessage, setErrorMessage] = useState('');
 
     async function onLogin(e) {
         e.preventDefault();
 
-        var api_key_val = config.API_KEY_VALUE;
         const formData = new FormData();
         formData.append("email", email);
         formData.append("password", password);
@@ -18,29 +16,26 @@ const Login = (props) => {
         await fetch('https://rt21-api.herokuapp.com/api/user/login', {
             method: 'POST',
             headers: {
-                'X-API-Key': api_key_val,
+                'X-API-Key': API_KEY_VALUE,
             },
             body: formData
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(response => {
-                        throw new Error(response.error)
-                    })
-                }
-                return response.json();
-            })
-            .then(data => {
-                setEmail("");
-                setPassword("");
+        }).then(response => {
+            if (!response.ok) {
+                return response.json().then(response => {
+                    throw new Error(response.error)
+                })
+            }
+            return response.json();
+        }).then(data => {
+            setEmail("");
+            setPassword("");
 
-                localStorage.setItem('userSessionID', JSON.stringify(data));
+            localStorage.setItem('userSessionID', JSON.stringify(data));
 
-                window.location = '/';
-            })
-            .catch(error => {
-                setErrorMessage('' + error);
-            });
+            window.location = '/';
+        }).catch(error => {
+            setErrorMessage('' + error);
+        });
     }
 
     return (
@@ -74,9 +69,9 @@ const Login = (props) => {
                 </form>
             </div>
             {errorMessage !== '' &&
-            <div style={{background: '#f8d7da'}} className="card-footer border-danger">
-                <span style={{color: '#721c24'}}>{errorMessage}</span>
-            </div>
+                <div style={{background: '#f8d7da'}} className="card-footer border-danger">
+                    <span style={{color: '#721c24'}}>{errorMessage}</span>
+                </div>
             }
         </div>
     )
