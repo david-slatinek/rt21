@@ -1,0 +1,2 @@
+const API_KEY_VALUE = "6d09115d"
+export default API_KEY_VALUE;
