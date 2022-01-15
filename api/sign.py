@@ -3,9 +3,9 @@ from os import path
 
 from bson import json_util
 from bson.objectid import ObjectId
-from flask import request
+from flask import jsonify, request
 
-from __init__ import DriveCollection, SignCollection, app
+from __init__ import DriveCollection, LocationCollection, SignCollection, app
 from common import create_response
 from detect_road_sign import recognize
 
@@ -163,9 +163,15 @@ def get_sign_type(latitude, longitude):
         return create_response('error', str(error), 400)
 
     sign = SignCollection.find_one({"latitude": lat, "longitude": lon},
-                                   {"_id": 0, "drive_id": 0, "latitude": 0, "longitude": 0})
+                                   {"_id": 0, "drive_id": 1, "type": 1})
 
     if sign:
-        return json.loads(json_util.dumps(sign))
+        quality = LocationCollection.find_one({"drive_id": sign["drive_id"]},
+                                              {"_id": 0, "drive_id": 0, "latitude": 0, "longitude": 0})
+
+        if quality:
+            return jsonify({"type": sign["type"], "quality": quality["road_quality"]})
+
+        return jsonify({"type": "-1", "quality": -1}), 404
     else:
-        return create_response('error', 'latitude or longitude is invalid', 404)
+        return jsonify({"type": "-1", "quality": -1}), 404
