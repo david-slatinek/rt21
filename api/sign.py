@@ -9,7 +9,7 @@ from __init__ import DriveCollection, LocationCollection, SignCollection, app
 from common import create_response
 from detect_road_sign import recognize
 
-DELTA = 10 ** -3
+DELTA = 10 ** -5
 
 
 def recognize_sign():
@@ -164,17 +164,23 @@ def get_sign_type(latitude, longitude):
     except TypeError as error:
         return create_response('error', str(error), 400)
 
-    sign = SignCollection.find_one({"latitude": {"$gt": lat - DELTA, "$lt": lat + DELTA},
-                                    "longitude": {"$gt": lon - DELTA, "$lt": lon + DELTA}},
-                                   {"_id": 0, "drive_id": 1, "type": 1})
+    signs = SignCollection.find({"latitude": {"$gt": lat - DELTA, "$lt": lat + DELTA},
+                                 "longitude": {"$gt": lon - DELTA, "$lt": lon + DELTA}},
+                                {"_id": 0, "drive_id": 1, "type": 1, "latitude": 1, "longitude": 1})
 
-    if sign:
+    if signs:
+        sorted_list = sorted([x for x in signs], key=lambda k: (-float(k["latitude"]), -float(k["longitude"])))
+
+        if len(sorted_list) > 0:
+            sign = sorted_list[0]
+        else:
+            return jsonify({"type": "-1", "quality": -1}), 404
+
         quality = LocationCollection.find_one({"drive_id": sign["drive_id"]},
                                               {"_id": 0, "drive_id": 0, "latitude": 0, "longitude": 0})
 
         if quality:
             return jsonify({"type": sign["type"], "quality": quality["road_quality"]})
+        return jsonify({"type": "-1", "quality": -1}), 404
 
-        return jsonify({"type": "-1", "quality": -1}), 404
-    else:
-        return jsonify({"type": "-1", "quality": -1}), 404
+    return jsonify({"type": "-1", "quality": -1}), 404
