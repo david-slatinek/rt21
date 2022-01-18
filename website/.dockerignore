@@ -1,7 +1,8 @@
 Dockerfile
 .dockerignore
 .gitignore
-.idea
-node_modules
+.idea/
+node_modules/
 README.md
 upload.sh
+build/

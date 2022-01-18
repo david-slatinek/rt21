@@ -71,7 +71,7 @@ const Home = () => {
             }
 
             //store all user drives
-            var data = await response.json();
+            const data = await response.json();
             let tmpArray = [];
             Object.entries(data).forEach(([key, value]) => {
                 tmpArray.push(value);
@@ -80,8 +80,7 @@ const Home = () => {
             setDrives(tmpArray);
 
             if (Object.entries(tmpArray).length > 0) {
-                var latesDrive = data[Object.entries(tmpArray).length - 1]._id.$oid;
-
+                const latesDrive = data[Object.entries(tmpArray).length - 1]._id.$oid;
                 getMarkers(latesDrive);
                 setActive(data[Object.entries(tmpArray).length - 1]);
             }
@@ -100,7 +99,6 @@ const Home = () => {
                             <a href="/login">log in</a> or <a href="/register">create a new account</a>
                             <br/>and start your new journey.</p>
                     </div>
-
                     :
                     <div className="row">
                         <div className="col-md-4 p-2">
@@ -161,9 +159,7 @@ const Home = () => {
                                                                             </Popup>
                                                                         </Marker>
                                                                     ))
-
                                                                     :
-
                                                                     markersRoadQuality.map(marker => (
                                                                         <Marker
                                                                             key={marker._id.$oid}
@@ -177,7 +173,6 @@ const Home = () => {
                                                                     ))
                                                             )}
                                                         </MapContainer>
-
                                                         :
                                                         markersRoadQuality.length > 0 ?
                                                             <MapContainer
@@ -199,9 +194,7 @@ const Home = () => {
                                                                                 </Popup>
                                                                             </Marker>
                                                                         ))
-
                                                                         :
-
                                                                         markersRoadQuality.map(marker => (
                                                                             <Marker
                                                                                 key={marker._id.$oid}
@@ -215,9 +208,7 @@ const Home = () => {
                                                                         ))
                                                                 )}
                                                             </MapContainer>
-
                                                             :
-
                                                             <MapContainer
                                                                 center={[46.558989157839555, 15.638179450784106]}
                                                                 zoom={10} scrollWheelZoom={false}>
@@ -237,9 +228,7 @@ const Home = () => {
                                                                                 </Popup>
                                                                             </Marker>
                                                                         ))
-
                                                                         :
-
                                                                         markersRoadQuality.map(marker => (
                                                                             <Marker
                                                                                 key={marker._id.$oid}
@@ -276,9 +265,7 @@ const Home = () => {
                                                 </tbody>
                                             </table>
                                         </div>
-
                                         :
-
                                         <div className="alert alert-info mt-5" role="alert"><h5>No
                                             drives were made with this account.</h5>
                                         </div>

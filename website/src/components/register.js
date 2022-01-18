@@ -13,7 +13,7 @@ const Register = () => {
     async function onRegister(e) {
         e.preventDefault();
 
-        var fullnameSplit = fullname.split(" ");
+        const fullnameSplit = fullname.split(" ");
 
         const formData = new FormData();
         formData.append("name", fullnameSplit[0]);
