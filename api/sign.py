@@ -9,6 +9,8 @@ from __init__ import DriveCollection, LocationCollection, SignCollection, app
 from common import create_response
 from detect_road_sign import recognize
 
+DELTA = 10 ** -3
+
 
 def recognize_sign():
     image = request.files['image']
@@ -162,7 +164,8 @@ def get_sign_type(latitude, longitude):
     except TypeError as error:
         return create_response('error', str(error), 400)
 
-    sign = SignCollection.find_one({"latitude": lat, "longitude": lon},
+    sign = SignCollection.find_one({"latitude": {"$gt": lat - DELTA, "$lt": lat + DELTA},
+                                    "longitude": {"$gt": lon - DELTA, "$lt": lon + DELTA}},
                                    {"_id": 0, "drive_id": 1, "type": 1})
 
     if sign:
