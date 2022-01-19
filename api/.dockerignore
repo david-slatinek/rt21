@@ -8,3 +8,4 @@ __pycache__/
 test_data.py
 upload.sh
 venv/
+db.txt

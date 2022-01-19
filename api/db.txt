@@ -1,0 +1,5 @@
+db.drive.deleteMany({_id: {$ne: ObjectId('61e83c0345938ba3658506d9')}});
+
+db.location.deleteMany({drive_id: {$ne: '61e83c0345938ba3658506d9'}});
+
+db.sign.deleteMany({drive_id: {$ne: '61e83c0345938ba3658506d9'}});
