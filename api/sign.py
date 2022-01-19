@@ -164,19 +164,20 @@ def get_sign_type(latitude, longitude):
     except TypeError as error:
         return create_response('error', str(error), 400)
 
-    signs = SignCollection.find({"latitude": {"$gt": lat - DELTA, "$lt": lat + DELTA},
-                                 "longitude": {"$gt": lon - DELTA, "$lt": lon + DELTA}},
+    signs = SignCollection.find({"latitude": {"$gte": lat - DELTA, "$lte": lat + DELTA},
+                                 "longitude": {"$gte": lon - DELTA, "$lte": lon + DELTA}},
                                 {"_id": 0, "drive_id": 1, "type": 1, "latitude": 1, "longitude": 1})
 
     if signs:
-        sorted_list = sorted([x for x in signs], key=lambda k: (-float(k["latitude"]), -float(k["longitude"])))
+        sorted_list = sorted([x for x in signs],
+                             key=lambda k: (abs(float(k["latitude"] - lat)), abs(float(k["longitude"]) - lon)))
 
         if len(sorted_list) > 0:
             sign = sorted_list[0]
         else:
             return jsonify({"type": "-1", "quality": -1}), 404
 
-        quality = LocationCollection.find_one({"drive_id": sign["drive_id"]},
+        quality = LocationCollection.find_one({"latitude": sign["latitude"], "longitude": sign["longitude"]},
                                               {"_id": 0, "drive_id": 0, "latitude": 0, "longitude": 0})
 
         if quality:
