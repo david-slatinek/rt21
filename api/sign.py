@@ -9,7 +9,7 @@ from __init__ import DriveCollection, LocationCollection, SignCollection, app
 from common import create_response
 from detect_road_sign import recognize
 
-DELTA = 10 ** -5
+DELTA = 10 ** -1
 
 
 def recognize_sign():
