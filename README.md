@@ -15,6 +15,7 @@
 - [Documents](#documents)
 - [Security and portability](#security-and-portability)
 - [STM32 Discovery](#stm32-discovery)
+- [Data compression algorithm](#data-compression-algorithm)
 
 # About
 
@@ -320,6 +321,52 @@ Contributor:
                     <img src="https://avatars.githubusercontent.com/u/34378985?v=4" width="100px;" alt="Vid Kreča Github avatar"/>
                     <br/>
                     <sub><b>Vid Kreča</b></sub>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+# Data compression algorithm
+
+<div align="center">
+    <img alt="Python" src="https://img.shields.io/badge/python-%2314354C.svg?style=for-the-badge&logo=python&logoColor=white"/>
+    <img alt="Shell script" src="https://img.shields.io/badge/Shell_Script-121011?style=for-the-badge&logo=gnu-bash&logoColor=white"/>
+</div>
+
+We made an algorithm for compressing road quality numbers with python. When the API receives an appropriate request, it gets all road quality data from the database and compresses it into a binary file, which he then sends to the client. The client can then perform decompression and uses the data in further analysis.
+
+```python
+if rule == 0:
+    bits = get_rule_0_bits(number)
+    result += str('{0:b}'.format(bits - 2).zfill(2))
+    result += str('{0:b}'.format(get_rule_0_value(number))).zfill(bits)
+elif rule == 1:
+    counter = 0
+    while counter < 8:
+        if len(numbers_2) == 0:
+            break
+        value = numbers_2.pop(0)
+        if value != 0:
+            numbers_2.insert(0, value)
+            break
+        counter += 1
+    result += str('{0:b}'.format(counter)).zfill(3)
+elif rule == 10:
+    result += "1" if number < 0 else "0"
+    result += str('{0:b}'.format(abs(number)).zfill(8))
+```
+
+Contributor:
+
+<table>
+    <tbody>
+        <tr>
+            <td align="center">
+                <a href="https://github.com/david-slatinek">
+                    <img src="https://avatars.githubusercontent.com/u/79467409?v=4" width="100px;" alt="David Slatinek Github avatar"/>
+                    <br/>
+                    <sub><b>David Slatinek</b></sub>
                 </a>
             </td>
         </tr>
