@@ -14,6 +14,7 @@
 - [Website](#website)
 - [Documents](#documents)
 - [Security and portability](#security-and-portability)
+- [STM32 Discovery](#stm32-discovery)
 
 # About
 
@@ -295,3 +296,32 @@ The following table shows the security of the project and the portability of a s
 | API          | Service provider, API keys, HTTPS | Yes, docker               |
 | Android app  | HTTPS                             | No, only Android platform |
 | Website      | Service provider, HTTPS           | Yes, docker               |
+
+# STM32 Discovery
+
+We used an accelerometer on the SMT32 Discovery board for simulating road quality values. We then made a python script to get data from it and to visualize it.
+
+<div align="center">
+  <img alt="C" src="https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white"/>
+  <img alt="Python" src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=darkgreen"/>
+</div>
+
+<div align="center">
+  <img alt="Data visualization" src="images/accelerometer.png"/>
+</div>
+
+Contributor:
+
+<table>
+    <tbody>
+        <tr>
+            <td align="center">
+                <a href="https://github.com/VidKreca">
+                    <img src="https://avatars.githubusercontent.com/u/34378985?v=4" width="100px;" alt="Vid Kreča Github avatar"/>
+                    <br/>
+                    <sub><b>Vid Kreča</b></sub>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
