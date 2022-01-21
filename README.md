@@ -3,6 +3,7 @@
 </div>
 
 # Table of Contents
+
 - [Table of Contents](#table-of-contents)
 - [About](#about)
 - [Server](#server)
@@ -15,12 +16,13 @@
 - [Security and portability](#security-and-portability)
 
 # About
+
 Project at big data analysis for real-world applications at FERI, 2nd and 3rd year, CS. The project theme was traffic. The android application takes the camera feed and sends that image to API for road signs recognition. The android app also uses GPS to track location, monitors mean and max speed, and detects vibration to determine road quality. API stores all essential info in the database. The website displays stored data and other statistical info to the user.
 
 <br>
-The project consists of 4 main components: database, API, website, and android application as shown in the following image and table:
+The project consists of 5 main components: database, API, website, android application and AR app as shown in the following image and table:
 <div align="center">
-  <img alt="Project components" src="images/project_components.png"/>
+  <img alt="Project components" src="images/project.png"/>
 </div>
 
 <br>
@@ -34,8 +36,13 @@ The project consists of 4 main components: database, API, website, and android a
 | Computer vision | OpenCV, TensorFlow, Keras |
 | Website         | HTML5, Bootstrap, React   |
 | Documents       | LaTeX                     |
+| STM32 Discovery | C, Python                 |
+| Algorithm       | Python                    |
+| AR app          | Unity, Blender            |
+| Parallel        | Python                    |
 
 # Server
+
 <div align="center">
   <img alt="Docker" src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white"/>
   <img alt="Shell Script" src="https://img.shields.io/badge/shell_script-%23121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white"/>
@@ -51,6 +58,7 @@ The project consists of 4 main components: database, API, website, and android a
 For website and API hosting, we choose [Heroku](https://www.heroku.com). Both applications are running inside docker containers, and by doing that, we achieve effortless transfer to another hosting provider in case of necessity. By using Heroku, all apps automatically get support for HTTPS protocol. For the web server, we choose Nginx.
 
 Contributor:
+
 <table>
     <tbody>
         <tr>
@@ -66,6 +74,7 @@ Contributor:
 </table>
 
 # Database
+
 <div align="center">
  <img alt="MongoDB" src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white"/>
  <img alt="diagrams.net" src="https://img.shields.io/badge/diagrams.net-F08705?style=for-the-badge&logo=diagrams.net&logoColor=white"/>
@@ -75,11 +84,13 @@ Contributor:
 For the database, we choose the NoSQL database type, specifically MongoDB. The database is being hosted by [MongoDB Atlas](https://www.mongodb.com/cloud/atlas). In the database, we store information about the user, his drives, the locations of these drives, and information about traffic signs.
 
 Collections can be seen from the following image:
+
 <div align="center">
   <img alt="Collections" src="images/collections.png"/>
 </div>
 
 Contributor:
+
 <table>
     <tbody>
         <tr>
@@ -95,6 +106,7 @@ Contributor:
 </table>
 
 # API
+
 <div align="center">
   <img alt="Python" src="https://img.shields.io/badge/python-%2314354C.svg?style=for-the-badge&logo=python&logoColor=white"/>
   <img alt="Flask" src="https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white"/>
@@ -105,10 +117,12 @@ Contributor:
 The API serves as an intermediate link between the clients and the database. It limits unauthorized access to the database and makes the development of front-end applications simpler, as the developers working on it are not involved in retrieving data from the database, but instead retrieve it in a specific format and then use it in further development.
 
 The API was made with python framework **flask**, follows the REST architectural style, and returns data in JSON format. On the security aspect, the system contains the following security mechanisms:
+
 1. API key.
 2. HTTPS protocol.
 
 One of the methods:
+
 ```python
 @app.route('/api/user/<user_id>', methods=['GET'])
 def app_get_user(user_id):
@@ -120,6 +134,7 @@ def app_get_user(user_id):
 The API supports all CRUD operations and can also identify traffic signs from a picture.
 
 Contributor:
+
 <table>
     <tbody>
         <tr>
@@ -135,6 +150,7 @@ Contributor:
 </table>
 
 # Android app
+
 <div align="center">
   <img alt="Android" src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white"/>
   <img alt="Java" src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white"/>
@@ -149,6 +165,7 @@ Android app was made with Java. The main app functionality is an image and data 
 </div>
 
 Contributor:
+
 <table>
     <tbody>
         <tr>
@@ -164,6 +181,7 @@ Contributor:
 </table>
 
 # Computer vision
+
 <div align="center">
   <img alt="OpenCV" src="https://img.shields.io/badge/OpenCV-27338e?style=for-the-badge&logo=OpenCV&logoColor=white"/>
   <img alt="TensorFlow" src="https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white"/>
@@ -186,6 +204,7 @@ return create_response('sign_type', recognize('image' + file_ext), 200)
 ```
 
 Contributor:
+
 <table>
     <tbody>
         <tr>
@@ -201,6 +220,7 @@ Contributor:
 </table>
 
 # Website
+
 <div align="center">
   <img alt="HTML5" src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white"/>
   <img alt="Bootstrap" src="https://img.shields.io/badge/bootstrap-%23563D7C.svg?style=for-the-badge&logo=bootstrap&logoColor=white"/>
@@ -215,6 +235,7 @@ The website was created using the React library, HTML and CSS, and Boostrap, whi
 ![Website - road quality](/images/website_road.png)
 
 Contributor:
+
 <table>
     <tbody>
         <tr>
@@ -230,6 +251,7 @@ Contributor:
 </table>
 
 # Documents
+
 <div align="center">
   <img alt="LaTeX" src="https://img.shields.io/badge/latex-%23008080.svg?style=for-the-badge&logo=latex&logoColor=white"/>
   <img alt="Overleaf" src="https://img.shields.io/badge/Overleaf-47A141?style=for-the-badge&logo=Overleaf&logoColor=white"/>
@@ -237,6 +259,7 @@ Contributor:
 
 All documents were written with [LaTeX](https://www.latex-project.org/) on [Overleaf](https://www.overleaf.com/).
 We choose LaTeX due to the following advantages:
+
 - Appealing documents
 - Superb and consistent management of internal references and citations
 - Separation of content and style
@@ -245,6 +268,7 @@ We choose LaTeX due to the following advantages:
 All documents are available [here](/documents).
 
 Contributor:
+
 <table>
     <tbody>
         <tr>
@@ -260,6 +284,7 @@ Contributor:
 </table>
 
 # Security and portability
+
 Data security is of paramount importance in any project. For this purpose, we use the HTTPS protocol for all parts of the project, and user passwords are stored as hashes in the database. By using Docker, we achieve portability.
 The following table shows the security of the project and the portability of a specific part:
 
