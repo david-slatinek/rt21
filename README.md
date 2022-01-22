@@ -418,7 +418,7 @@ To achieve higher performance, we used Open MPI for image processing. The main p
 We made traffic signs with Blender and we used Unity to make an AR app. The app uses GPS location to get the closest traffic sign and the closest road quality.
 
 <div align="center">
-  <img alt="App video" src="images/project.gif"/>
+  <img alt="Project video" src="images/project.gif"/>
 </div>
 
 <table>
