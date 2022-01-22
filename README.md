@@ -16,6 +16,7 @@
 - [Security and portability](#security-and-portability)
 - [STM32 Discovery](#stm32-discovery)
 - [Data compression algorithm](#data-compression-algorithm)
+- [Parallel app](#parallel-app)
 
 # About
 
@@ -40,8 +41,8 @@ The project consists of 5 main components: database, API, website, android appli
 | Documents       | LaTeX                     |
 | STM32 Discovery | C, Python                 |
 | Algorithm       | Python                    |
-| AR app          | Unity, Blender            |
 | Parallel        | Python                    |
+| AR app          | Unity, Blender            |
 
 # Server
 
@@ -367,6 +368,39 @@ Contributor:
                     <img src="https://avatars.githubusercontent.com/u/79467409?v=4" width="100px;" alt="David Slatinek Github avatar"/>
                     <br/>
                     <sub><b>David Slatinek</b></sub>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+# Parallel app
+
+<div align="center">
+    <img alt="Python" src="https://img.shields.io/badge/python-%2314354C.svg?style=for-the-badge&logo=python&logoColor=white"/>
+</div>
+
+To achieve higher performance, we used Open MPI for image processing. The main program receives the request and the images, distributes them to the other computers, and then receives their responses.
+
+<div align="center">
+  <img alt="MPI" src="images/mpi.png"/>
+</div>
+
+<table>
+    <tbody>
+        <tr>
+            <td align="center">
+                <a href="https://github.com/VidKreca">
+                    <img src="https://avatars.githubusercontent.com/u/34378985?v=4" width="100px;" alt="Vid Kreča Github avatar"/>
+                    <br/>
+                    <sub><b>Vid Kreča</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/iskraM">
+                    <img src="https://avatars.githubusercontent.com/u/40259973?v=4" width="100px;" alt="Marcel Iskrač Github avatar"/>
+                    <br/>
+                    <sub><b>Marcel Iskrač</b></sub>
                 </a>
             </td>
         </tr>
