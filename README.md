@@ -17,6 +17,7 @@
 - [STM32 Discovery](#stm32-discovery)
 - [Data compression algorithm](#data-compression-algorithm)
 - [Parallel app](#parallel-app)
+- [AR app](#ar-app)
 
 # About
 
@@ -383,7 +384,7 @@ Contributor:
 To achieve higher performance, we used Open MPI for image processing. The main program receives the request and the images, distributes them to the other computers, and then receives their responses.
 
 <div align="center">
-  <img alt="MPI" src="images/mpi.png"/>
+  <img alt="MPI program" src="images/mpi.png"/>
 </div>
 
 <table>
@@ -396,6 +397,33 @@ To achieve higher performance, we used Open MPI for image processing. The main p
                     <sub><b>Vid Kreča</b></sub>
                 </a>
             </td>
+            <td align="center">
+                <a href="https://github.com/iskraM">
+                    <img src="https://avatars.githubusercontent.com/u/40259973?v=4" width="100px;" alt="Marcel Iskrač Github avatar"/>
+                    <br/>
+                    <sub><b>Marcel Iskrač</b></sub>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+# AR app
+
+<div align="center">
+    <img alt="Unity" src="https://img.shields.io/badge/Unity-100000?style=for-the-badge&logo=unity&logoColor=white"/>
+    <img alt="Blender" src="https://img.shields.io/badge/blender-%23F5792A.svg?style=for-the-badge&logo=blender&logoColor=white"/>
+</div>
+
+We made traffic signs with Blender and we used Unity to make an AR app. The app uses GPS location to get the closest traffic sign and the closest road quality.
+
+<div align="center">
+  <img alt="App video" src="images/project.gif"/>
+</div>
+
+<table>
+    <tbody>
+        <tr>
             <td align="center">
                 <a href="https://github.com/iskraM">
                     <img src="https://avatars.githubusercontent.com/u/40259973?v=4" width="100px;" alt="Marcel Iskrač Github avatar"/>
