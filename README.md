@@ -67,7 +67,7 @@ Contributor:
     <tbody>
         <tr>
             <td align="center">
-                <a href="https://github.com/david-slatinek" target="_blank">
+                <a href="https://github.com/david-slatinek">
                     <img src="https://avatars.githubusercontent.com/u/79467409?v=4" width="100px;" alt="David Slatinek Github avatar"/>
                     <br/>
                     <sub><b>David Slatinek</b></sub>
@@ -99,7 +99,7 @@ Contributor:
     <tbody>
         <tr>
             <td align="center">
-                <a href="https://github.com/david-slatinek" target="_blank">
+                <a href="https://github.com/david-slatinek">
                     <img src="https://avatars.githubusercontent.com/u/79467409?v=4" width="100px;" alt="David Slatinek Github avatar"/>
                     <br/>
                     <sub><b>David Slatinek</b></sub>
@@ -143,7 +143,7 @@ Contributor:
     <tbody>
         <tr>
             <td align="center">
-                <a href="https://github.com/david-slatinek" target="_blank">
+                <a href="https://github.com/david-slatinek">
                     <img src="https://avatars.githubusercontent.com/u/79467409?v=4" width="100px;" alt="David Slatinek Github avatar"/>
                     <br/>
                     <sub><b>David Slatinek</b></sub>
@@ -174,7 +174,7 @@ Contributor:
     <tbody>
         <tr>
             <td align="center">
-                <a href="https://github.com/iskraM" target="_blank">
+                <a href="https://github.com/iskraM">
                     <img src="https://avatars.githubusercontent.com/u/40259973?v=4" width="100px;" alt="Marcel Iskrač Github avatar"/>
                     <br/>
                     <sub><b>Marcel Iskrač</b></sub>
@@ -213,7 +213,7 @@ Contributor:
     <tbody>
         <tr>
             <td align="center">
-                <a href="https://github.com/iskraM" target="_blank">
+                <a href="https://github.com/iskraM">
                     <img src="https://avatars.githubusercontent.com/u/40259973?v=4" width="100px;" alt="Marcel Iskrač Github avatar"/>
                     <br/>
                     <sub><b>Marcel Iskrač</b></sub>
@@ -244,7 +244,7 @@ Contributor:
     <tbody>
         <tr>
             <td align="center">
-                <a href="https://github.com/iskraM" target="_blank">
+                <a href="https://github.com/iskraM">
                     <img src="https://avatars.githubusercontent.com/u/40259973?v=4" width="100px;" alt="Marcel Iskrač Github avatar"/>
                     <br/>
                     <sub><b>Marcel Iskrač</b></sub>
@@ -277,7 +277,7 @@ Contributor:
     <tbody>
         <tr>
             <td align="center">
-                <a href="https://github.com/david-slatinek" target="_blank">
+                <a href="https://github.com/david-slatinek">
                     <img src="https://avatars.githubusercontent.com/u/79467409?v=4" width="100px;" alt="David Slatinek Github avatar"/>
                     <br/>
                     <sub><b>David Slatinek</b></sub>
@@ -319,7 +319,7 @@ Contributor:
     <tbody>
         <tr>
             <td align="center">
-                <a href="https://github.com/VidKreca" target="_blank">
+                <a href="https://github.com/VidKreca">
                     <img src="https://avatars.githubusercontent.com/u/34378985?v=4" width="100px;" alt="Vid Kreča Github avatar"/>
                     <br/>
                     <sub><b>Vid Kreča</b></sub>
@@ -365,7 +365,7 @@ Contributor:
     <tbody>
         <tr>
             <td align="center">
-                <a href="https://github.com/david-slatinek" target="_blank">
+                <a href="https://github.com/david-slatinek">
                     <img src="https://avatars.githubusercontent.com/u/79467409?v=4" width="100px;" alt="David Slatinek Github avatar"/>
                     <br/>
                     <sub><b>David Slatinek</b></sub>
@@ -391,14 +391,14 @@ To achieve higher performance, we used Open MPI for image processing. The main p
     <tbody>
         <tr>
             <td align="center">
-                <a href="https://github.com/VidKreca" target="_blank">
+                <a href="https://github.com/VidKreca">
                     <img src="https://avatars.githubusercontent.com/u/34378985?v=4" width="100px;" alt="Vid Kreča Github avatar"/>
                     <br/>
                     <sub><b>Vid Kreča</b></sub>
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/iskraM" target="_blank">
+                <a href="https://github.com/iskraM">
                     <img src="https://avatars.githubusercontent.com/u/40259973?v=4" width="100px;" alt="Marcel Iskrač Github avatar"/>
                     <br/>
                     <sub><b>Marcel Iskrač</b></sub>
@@ -425,7 +425,7 @@ We made traffic signs with Blender and we used Unity to make an AR app. The app 
     <tbody>
         <tr>
             <td align="center">
-                <a href="https://github.com/iskraM" target="_blank">
+                <a href="https://github.com/iskraM">
                     <img src="https://avatars.githubusercontent.com/u/40259973?v=4" width="100px;" alt="Marcel Iskrač Github avatar"/>
                     <br/>
                     <sub><b>Marcel Iskrač</b></sub>
